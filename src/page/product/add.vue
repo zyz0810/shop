@@ -16,7 +16,7 @@
                 <el-button type="danger">清空数据</el-button>
             </el-form-item>
             <el-form-item label="您当前选择的是">
-                <!--<span class="red01 bold choosecCategory">{{oneCategory[categoryOneIndex].name}}<span>/</span>{{oneCategory[categoryOneIndex].children[categoryTwoIndex].name}}<span>/</span></span>-->
+                <span class="red01 bold choosecCategory">{{oneCategory[categoryOneIndex].name}}<span>/</span>{{oneCategory[categoryOneIndex].children[categoryTwoIndex].name}}<span>/{{oneCategory[categoryOneIndex].children[categoryTwoIndex].children[categoryThreeIndex].name}}</span></span>
                 <el-button>加入常用类目</el-button>
             </el-form-item>
             <el-form-item label="选择类目">
@@ -41,7 +41,7 @@
                         </div>
                         <template v-for="(item,index) in oneCategory">
                             <ul class="categoryUl" v-if="index == categoryOneIndex">
-                                <li v-for="(two,idx) in item.clilden" :class="categoryTwoIndex == idx?'selected':''"
+                                <li v-for="(two,idx) in item.children" :class="categoryTwoIndex == idx?'selected':''"
                                     @click="categoryTwo(idx)">{{two.name}}
                                 </li>
                             </ul>
@@ -56,9 +56,9 @@
                             <el-button class="categorySearch">搜索</el-button>
                         </div>
                         <template v-for="(item,index) in oneCategory" v-if="index == categoryOneIndex">
-                            <template v-for="(two,idx) in item.clilden" v-if="idx == categoryTwoIndex">
+                            <template v-for="(two,idx) in item.children" v-if="idx == categoryTwoIndex">
                                 <ul class="categoryUl" :data-id="idx">
-                                    <li v-for="(three,tindex) in two.clilden"
+                                    <li v-for="(three,tindex) in two.children"
                                         :class="categoryThreeIndex == tindex?'selected':''"
                                         @click="categoryThree(tindex)">{{three.name}}
                                     </li>
@@ -413,9 +413,9 @@
                 }],
                 oneCategory: [{
                     name: '潮流女装',
-                    clilden: [{
+                    children: [{
                         name: '内衣',
-                        clilden: [{
+                        children: [{
                             name: '11'
                         }, {
                             name: '22'
@@ -426,7 +426,7 @@
                         }]
                     }, {
                         name: '袜子',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -437,7 +437,7 @@
                         }]
                     }, {
                         name: '毛衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -448,7 +448,7 @@
                         }]
                     }, {
                         name: '上衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -460,9 +460,9 @@
                     }]
                 }, {
                     name: '潮流男装',
-                    clilden: [{
+                    children: [{
                         name: '男装',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -473,7 +473,7 @@
                         }]
                     }, {
                         name: '袜子',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -484,7 +484,7 @@
                         }]
                     }, {
                         name: '毛衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -495,7 +495,7 @@
                         }]
                     }, {
                         name: '上衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -507,9 +507,9 @@
                     }]
                 }, {
                     name: '潮流通装',
-                    clilden: [{
+                    children: [{
                         name: '童装',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -520,7 +520,7 @@
                         }]
                     }, {
                         name: '袜子',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -531,7 +531,7 @@
                         }]
                     }, {
                         name: '毛衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -542,7 +542,7 @@
                         }]
                     }, {
                         name: '上衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -554,9 +554,9 @@
                     }]
                 }, {
                     name: '潮流就装',
-                    clilden: [{
+                    children: [{
                         name: '就装',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -567,7 +567,7 @@
                         }]
                     }, {
                         name: '袜子',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -578,7 +578,7 @@
                         }]
                     }, {
                         name: '毛衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'
@@ -589,7 +589,7 @@
                         }]
                     }, {
                         name: '上衣',
-                        clilden: [{
+                        children: [{
                             name: 'fs'
                         }, {
                             name: 'a子'

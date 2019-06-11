@@ -120,7 +120,7 @@
 								<el-button @click="dialogVisible = true">上传图片</el-button>
 							</el-checkbox>
 							<!--选择颜色-->
-							<div class="color_choose clearfix" v-if="colorOneFocus[index]">
+							<div class="color_choose clearfix" v-show="colorOneFocus[index]">
 								<ul class="fl color_title">
 									<li v-for="(item,index) in list" @click="tab(index)"><span class="color_bg" :style="{background: item.color}"></span>{{item.name}}</li>
 								</ul>
@@ -376,15 +376,16 @@
             chooseColor:function (e,index) {
                 console.log(index)
 				this.form.colorOne.push(e.target.innerText)
-                this.colorOneFocus.push('false')
+                this.colorOneFocus.push(false)
 				this.colorSpec.push(1)
 				console.log(this.form.colorOne[0])
             },
             inputFocus:function (index) {
                 console.log(index)
-                console.log(this.colorOneFocus[index])
+                console.log('前'+this.colorOneFocus[index])
+                // this.colorOneFocus.push('true')
 				this.colorOneFocus[index] = true
-				console.log(this.colorOneFocus[index])
+				console.log('后'+this.colorOneFocus[index])
             },
             tab:function(index){
                 for(var i=0;i<this.list.length;i++){

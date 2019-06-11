@@ -29,6 +29,9 @@ input[type="number"]{
 .input.is-danger, .is-danger >input {
   border-color: #f22435 !important;
 }
+.relative{
+  position: relative;
+}
 //页脚
 .el-footer{
   height: 60px;

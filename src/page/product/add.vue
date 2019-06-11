@@ -15,7 +15,7 @@
 				<el-button type="danger">清空数据</el-button>
 			</el-form-item>
 			<el-form-item label="您当前选择的是">
-				<el-input v-model="form.category" class="inputOne"></el-input>
+				<span class="red01 bold choosecCategory">潮流女鞋<span>/</span>方式<span>/</span>纪家庙</span>
 				<el-button>加入常用类目</el-button>
 			</el-form-item>
 			<el-form-item label="选择类目">
@@ -110,17 +110,105 @@
 					<el-radio label="统一规格"></el-radio>
 					<el-radio label="多规格"></el-radio>
 				</el-radio-group>
-				<div class="Specifications">
-					<el-button>添加规格项目</el-button>
-					<el-form-item label="规格名">
-						<el-input v-model="form.unit" class="" style="width: 50px"></el-input>
-						<span>添加规格图片</span>
-					</el-form-item>
+				<div class="specifications">
+					<div class="specifications_tit">颜色</div>
+					<ul>
+						<li class="relative" v-for="(item,index) in colorSpec">
+							<el-checkbox @change="choose">
+								<el-input v-model="form.colorOne[index]" class="color_input" ref="colorOne" @focus="inputFocus(index)"></el-input>
+								<span class="spec_img tc f20">+</span>
+								<el-button @click="dialogVisible = true">上传图片</el-button>
+							</el-checkbox>
+							<!--选择颜色-->
+							<div class="color_choose clearfix" v-if="colorOneFocus[index]">
+								<ul class="fl color_title">
+									<li v-for="(item,index) in list" @click="tab(index)"><span class="color_bg" :style="{background: item.color}"></span>{{item.name}}</li>
+								</ul>
+								<ul class="color_cont fl">
+									<li v-for="(item,index) in list" v-if="item.show">
+										<p>常用标准颜色</p>
+										<ul>
+											<template v-for="child in item.cont">
+												<li class="fl" @click="chooseColor($event,index)"><span class="color_bg" :style="{background: child.color}"></span>{{child.name}}</li>
+											</template>
+										</ul>
+									</li>
+								</ul>
+							</div>
+						</li>
+
+					</ul>
+					<div class="specifications_tit">尺码</div>
+					<ul class="size_product">
+						<li><el-checkbox check="true">XS</el-checkbox></li>
+						<li><el-checkbox check="true">S</el-checkbox></li>
+						<li><el-checkbox check="true">M</el-checkbox></li>
+						<li><el-checkbox check="true">L</el-checkbox></li>
+						<li><el-checkbox check="true"><el-input v-model="sizeCustom" size="small" placeholder="自定义尺码" style="width: 100px"></el-input></el-checkbox></li>
+					</ul>
+					<div class="specifications_tit">宝贝销售规格</div>
+					<ul class="batch_product">
+						<li>批量填充</li>
+						<li><el-input placeholder="条形码" size="small"></el-input></li>
+						<li><el-input placeholder="合伙人" size="small"></el-input></li>
+						<li><el-input placeholder="销售价" size="small"></el-input></li>
+						<li><el-input placeholder="市场价" size="small"></el-input></li>
+						<li><el-input placeholder="库存" size="small"></el-input></li>
+						<li><el-input placeholder="成本价" size="small"></el-input></li>
+						<li><el-input placeholder="起订量" size="small"></el-input></li>
+						<li><el-input size="small"></el-input></li>
+						<li><el-button size="small">确定</el-button></li>
+					</ul>
+
+
+
+					<el-table :data="tableData" :span-method="objectSpanMethod" border stripe style="width: 100%; margin-top: 20px" class="tc">
+						<el-table-column align="center" prop="color" label="颜色"></el-table-column>
+						<el-table-column align="center" prop="size" label="尺码"></el-table-column>
+						<el-table-column align="center" label="条形码">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.code" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="合伙人价">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.price1" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="销售价">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.price2" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="市场价">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.price3" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="库存">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.stock" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="成本价">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.price4" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="起订量">
+							<template slot-scope="scope">
+								<!--<div v-html="scope.row.miniOrder"></div>-->
+								<el-input v-model="scope.row.miniOrder" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+						<el-table-column align="center" label="">
+							<template slot-scope="scope">
+								<el-input v-model="scope.row.price5" clearable size="mini"></el-input>
+							</template>
+						</el-table-column>
+					</el-table>
 				</div>
-
 			</el-form-item>
-
-
 
 
 
@@ -131,12 +219,12 @@
 				</el-checkbox-group>
 			</el-form-item>
 			<el-form-item label="商品图片">
-				<el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview" :on-remove="handleRemove">
+				<el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card" :on-preview="handlePictureCardPreview">
 					<i class="el-icon-plus"></i>
 				</el-upload>
-				<el-dialog :visible.sync="dialogVisible">
-					<img width="100%" :src="dialogImageUrl" alt="">
-				</el-dialog>
+				<!--<el-dialog :visible.sync="dialogVisible">-->
+					<!--<img width="100%" :src="dialogImageUrl" alt="">-->
+				<!--</el-dialog>-->
 			</el-form-item>
 
 			<!--<div class="setMore">-->
@@ -153,25 +241,38 @@
 				<el-collapse-item title="更多设置" name="1" class="baseColor">
 					<el-form-item label="推广佣金率">
 						<el-input v-model="form.unit" class="inputOne"></el-input>
-						<span>%</span>
 					</el-form-item>
 					<el-form-item label="返利比例">
 						<el-input v-model="form.unit" class="inputOne"></el-input>
-						<span>%</span>
 					</el-form-item>
 				</el-collapse-item>
 			</el-collapse>
-
-
-
-
-
-
 			<el-form-item>
 				<el-button style="margin-top: 12px;" @click="next">下一步</el-button>
 			</el-form-item>
 
 		</el-form>
+
+		<!--上传图片弹框-->
+		<el-dialog title="选择文件" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
+			<span>
+				<img v-if="imageUrl" :src="imageUrl" class="avatar">
+				<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+			</span>
+			<span slot="footer" class="dialog-footer">
+			<el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/" :on-preview="handlePreview" :on-change="onchange" :auto-upload="false" :show-file-list="false">
+
+				<!--<el-button @click="dialogVisible = false">取 消</el-button>-->
+					<!--<el-button @click="dialogVisible = false">确定上传</el-button>-->
+					<!--<el-button type="primary" @click="">选择文件</el-button>-->
+					<el-button slot="trigger" size="small" type="primary">选择文件</el-button>
+					<el-button style="margin-left: 10px;" size="small" type="success" @click="submitUpload">确定上传</el-button>
+
+			</el-upload>
+				</span>
+
+		</el-dialog>
+
 	</div>
 </template>
 
@@ -204,7 +305,8 @@
                     category:'',
                     categoryOneSearch:'',
                     categoryTwoSearch:'',
-                    categoryThreeSearch:''
+                    categoryThreeSearch:'',
+                    colorOne:[]
 				},
                 restaurants: [],
                 state: '',
@@ -212,13 +314,185 @@
                 active: 0,
                 activeNames: ['1'],
                 dialogImageUrl: '',
-                dialogVisible: false
+                dialogVisible: false,
+                checked: true,
+                state1: '',
+                formMovie:{
+                    posterURL:''
+				},
+                imageUrl:'',
+                sizeCustom:'',
+                tableData: [],
+                spanArr:[],
+                pos:'',
+				list:[{
+                    color:'#FF0000',
+                    name:"红色",
+					show:true,
+					cont:[{
+                        color:"#FF0000",
+						name:"大红色"
+					},{
+                        color:"#8B0000",
+                        name:"深红色"
+					}]
+				},{
+                    color:'#FFA500',
+                    name:"橙色",
+                    show:false,
+                    cont:[{
+                        color:"#FF4500",
+                        name:"橙红色"
+                    },{
+                        color:"#FFA500",
+                        name:"橙色"
+                    },{
+                        color:"#FF8C00",
+                        name:"深橙色"
+                    },{
+                        color:"#FF7F50",
+                        name:"荧光橘"
+                    }]
+				},{
+                    color:'#FFFF00',
+                    name:"黄色",
+                    show:false,
+                    cont:[{
+                        color:"#FFFF00",
+                        name:"纯黄色"
+                    },{
+                        color:"#FFD700",
+                        name:"金黄色"
+                    },{
+                        color:"#F0E68C",
+                        name:"浅黄色"
+                    }]
+                }],
+                colorOneFocus:[false],
+				colorSpec:[1]
 			}
 		},
 		methods: {
-            handleRemove(file, fileList) {
-                console.log(file, fileList);
+            chooseColor:function (e,index) {
+                console.log(index)
+				this.form.colorOne.push(e.target.innerText)
+                this.colorOneFocus.push('false')
+				this.colorSpec.push(1)
+				console.log(this.form.colorOne[0])
             },
+            inputFocus:function (index) {
+                console.log(index)
+                console.log(this.colorOneFocus[index])
+				this.colorOneFocus[index] = true
+				console.log(this.colorOneFocus[index])
+            },
+            tab:function(index){
+                for(var i=0;i<this.list.length;i++){
+                    this.list[i].show=false;
+                    if(i==index){
+                        this.list[index].show=true;
+                    }
+                }
+            },
+            choose:function (e) {
+                var that = this
+				console.log(e)
+				if(e == true){
+					console.log(that.$refs.colorOne.value)
+					var myColor = that.$refs.colorOne.value;
+                    that.tableData.push({
+                        color: myColor,
+                        size: 'm',
+                        price1: '',
+                        price2: '',
+                        price3: '',
+                        price4:'',
+                        price5:'',
+                        code:'',
+                        stock:'',
+                        miniOrder:''
+					})
+					console.log(that.tableData)
+                    this.getSpanArr(that.tableData);
+				}
+            },
+            getSpanArr(data) {
+                for (var i = 0; i < data.length; i++) {
+                    // console.log(data.length)
+                    if (i === 0) {
+                        console.log('不判断')
+                        this.spanArr.push(1);
+                        this.pos = 0
+                    } else {
+                        // 判断当前元素与上一个元素是否相同
+                        if (data[i].color === data[i - 1].color) {
+                            this.spanArr[this.pos] += 1;
+                            this.spanArr.push(0);
+                            console.log('判断')
+                            console.log(i)
+                        } else {
+                            this.spanArr.push(1);
+                            this.pos = i;
+                        }
+                    }
+                }
+            },
+            objectSpanMethod({ row, column, rowIndex, columnIndex }) {
+                if (columnIndex === 0) {
+                    const _row = this.spanArr[rowIndex];
+                    const _col = _row > 0 ? 1 : 0;
+                    return {
+                        rowspan: _row,
+                        colspan: _col
+                    }
+                }
+            },
+
+        //关闭弹窗
+            handleClose(done) {
+				this.dialogVisible = false
+            },
+            onchange(file,fileList){
+                var _this = this;
+                var event = event || window.event;
+                var file = event.target.files[0];
+                var reader = new FileReader();
+                //转base64
+                reader.onload = function(e) {
+                    _this.imageUrl = e.target.result //将图片路径赋值给src
+                }
+                reader.readAsDataURL(file);
+            },
+
+            submitUpload() {
+                this.$refs.upload.submit();
+            },
+            // handleRemove(file, fileList) {
+            //     console.log(file, fileList);
+            // },
+            handlePreview(file) {
+                console.log(file);
+            },
+            handleLoadError(e) {
+                const img = e.srcElement;
+                this.imageUrl = this.errorLoadImg;  //  用加载失败的图片替代之
+                img.onerror = null; //  清除错误:如果错误时加载时显示的图片出错，将会一直循环，所以我们必须清除掉错误，限制运行一次
+            },
+            querySearch(queryString, cb) {
+                var restaurants = this.restaurants;
+                var results = queryString ? restaurants.filter(this.createFilter(queryString)) : restaurants;
+                // 调用 callback 返回建议列表的数据
+                cb(results);
+            },
+            createFilter(queryString) {
+                return (restaurant) => {
+                    return (restaurant.value.toLowerCase().indexOf(queryString.toLowerCase()) === 0);
+                };
+            },
+            handleSelect(item) {
+                console.log(item);
+            },
+
             handlePictureCardPreview(file) {
                 this.dialogImageUrl = file.url;
                 this.dialogVisible = true;
@@ -300,15 +574,44 @@
             }
 		},
 		mounted() {
+            this.getSpanArr(this.tableData);
             this.restaurants = this.loadAll();
 		}
 	}
 
 </script>
 
-<style lang="scss">
+<style lang="scss" type="text/scss">
 	@import '../../styles/color.scss';
 	@import '../../styles/common.scss';
+	//颜色选择
+	.color_choose{
+		position: absolute;
+		top: 50px;
+		left: 0;
+		z-index: 99;
+		background: $white01;
+		line-height: 2;
+		border: 1px solid #f2f2f2;
+		.color_title{
+			padding: 20px 10px;
+			border-right: 1px solid #f2f2f2;
+		}
+		.color_cont{
+			padding: 10px 20px 20px;
+			ul{
+				li{
+					margin: 0 20px;
+				}
+			}
+		}
+	}
+	.color_bg{
+		display: inline-block;
+		margin-right: 5px;
+		width: 10px;
+		height: 10px;
+	}
 	.addProduct{
 		padding: 10px;
 		background: $white01;
@@ -333,7 +636,6 @@
 		.el-form-item__content{
 			line-height: 1;
 		}
-
 	}
 	.product_tit{
 		padding: 10px;
@@ -346,5 +648,57 @@
 			color: $baseColor;
 		}
 	}
-	.stepProduct{}
+	.specifications{
+		.el-form-item{
+			margin-bottom: 10px;
+		}
+	}
+	.choosecCategory span{
+		padding: 0 5px;
+	}
+	/*颜色规格*/
+	.color_input{
+		width: 200px;
+	}
+	.el-dialog__body{
+		img{
+			display: block;
+			width: 90%;
+			margin: 0 auto;
+		}
+	}
+	.specifications{
+		padding: 2%;
+		background: $gray06;
+		ul{
+			li{
+				margin: 10px 0;
+			}
+			&.size_product{
+				li{
+					display: inline-block;
+					margin-right: 20px;
+				}
+			}
+			&.batch_product{
+				li{
+					display: inline-block;
+					input{
+						width: 80px;
+					}
+				}
+			}
+		}
+	}
+	.spec_img{
+		display: inline-block;
+		width: 50px;
+		height: 50px;
+		background: $gray11;
+		margin: 0 0 0 20px;
+		padding: 0;
+		border: 1px solid #ccc;
+		line-height: 50px;
+	}
+
 </style>

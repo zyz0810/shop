@@ -653,6 +653,7 @@
                         indices.push([i])
                     }
                 })
+
                 let result = []
                 indices.forEach(item => {
                     item.forEach(index => {

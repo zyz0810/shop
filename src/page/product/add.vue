@@ -118,9 +118,9 @@
                     <div class="specifications_tit">颜色</div>
                     <ul>
                         <li class="relative" v-for="(item,index) in colorSpec">
-                            <el-checkbox @change="choose">
-                                <el-input v-model="form.colorOne[index]" class="color_input" ref="colorOne"
-                                          @focus="inputFocus(index)"></el-input>
+                            <el-checkbox @change="choose($event,index)">
+                                <el-input v-model="form.colorOne[index]" class="color_input" :data-id="'colorOne' + index" :ref="'colorOne' + index"
+                                          @focus="inputFocus(index)" @change="inputChange($event,index)"></el-input>
                                 <span class="spec_img tc f20">+</span>
                                 <el-button @click="dialogVisible = true">上传图片</el-button>
                             </el-checkbox>
@@ -149,18 +149,10 @@
                     </ul>
                     <div class="specifications_tit">尺码</div>
                     <ul class="size_product">
-                        <li>
-                            <el-checkbox check="true">XS</el-checkbox>
+                        <li v-for="(item,index) in sizeSpec">
+                            <el-checkbox @change="chooseSize($event,index)">{{item}}</el-checkbox>
                         </li>
-                        <li>
-                            <el-checkbox check="true">S</el-checkbox>
-                        </li>
-                        <li>
-                            <el-checkbox check="true">M</el-checkbox>
-                        </li>
-                        <li>
-                            <el-checkbox check="true">L</el-checkbox>
-                        </li>
+
                         <li>
                             <el-checkbox check="true">
                                 <el-input v-model="sizeCustom" size="small" placeholder="自定义尺码"
@@ -200,8 +192,9 @@
                         </li>
                     </ul>
 
-                    <el-table :data="tableData" :span-method="objectSpanMethod" border stripe
-                              style="width: 100%; margin-top: 20px" class="tc">
+                    <!--<el-table :data="tableData" :span-method="objectSpanMethod" @cell-mouse-leave="cellMouseLeave" @cell-mouse-center="cellMouseCenter" :row-class-name="tableRowClassName" border stripe-->
+                              <!--style="width: 100%; margin-top: 20px">-->
+                    <el-table :data="tableData" border stripe style="width: 100%; margin-top: 20px">
                         <el-table-column align="center" prop="color" label="颜色"></el-table-column>
                         <el-table-column align="center" prop="size" label="尺码"></el-table-column>
                         <el-table-column align="center" label="条形码">
@@ -406,7 +399,6 @@
                         name: "浅黄色"
                     }]
                 }],
-                colorOneFocus: [false],
                 colorSpec: [{
                     name: 1,
                     show: false
@@ -510,7 +502,7 @@
                     children: [{
                         name: '童装',
                         children: [{
-                            name: 'fs'
+                            name: '56fs'
                         }, {
                             name: 'a子'
                         }, {
@@ -521,9 +513,9 @@
                     }, {
                         name: '袜子',
                         children: [{
-                            name: 'fs'
+                            name: '77fs'
                         }, {
-                            name: 'a子'
+                            name: '99a子'
                         }, {
                             name: 'gdg'
                         }, {
@@ -532,7 +524,7 @@
                     }, {
                         name: '毛衣',
                         children: [{
-                            name: 'fs'
+                            name: '23fs'
                         }, {
                             name: 'a子'
                         }, {
@@ -602,10 +594,29 @@
                 }],
                 categoryOneIndex: '0',
                 categoryTwoIndex: '0',
-                categoryThreeIndex: '0'
+                categoryThreeIndex: '0',
+                sizeSpec:['XS','S','M','L','XL'],
+                mySizeSpec:[{
+                    name:'XS',
+                    checked:false
+                },{
+                    name:'S',
+                    checked:false
+                },{
+                    name:'M',
+                    checked:false
+                },{
+                    name:'L',
+                    checked:false
+                },{
+                    name:'XL',
+                    checked:false
+                },],
+                myColorSpec:[],
             }
         },
         methods: {
+            //点击分类
             categoryOne: function (index) {
                 console.log(index)
                 this.categoryOneIndex = index
@@ -618,22 +629,78 @@
                 this.categoryThreeIndex = tindex
                 console.log(this.categoryThreeIndex)
             },
+            chooseSize:function (e,index) {
+                console.log(index);
+                var that = this;
+                if (e == true) {
+                    var mySize = that.sizeSpec[index];
+                    that.mySizeSpec[index].checked = true;
+                    for(var i=0;i<that.myColorSpec.length;i++){
+                        if(that.myColorSpec[i].checked == true){
+                            that.tableData.push({
+                                color: that.myColorSpec[i].name,
+                                size: mySize,
+                                price1: '',
+                                price2: '',
+                                price3: '',
+                                price4: '',
+                                price5: '',
+                                code: '',
+                                stock: '',
+                                miniOrder: ''
+                            });
+                        }
+                    }
+                    that.$nextTick(function(){
+                        that.getSpanArr(that.tableData);
+                    });
+                }else{
+                    var mySize = that.sizeSpec[index];
+                    that.mySizeSpec[index].checked = false;
+                    console.log(mySize)
+
+                    let newArr = [];
+                    that.tableData.forEach(function (value,key,arr) {
+                        if(value.size != mySize){
+                            newArr.push(value)
+                        }
+                    });
+                    that.tableData = newArr;
+                    that.$nextTick(function(){
+                        that.getSpanArr(that.tableData);
+                    });
+                }
+            },
+            //选取颜色（选取弹框中颜色）
             chooseColor: function (e, index) {
+                console.log('弹框')
                 console.log(index)
                 this.form.colorOne.push(e.target.innerText)
+                this.myColorSpec.push({
+                    name:e.target.innerText,
+                    checked:false
+                })
                 this.colorSpec[index].show = false
                 this.colorSpec.push({
                     name: 1,
                     show: false
                 })
-                console.log(this.colorSpec)
+                console.log(this.myColorSpec)
             },
+            //颜色输入框聚焦事件
             inputFocus: function (index) {
-                console.log(index)
-                console.log('前' + this.colorSpec)
-                // this.colorOneFocus.push('true')
                 this.colorSpec[index].show = true
-                console.log(this.colorSpec)
+            },
+            //选取颜色（自己填写）
+            inputChange:function (e,index) {
+                console.log('自行')
+                this.form.colorOne.push(e)
+                this.colorSpec[index].show = false
+                this.colorSpec.push({
+                    name: 1,
+                    show: false
+                });
+                console.log(this.form.colorOne)
             },
             tab: function (index) {
                 for (var i = 0; i < this.list.length; i++) {
@@ -643,33 +710,64 @@
                     }
                 }
             },
-            choose: function (e) {
+            //点击颜色复选框
+            choose: function (e,index) {
                 var that = this
                 console.log(e)
+                console.log('索引：'+index)
                 if (e == true) {
-                    console.log(that.$refs.colorOne.value)
-                    var myColor = that.$refs.colorOne.value;
-                    that.tableData.push({
-                        color: myColor,
-                        size: 'm',
-                        price1: '',
-                        price2: '',
-                        price3: '',
-                        price4: '',
-                        price5: '',
-                        code: '',
-                        stock: '',
-                        miniOrder: ''
-                    })
-                    console.log(that.tableData)
-                    this.getSpanArr(that.tableData);
+                    // var myColor = that.$refs.colorOne + index.value;
+                    var myColor = that.form.colorOne[index];
+                    that.myColorSpec[index].checked = true;
+                    console.log(that.myColorSpec)
+                    for(var i=0;i<that.mySizeSpec.length;i++){
+                        if(that.mySizeSpec[i].checked == true){
+                            that.tableData.push({
+                                color: myColor,
+                                size: that.mySizeSpec[i].name,
+                                price1: '',
+                                price2: '',
+                                price3: '',
+                                price4: '',
+                                price5: '',
+                                code: '',
+                                stock: '',
+                                miniOrder: ''
+                            });
+                        }
+                    }
+                    that.$nextTick(function(){
+                        that.getSpanArr(that.tableData);
+                    });
+
+                }else{
+                    // that.tableData.$remove(index)
+
+                    var myColor = that.form.colorOne[index];
+
+                    let newArr = [];
+                    that.tableData.forEach(function (value,key,arr) {
+                        if(value.color != myColor){
+                            newArr.push(value)
+                        }
+                    });
+                    that.tableData = newArr;
+
+                    that.$nextTick(function(){
+                        that.getSpanArr(that.tableData);
+                    });
+
+
+
+
+
+
                 }
             },
             getSpanArr(data) {
                 for (var i = 0; i < data.length; i++) {
                     // console.log(data.length)
                     if (i === 0) {
-                        console.log('不判断')
                         this.spanArr.push(1);
                         this.pos = 0
                     } else {
@@ -677,14 +775,16 @@
                         if (data[i].color === data[i - 1].color) {
                             this.spanArr[this.pos] += 1;
                             this.spanArr.push(0);
-                            console.log('判断')
-                            console.log(i)
+                            console.log(data[i].color+'  '+data[i - 1].color+'  相同')
                         } else {
                             this.spanArr.push(1);
                             this.pos = i;
                         }
                     }
                 }
+
+
+
             },
             objectSpanMethod({row, column, rowIndex, columnIndex}) {
                 if (columnIndex === 0) {
@@ -696,6 +796,24 @@
                     }
                 }
             },
+            // tableRowClassName({row,rowIndex}){
+            //     let temArr = this.curRowArr
+            //     for(let i=0;i<temArr.length;i++){
+            //         if(rowIndex == temArr[i]){
+            //             return 'row_class'
+            //         }
+            //     }
+            // },
+            // cellMouseCenter(row,column,cell,event){
+            //     this.sameRowArr.forEach((arr,i)=>{
+            //         if(arr.indexOf(row.index)!=-1){
+            //             this.curRowArr = arr
+            //         }
+            //     })
+            // },
+            // cellMouseLeave(row,column,cell,event) {
+            //     this.curRowArr = []
+            // },
 
             //关闭弹窗
             handleClose(done) {

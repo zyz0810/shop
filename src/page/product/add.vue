@@ -127,18 +127,14 @@
                             <!--选择颜色-->
                             <div class="color_choose clearfix" v-show="item.show">
                                 <ul class="fl color_title">
-                                    <li v-for="(item,idx) in list" @click="tab(idx)"><span class="color_bg"
-                                                                                           :style="{background: item.color}"></span>{{item.name}}
-                                    </li>
+                                    <li v-for="(item,idx) in list" @click="tab(idx)"><span class="color_bg" :style="{background: item.color}"></span>{{item.name}}</li>
                                 </ul>
                                 <ul class="color_cont fl">
                                     <li v-for="(item,idx) in list" v-if="item.show">
                                         <p>常用标准颜色</p>
                                         <ul>
                                             <template v-for="child in item.cont">
-                                                <li class="fl" @click="chooseColor($event,index)"><span class="color_bg"
-                                                                                                        :style="{background: child.color}"></span>{{child.name}}
-                                                </li>
+                                                <li class="fl" @click="chooseColor($event,index)"><span class="color_bg" :style="{background: child.color}"></span>{{child.name}}</li>
                                             </template>
                                         </ul>
                                     </li>
@@ -680,6 +676,9 @@
             //选取颜色（选取弹框中颜色）
             chooseColor: function (e, index) {
                 var that = this
+                console.log('选择颜色')
+                console.log(e.target.innerText)
+                console.log(e)
                 this.colorSpec[index].show = false
                 this.maskShow = false
                 this.colorSpec[index].name = e.target.innerText

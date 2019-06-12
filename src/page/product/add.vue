@@ -127,14 +127,18 @@
                             <!--选择颜色-->
                             <div class="color_choose clearfix" v-show="item.show">
                                 <ul class="fl color_title">
-                                    <li v-for="(item,idx) in list" @click="tab(idx)"><span class="color_bg" :style="{background: item.color}"></span>{{item.name}}</li>
+                                    <li v-for="(item,idx) in list" @click="tab(idx)"><span class="color_bg"
+                                                                                           :style="{background: item.color}"></span>{{item.name}}
+                                    </li>
                                 </ul>
                                 <ul class="color_cont fl">
                                     <li v-for="(item,idx) in list" v-if="item.show">
                                         <p>常用标准颜色</p>
                                         <ul>
                                             <template v-for="child in item.cont">
-                                                <li class="fl" @click="chooseColor($event,index)"><span class="color_bg" :style="{background: child.color}"></span>{{child.name}}</li>
+                                                <li class="fl" @click="chooseColor($event,index)"><span class="color_bg"
+                                                                                                        :style="{background: child.color}"></span>{{child.name}}
+                                                </li>
                                             </template>
                                         </ul>
                                     </li>
@@ -146,7 +150,8 @@
                     <div class="specifications_tit">尺码</div>
                     <ul class="size_product">
                         <li v-for="(item,index) in sizeSpec">
-                            <el-checkbox @change="chooseSize($event,index)" v-if="!item.custom">{{item.name}}</el-checkbox>
+                            <el-checkbox @change="chooseSize($event,index)" v-if="!item.custom">{{item.name}}
+                            </el-checkbox>
                             <el-checkbox @change="chooseSize($event,index)" v-if="item.custom">
                                 <el-input v-model="item.value" size="small" placeholder="自定义尺码"
                                           style="width: 100px" @change="sizeChange($event,index)"></el-input>
@@ -187,8 +192,8 @@
                     </ul>
 
                     <!--<el-table :data="tableData" :span-method="objectSpanMethod" @cell-mouse-leave="cellMouseLeave" @cell-mouse-center="cellMouseCenter" :row-class-name="tableRowClassName" border stripe-->
-                              <!--style="width: 100%; margin-top: 20px">-->
-                    <el-table :data="tableData" border stripe style="width: 100%; margin-top: 20px">
+                    <!--style="width: 100%; margin-top: 20px">-->
+                    <el-table :data="tableData" border stripe :span-method="objectSpanMethod" style="width: 100%; margin-top: 20px">
                         <el-table-column align="center" prop="color" label="颜色"></el-table-column>
                         <el-table-column align="center" prop="size" label="尺码"></el-table-column>
                         <el-table-column align="center" label="条形码">
@@ -310,7 +315,7 @@
         data() {
             return {
 
-                maskShow:false,
+                maskShow: false,
                 options: [{
                     value: '选项1',
                     label: '黄金糕'
@@ -397,7 +402,7 @@
                 colorSpec: [{
                     name: '',
                     show: false,
-                    checked:false
+                    checked: false
                 }],
                 oneCategory: [{
                     name: '潮流女装',
@@ -591,36 +596,36 @@
                 categoryOneIndex: '0',
                 categoryTwoIndex: '0',
                 categoryThreeIndex: '0',
-                sizeSpec:[{
-                    name:'XS',
-                    custom:false,
-                    checked:false
-                },{
-                    name:'S',
-                    custom:false,
-                    checked:false
-                },{
-                    name:'M',
-                    custom:false,
-                    checked:false
-                },{
-                    name:'L',
-                    custom:false,
-                    checked:false
-                },{
-                    name:'XL',
-                    custom:false,
-                    checked:false
-                },{
-                    name:'',
-                    custom:true,
-                    checked:false
+                sizeSpec: [{
+                    name: 'XS',
+                    custom: false,
+                    checked: false
+                }, {
+                    name: 'S',
+                    custom: false,
+                    checked: false
+                }, {
+                    name: 'M',
+                    custom: false,
+                    checked: false
+                }, {
+                    name: 'L',
+                    custom: false,
+                    checked: false
+                }, {
+                    name: 'XL',
+                    custom: false,
+                    checked: false
+                }, {
+                    name: '',
+                    custom: true,
+                    checked: false
                 }],
-                specsLabel:'0'
+                specsLabel: '0'
             }
         },
         methods: {
-            specsButton(e){
+            specsButton(e) {
                 var that = this
                 that.specsLabel = e
             },
@@ -634,13 +639,42 @@
             categoryThree: function (tindex) {
                 this.categoryThreeIndex = tindex
             },
-            chooseSize:function (e,index) {
+            //重新对属性颜色排序
+            transSort: function (data) {
+                let cache = {} // cache存储的键是eid，值是这个eid在indices数组中的下标
+                let indices = [] // 数组中的每一个值是一个数组，数组中的每一个元素是原数组中相同eid的下标
+                data.forEach((item, i) => {
+                    let eid = item.color
+                    let index = cache[eid]
+                    if (index !== undefined) {
+                        indices[index].push(i)
+                    } else {
+                        cache[eid] = indices.length
+                        indices.push([i])
+                    }
+                })
+                let result = []
+                indices.forEach(item => {
+                    item.forEach(index => {
+                        result.push(data[index]) // 依次把index对应的元素data[index]添加进去即可
+                    })
+                })
+                return result
+            },
+            sortRule(property) {
+                return function (a, b) {
+                    var value1 = a[property];
+                    var value2 = b[property];
+                    return value1 - value2;
+                }
+            },
+            chooseSize: function (e, index) {
                 var that = this;
                 if (e == true) {
                     var mySize = that.sizeSpec[index].name;
                     that.sizeSpec[index].checked = true;
-                    for(var i=0;i<that.colorSpec.length;i++){
-                        if(that.colorSpec[i].checked == true){
+                    for (var i = 0; i < that.colorSpec.length; i++) {
+                        if (that.colorSpec[i].checked == true) {
                             that.tableData.push({
                                 color: that.colorSpec[i].name,
                                 size: mySize,
@@ -653,22 +687,23 @@
                                 stock: '',
                                 miniOrder: ''
                             });
+                            that.tableData = that.transSort(that.tableData)
                         }
                     }
-                    that.$nextTick(function(){
+                    that.$nextTick(function () {
                         that.getSpanArr(that.tableData);
                     });
-                }else{
+                } else {
                     var mySize = that.sizeSpec[index].name;
                     that.sizeSpec[index].checked = false;
                     let newArr = [];
-                    that.tableData.forEach(function (value,key,arr) {
-                        if(value.size != mySize){
+                    that.tableData.forEach(function (value, key, arr) {
+                        if (value.size != mySize) {
                             newArr.push(value)
                         }
                     });
                     that.tableData = newArr;
-                    that.$nextTick(function(){
+                    that.$nextTick(function () {
                         that.getSpanArr(that.tableData);
                     });
                 }
@@ -682,16 +717,16 @@
                 this.colorSpec[index].show = false
                 this.maskShow = false
                 this.colorSpec[index].name = e.target.innerText
-                if(index >= this.colorSpec.length-1){
+                if (index >= this.colorSpec.length - 1) {
                     this.colorSpec.push({
                         name: '',
                         show: false,
-                        checked:false
+                        checked: false
                     });
                 }
-                if(this.colorSpec[index].checked == true){
-                    for(var i=0;i<that.sizeSpec.length;i++){
-                        if(that.sizeSpec[i].checked == true){
+                if (this.colorSpec[index].checked == true) {
+                    for (var i = 0; i < that.sizeSpec.length; i++) {
+                        if (that.sizeSpec[i].checked == true) {
                             that.tableData.push({
                                 color: e.target.innerText,
                                 size: that.sizeSpec[i].name,
@@ -706,17 +741,17 @@
                             });
                         }
                     }
-                    that.$nextTick(function(){
+                    that.$nextTick(function () {
                         that.getSpanArr(that.tableData);
                     });
                 }
 
             },
             //关闭颜色弹框
-            closeMask(){
+            closeMask() {
                 var that = this
-                for(let i=0;i<that.colorSpec.length;i++){
-                    if(that.colorSpec[i].show == true){
+                for (let i = 0; i < that.colorSpec.length; i++) {
+                    if (that.colorSpec[i].show == true) {
                         that.colorSpec[i].show = false
                     }
                 }
@@ -728,25 +763,25 @@
                 this.maskShow = true
             },
             //选取颜色（自己填写）
-            inputChange:function (e,index) {
+            inputChange: function (e, index) {
                 this.colorSpec[index].name = e
                 this.colorSpec[index].show = false
-                if(index >= this.colorSpec.length-1){
+                if (index >= this.colorSpec.length - 1) {
                     this.colorSpec.push({
                         name: '',
                         show: false,
-                        checked:false
+                        checked: false
                     });
                 }
 
             },
             //自定义尺码
-            sizeChange(e,index){
-                this.sizeSpec[index].name=e
+            sizeChange(e, index) {
+                this.sizeSpec[index].name = e
                 this.sizeSpec.push({
-                    name:'',
-                    custom:true,
-                    checked:false
+                    name: '',
+                    custom: true,
+                    checked: false
                 })
             },
             tab: function (index) {
@@ -758,14 +793,14 @@
                 }
             },
             //点击颜色复选框
-            choose: function (e,index) {
+            choose: function (e, index) {
                 var that = this
                 if (e == true) {
                     var myColor = that.colorSpec[index].name;
                     that.colorSpec[index].checked = true;
-                    if(myColor){
-                        for(var i=0;i<that.sizeSpec.length;i++){
-                            if(that.sizeSpec[i].checked == true){
+                    if (myColor) {
+                        for (var i = 0; i < that.sizeSpec.length; i++) {
+                            if (that.sizeSpec[i].checked == true) {
                                 that.tableData.push({
                                     color: myColor,
                                     size: that.sizeSpec[i].name,
@@ -780,37 +815,34 @@
                                 });
                             }
                         }
-                        that.$nextTick(function(){
+                        that.$nextTick(function () {
                             that.getSpanArr(that.tableData);
                         });
                     }
 
 
-                }else{
+                } else {
                     // that.tableData.$remove(index)
 
                     var myColor = that.colorSpec[index].name;
 
                     let newArr = [];
-                    that.tableData.forEach(function (value,key,arr) {
-                        if(value.color != myColor){
+                    that.tableData.forEach(function (value, key, arr) {
+                        if (value.color != myColor) {
                             newArr.push(value)
                         }
                     });
                     that.tableData = newArr;
 
-                    that.$nextTick(function(){
+                    that.$nextTick(function () {
                         that.getSpanArr(that.tableData);
                     });
-
-
-
-
 
 
                 }
             },
             getSpanArr(data) {
+                this.spanArr = []
                 for (var i = 0; i < data.length; i++) {
                     if (i === 0) {
                         this.spanArr.push(1);
@@ -826,7 +858,6 @@
                         }
                     }
                 }
-
 
 
             },

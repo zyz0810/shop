@@ -255,7 +255,7 @@
                 return (() => {
                     window.screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
                     this.screenHeight = window.screenHeight;
-                    console.log('屏幕高度：'+ window.screenHeight)
+                    // console.log('屏幕高度：'+ window.screenHeight)
                 })();
             };
         }

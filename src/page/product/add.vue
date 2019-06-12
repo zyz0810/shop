@@ -110,16 +110,16 @@
             </el-form-item>
             <div class="product_tit">价格库存</div>
             <el-form-item label="商品规格">
-                <el-radio-group v-model="form.resource">
-                    <el-radio label="统一规格"></el-radio>
-                    <el-radio label="多规格"></el-radio>
+                <el-radio-group v-model="specsLabel" @change="specsButton($event)">
+                    <el-radio label="0">统一规格</el-radio>
+                    <el-radio label="1">多规格</el-radio>
                 </el-radio-group>
-                <div class="specifications">
+                <div class="specifications" v-if="specsLabel == '1'">
                     <div class="specifications_tit">颜色</div>
                     <ul>
                         <li class="relative" v-for="(item,index) in colorSpec">
                             <el-checkbox @change="choose($event,index)">
-                                <el-input v-model="form.colorOne[index]" class="color_input" :data-id="'colorOne' + index" :ref="'colorOne' + index"
+                                <el-input v-model="colorSpec[index].name" class="color_input"
                                           @focus="inputFocus(index)" @change="inputChange($event,index)"></el-input>
                                 <span class="spec_img tc f20">+</span>
                                 <el-button @click="dialogVisible = true">上传图片</el-button>
@@ -150,15 +150,13 @@
                     <div class="specifications_tit">尺码</div>
                     <ul class="size_product">
                         <li v-for="(item,index) in sizeSpec">
-                            <el-checkbox @change="chooseSize($event,index)">{{item}}</el-checkbox>
-                        </li>
-
-                        <li>
-                            <el-checkbox check="true">
-                                <el-input v-model="sizeCustom" size="small" placeholder="自定义尺码"
-                                          style="width: 100px"></el-input>
+                            <el-checkbox @change="chooseSize($event,index)" v-if="!item.custom">{{item.name}}</el-checkbox>
+                            <el-checkbox @change="chooseSize($event,index)" v-if="item.custom">
+                                <el-input v-model="item.value" size="small" placeholder="自定义尺码"
+                                          style="width: 100px" @change="sizeChange($event,index)"></el-input>
                             </el-checkbox>
                         </li>
+
                     </ul>
                     <div class="specifications_tit">宝贝销售规格</div>
                     <ul class="batch_product">
@@ -303,7 +301,7 @@
 				</span>
 
         </el-dialog>
-
+        <div class="mask" v-if="maskShow" @click="closeMask"></div>
     </div>
 </template>
 
@@ -315,6 +313,8 @@
     export default {
         data() {
             return {
+
+                maskShow:false,
                 options: [{
                     value: '选项1',
                     label: '黄金糕'
@@ -337,7 +337,6 @@
                     categoryOneSearch: '',
                     categoryTwoSearch: '',
                     categoryThreeSearch: '',
-                    colorOne: []
                 },
                 restaurants: [],
                 state: '',
@@ -400,8 +399,9 @@
                     }]
                 }],
                 colorSpec: [{
-                    name: 1,
-                    show: false
+                    name: '',
+                    show: false,
+                    checked:false
                 }],
                 oneCategory: [{
                     name: '潮流女装',
@@ -595,50 +595,58 @@
                 categoryOneIndex: '0',
                 categoryTwoIndex: '0',
                 categoryThreeIndex: '0',
-                sizeSpec:['XS','S','M','L','XL'],
-                mySizeSpec:[{
+                sizeSpec:[{
                     name:'XS',
+                    custom:false,
                     checked:false
                 },{
                     name:'S',
+                    custom:false,
                     checked:false
                 },{
                     name:'M',
+                    custom:false,
                     checked:false
                 },{
                     name:'L',
+                    custom:false,
                     checked:false
                 },{
                     name:'XL',
+                    custom:false,
                     checked:false
-                },],
-                myColorSpec:[],
+                },{
+                    name:'',
+                    custom:true,
+                    checked:false
+                }],
+                specsLabel:'0'
             }
         },
         methods: {
+            specsButton(e){
+                var that = this
+                that.specsLabel = e
+            },
             //点击分类
             categoryOne: function (index) {
-                console.log(index)
                 this.categoryOneIndex = index
             },
             categoryTwo: function (idx) {
                 this.categoryTwoIndex = idx
-                console.log(this.categoryTwoIndex)
             },
             categoryThree: function (tindex) {
                 this.categoryThreeIndex = tindex
-                console.log(this.categoryThreeIndex)
             },
             chooseSize:function (e,index) {
-                console.log(index);
                 var that = this;
                 if (e == true) {
-                    var mySize = that.sizeSpec[index];
-                    that.mySizeSpec[index].checked = true;
-                    for(var i=0;i<that.myColorSpec.length;i++){
-                        if(that.myColorSpec[i].checked == true){
+                    var mySize = that.sizeSpec[index].name;
+                    that.sizeSpec[index].checked = true;
+                    for(var i=0;i<that.colorSpec.length;i++){
+                        if(that.colorSpec[i].checked == true){
                             that.tableData.push({
-                                color: that.myColorSpec[i].name,
+                                color: that.colorSpec[i].name,
                                 size: mySize,
                                 price1: '',
                                 price2: '',
@@ -655,10 +663,8 @@
                         that.getSpanArr(that.tableData);
                     });
                 }else{
-                    var mySize = that.sizeSpec[index];
-                    that.mySizeSpec[index].checked = false;
-                    console.log(mySize)
-
+                    var mySize = that.sizeSpec[index].name;
+                    that.sizeSpec[index].checked = false;
                     let newArr = [];
                     that.tableData.forEach(function (value,key,arr) {
                         if(value.size != mySize){
@@ -673,58 +679,23 @@
             },
             //选取颜色（选取弹框中颜色）
             chooseColor: function (e, index) {
-                console.log('弹框')
-                console.log(index)
-                this.form.colorOne.push(e.target.innerText)
-                this.myColorSpec.push({
-                    name:e.target.innerText,
-                    checked:false
-                })
-                this.colorSpec[index].show = false
-                this.colorSpec.push({
-                    name: 1,
-                    show: false
-                })
-                console.log(this.myColorSpec)
-            },
-            //颜色输入框聚焦事件
-            inputFocus: function (index) {
-                this.colorSpec[index].show = true
-            },
-            //选取颜色（自己填写）
-            inputChange:function (e,index) {
-                console.log('自行')
-                this.form.colorOne.push(e)
-                this.colorSpec[index].show = false
-                this.colorSpec.push({
-                    name: 1,
-                    show: false
-                });
-                console.log(this.form.colorOne)
-            },
-            tab: function (index) {
-                for (var i = 0; i < this.list.length; i++) {
-                    this.list[i].show = false;
-                    if (i == index) {
-                        this.list[index].show = true;
-                    }
-                }
-            },
-            //点击颜色复选框
-            choose: function (e,index) {
                 var that = this
-                console.log(e)
-                console.log('索引：'+index)
-                if (e == true) {
-                    // var myColor = that.$refs.colorOne + index.value;
-                    var myColor = that.form.colorOne[index];
-                    that.myColorSpec[index].checked = true;
-                    console.log(that.myColorSpec)
-                    for(var i=0;i<that.mySizeSpec.length;i++){
-                        if(that.mySizeSpec[i].checked == true){
+                this.colorSpec[index].show = false
+                this.maskShow = false
+                this.colorSpec[index].name = e.target.innerText
+                if(index >= this.colorSpec.length-1){
+                    this.colorSpec.push({
+                        name: '',
+                        show: false,
+                        checked:false
+                    });
+                }
+                if(this.colorSpec[index].checked == true){
+                    for(var i=0;i<that.sizeSpec.length;i++){
+                        if(that.sizeSpec[i].checked == true){
                             that.tableData.push({
-                                color: myColor,
-                                size: that.mySizeSpec[i].name,
+                                color: e.target.innerText,
+                                size: that.sizeSpec[i].name,
                                 price1: '',
                                 price2: '',
                                 price3: '',
@@ -739,11 +710,87 @@
                     that.$nextTick(function(){
                         that.getSpanArr(that.tableData);
                     });
+                }
+
+            },
+            //关闭颜色弹框
+            closeMask(){
+                var that = this
+                for(let i=0;i<that.colorSpec.length;i++){
+                    if(that.colorSpec[i].show == true){
+                        that.colorSpec[i].show = false
+                    }
+                }
+                this.maskShow = false
+            },
+            //颜色输入框聚焦事件
+            inputFocus: function (index) {
+                this.colorSpec[index].show = true
+                this.maskShow = true
+            },
+            //选取颜色（自己填写）
+            inputChange:function (e,index) {
+                this.colorSpec[index].name = e
+                this.colorSpec[index].show = false
+                if(index >= this.colorSpec.length-1){
+                    this.colorSpec.push({
+                        name: '',
+                        show: false,
+                        checked:false
+                    });
+                }
+
+            },
+            //自定义尺码
+            sizeChange(e,index){
+                this.sizeSpec[index].name=e
+                this.sizeSpec.push({
+                    name:'',
+                    custom:true,
+                    checked:false
+                })
+            },
+            tab: function (index) {
+                for (var i = 0; i < this.list.length; i++) {
+                    this.list[i].show = false;
+                    if (i == index) {
+                        this.list[index].show = true;
+                    }
+                }
+            },
+            //点击颜色复选框
+            choose: function (e,index) {
+                var that = this
+                if (e == true) {
+                    var myColor = that.colorSpec[index].name;
+                    that.colorSpec[index].checked = true;
+                    if(myColor){
+                        for(var i=0;i<that.sizeSpec.length;i++){
+                            if(that.sizeSpec[i].checked == true){
+                                that.tableData.push({
+                                    color: myColor,
+                                    size: that.sizeSpec[i].name,
+                                    price1: '',
+                                    price2: '',
+                                    price3: '',
+                                    price4: '',
+                                    price5: '',
+                                    code: '',
+                                    stock: '',
+                                    miniOrder: ''
+                                });
+                            }
+                        }
+                        that.$nextTick(function(){
+                            that.getSpanArr(that.tableData);
+                        });
+                    }
+
 
                 }else{
                     // that.tableData.$remove(index)
 
-                    var myColor = that.form.colorOne[index];
+                    var myColor = that.colorSpec[index].name;
 
                     let newArr = [];
                     that.tableData.forEach(function (value,key,arr) {
@@ -766,7 +813,6 @@
             },
             getSpanArr(data) {
                 for (var i = 0; i < data.length; i++) {
-                    // console.log(data.length)
                     if (i === 0) {
                         this.spanArr.push(1);
                         this.pos = 0
@@ -775,7 +821,6 @@
                         if (data[i].color === data[i - 1].color) {
                             this.spanArr[this.pos] += 1;
                             this.spanArr.push(0);
-                            console.log(data[i].color+'  '+data[i - 1].color+'  相同')
                         } else {
                             this.spanArr.push(1);
                             this.pos = i;

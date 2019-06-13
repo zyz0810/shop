@@ -113,6 +113,7 @@
                 <el-radio-group v-model="specsLabel" @change="specsButton($event)">
                     <el-radio label="0">统一规格</el-radio>
                     <el-radio label="1">多规格</el-radio>
+                    <el-radio label="2">多规格2</el-radio>
                 </el-radio-group>
                 <div class="specifications" v-if="specsLabel == '1'">
                     <div class="specifications_tit">颜色</div>
@@ -149,7 +150,7 @@
                             <el-checkbox @change="chooseSize($event,index)" v-if="!item.custom">{{item.name}}</el-checkbox>
                             <el-checkbox @change="chooseSize($event,index)" v-if="item.custom">
                                 <el-input v-model="item.value" size="small" placeholder="自定义尺码"
-                                          style="width: 100px" @change="sizeChange($event,index)"></el-input>
+                                          style="width: 100px" @focus="sizeFocus(index)" @change="sizeChange($event,index)"></el-input>
                             </el-checkbox>
                         </li>
 
@@ -188,8 +189,11 @@
 
                     <!--<el-table :data="tableData" :span-method="objectSpanMethod" @cell-mouse-leave="cellMouseLeave" @cell-mouse-center="cellMouseCenter" :row-class-name="tableRowClassName" border stripe-->
                               <!--style="width: 100%; margin-top: 20px">-->
-                    <el-table :data="tableData" border stripe style="width: 100%; margin-top: 20px">
+                    <el-table :data="tableData" :span-method="objectSpanMethod" border stripe style="width: 100%; margin-top: 20px">
+
                         <el-table-column align="center" prop="color" label="颜色"></el-table-column>
+                        <el-table-column align="center" prop="id" label="id"></el-table-column>
+                        <el-table-column align="center" prop="sizeId" label="sizeId"></el-table-column>
                         <el-table-column align="center" prop="size" label="尺码"></el-table-column>
                         <el-table-column align="center" label="条形码">
                             <template slot-scope="scope">
@@ -233,6 +237,76 @@
                             </template>
                         </el-table-column>
                     </el-table>
+                </div>
+                <div class="specifications" v-if="specsLabel == '2'">
+                    <div><el-button>增加商品规格</el-button></div>
+                    <template>
+                        <el-table :data="specData" border style="width: 100%">
+
+                            <el-table-column align="center" label="条形码">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.code" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+
+                            <el-table-column align="center">
+                                <template slot="header" slot-scope="scope">
+                                    <el-input
+                                            v-model="specTit1"
+                                            size="mini"
+                                            placeholder="输入关键字搜索"/>
+                                </template>
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.color" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <!--<el-table-column align="center" prop="id" label="id"></el-table-column>-->
+                            <!--<el-table-column align="center" prop="sizeId" label="sizeId"></el-table-column>-->
+                            <el-table-column align="center" label="尺码">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.size" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+
+
+                            <el-table-column align="center" label="合伙人价">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.price1" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column align="center" label="销售价">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.price2" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column align="center" label="市场价">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.price3" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column align="center" label="库存">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.stock" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column align="center" label="成本价">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.price4" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column align="center" label="起订量">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.miniOrder" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                            <el-table-column align="center" label="起订量">
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.price5" clearable size="mini"></el-input>
+                                </template>
+                            </el-table-column>
+                        </el-table>
+                    </template>
+
                 </div>
             </el-form-item>
 
@@ -309,7 +383,21 @@
     export default {
         data() {
             return {
-
+                specTit1:'',
+                specData: [{
+                    id:'',
+                    color: '',
+                    sizeId:'',
+                    size: '',
+                    price1: '',
+                    price2: '',
+                    price3: '',
+                    price4: '',
+                    price5: '',
+                    code: '',
+                    stock: '',
+                    miniOrder: ''
+                }],
                 maskShow:false,
                 options: [{
                     value: '选项1',
@@ -395,6 +483,7 @@
                     }]
                 }],
                 colorSpec: [{
+                    id:'0',
                     name: '',
                     show: false,
                     checked:false
@@ -592,31 +681,39 @@
                 categoryTwoIndex: '0',
                 categoryThreeIndex: '0',
                 sizeSpec:[{
+                    sizeId:'0',
                     name:'XS',
                     custom:false,
                     checked:false
                 },{
+                    sizeId:'1',
                     name:'S',
                     custom:false,
                     checked:false
                 },{
+                    sizeId:'2',
                     name:'M',
                     custom:false,
                     checked:false
                 },{
+                    sizeId:'3',
                     name:'L',
                     custom:false,
                     checked:false
                 },{
+                    sizeId:'4',
                     name:'XL',
                     custom:false,
                     checked:false
                 },{
+                    sizeId:'5',
                     name:'',
                     custom:true,
                     checked:false
                 }],
-                specsLabel:'0'
+                specsLabel:'2',
+                hasValue:'',
+                sizeHasValue:''
             }
         },
         methods: {
@@ -634,36 +731,70 @@
             categoryThree: function (tindex) {
                 this.categoryThreeIndex = tindex
             },
+            //重新对属性颜色排序
+            transSort: function (data) {
+                let cache = {} // cache存储的键是eid，值是这个eid在indices数组中的下标
+                let indices = [] // 数组中的每一个值是一个数组，数组中的每一个元素是原数组中相同eid的下标
+                data.forEach((item, i) => {
+                    let eid = item.id
+                    let index = cache[eid]
+                    if (index !== undefined) {
+                        indices[index].push(i)
+                    } else {
+                        cache[eid] = indices.length
+                        indices.push([i])
+                    }
+                })
+
+                let result = []
+                indices.forEach(item => {
+                    item.forEach(index => {
+                        result.push(data[index]) // 依次把index对应的元素data[index]添加进去即可
+                    })
+                })
+                return result
+            },
+
             chooseSize:function (e,index) {
+                console.log('点击：'+e)
                 var that = this;
+                console.log(that.sizeSpec)
                 if (e == true) {
                     var mySize = that.sizeSpec[index].name;
                     that.sizeSpec[index].checked = true;
-                    for(var i=0;i<that.colorSpec.length;i++){
-                        if(that.colorSpec[i].checked == true){
-                            that.tableData.push({
-                                color: that.colorSpec[i].name,
-                                size: mySize,
-                                price1: '',
-                                price2: '',
-                                price3: '',
-                                price4: '',
-                                price5: '',
-                                code: '',
-                                stock: '',
-                                miniOrder: ''
-                            });
+
+
+                    if(mySize){
+                        for(var i=0;i<that.colorSpec.length;i++){
+                            if(that.colorSpec[i].checked == true){
+                                that.tableData.push({
+                                    id:that.colorSpec[i].id,
+                                    color: that.colorSpec[i].name,
+                                    sizeId:that.sizeSpec[index].sizeId,
+                                    size: mySize,
+                                    price1: '',
+                                    price2: '',
+                                    price3: '',
+                                    price4: '',
+                                    price5: '',
+                                    code: '',
+                                    stock: '',
+                                    miniOrder: ''
+                                });
+                                that.tableData = that.transSort(that.tableData)
+                            }
                         }
+                        that.$nextTick(function(){
+                            that.getSpanArr(that.tableData);
+                        });
                     }
-                    that.$nextTick(function(){
-                        that.getSpanArr(that.tableData);
-                    });
+
                 }else{
-                    var mySize = that.sizeSpec[index].name;
+                    var mySize = that.sizeSpec[index].sizeId;
                     that.sizeSpec[index].checked = false;
                     let newArr = [];
                     that.tableData.forEach(function (value,key,arr) {
-                        if(value.size != mySize){
+                        if(value.sizeId != mySize){
                             newArr.push(value)
                         }
                     });
@@ -676,41 +807,83 @@
             //选取颜色（选取弹框中颜色）
             chooseColor: function (e, index) {
                 var that = this
-                console.log('选择颜色')
-                console.log(e.target.innerText)
-                console.log(e)
-                this.colorSpec[index].show = false
-                this.maskShow = false
-                this.colorSpec[index].name = e.target.innerText
-                if(index >= this.colorSpec.length-1){
-                    this.colorSpec.push({
-                        name: '',
-                        show: false,
-                        checked:false
-                    });
-                }
-                if(this.colorSpec[index].checked == true){
-                    for(var i=0;i<that.sizeSpec.length;i++){
-                        if(that.sizeSpec[i].checked == true){
-                            that.tableData.push({
-                                color: e.target.innerText,
-                                size: that.sizeSpec[i].name,
-                                price1: '',
-                                price2: '',
-                                price3: '',
-                                price4: '',
-                                price5: '',
-                                code: '',
-                                stock: '',
-                                miniOrder: ''
+                console.log(that.colorSpec)
+                for(let i=0;i<that.colorSpec.length;i++){
+                    // if(that.colorSpec[i].name == e.target.innerText){
+                    //     alert('不能选择相同颜色')
+                    // }
+                    // else{
+
+                        console.log('选择颜色')
+                        console.log(e.target.innerText)
+                        console.log(e)
+                        this.colorSpec[index].show = false
+                        this.maskShow = false
+                        this.colorSpec[index].name = e.target.innerText
+                        if(index >= this.colorSpec.length-1){
+                            this.colorSpec.push({
+                                id:parseInt(index)+1,
+                                name: '',
+                                show: false,
+                                checked:false
                             });
                         }
-                    }
-                    that.$nextTick(function(){
-                        that.getSpanArr(that.tableData);
-                    });
-                }
 
+                        console.log(that.colorSpec)
+                        if(this.colorSpec[index].checked == true){
+
+                            if(that.hasValue){
+                                for(let i=0;i<that.tableData.length;i++){
+                                    if(that.tableData[i].id == that.colorSpec[index].id){
+                                        // that.tableData[i].name = that.colorSpec[index].name
+                                        this.$set(that.tableData,i,{
+                                            id:that.colorSpec[index].id,
+                                            color:that.colorSpec[index].name,
+                                            sizeId:that.tableData[i].sizeId,
+                                            size: that.tableData[i].size,
+                                            price1: '',
+                                            price2: '',
+                                            price3: '',
+                                            price4: '',
+                                            price5: '',
+                                            code: '',
+                                            stock: '',
+                                            miniOrder: ''
+                                        })
+                                    }
+                                }
+                                console.log(that.tableData)
+                                that.$nextTick(function(){
+                                    that.getSpanArr(that.tableData);
+                                });
+                            }else{
+                                for(var i=0;i<that.sizeSpec.length;i++){
+                                    if(that.sizeSpec[i].checked == true){
+                                        that.tableData.push({
+                                            id:this.colorSpec[index].id,
+                                            color: e.target.innerText,
+                                            sizeId:that.sizeSpec[i].sizeId,
+                                            size: that.sizeSpec[i].name,
+                                            price1: '',
+                                            price2: '',
+                                            price3: '',
+                                            price4: '',
+                                            price5: '',
+                                            code: '',
+                                            stock: '',
+                                            miniOrder: ''
+                                        });
+                                    }
+                                }
+                                that.$nextTick(function(){
+                                    that.getSpanArr(that.tableData);
+                                });
+                            }
+
+                        }
+
+                    }
+                // }
             },
             //关闭颜色弹框
             closeMask(){
@@ -726,28 +899,190 @@
             inputFocus: function (index) {
                 this.colorSpec[index].show = true
                 this.maskShow = true
+                if(this.colorSpec[index].name){
+                    console.log('haode   '+this.colorSpec[index].name)
+                    this.hasValue = true
+                }
+                else{
+                    console.log('dqa    '+this.colorSpec[index].name)
+                    this.hasValue = false
+                }
+            },
+            sizeFocus(index){
+                if(this.sizeSpec[index].name){
+                    this.sizeHasValue = true
+                }
+                else{
+                    this.sizeHasValue = false
+                }
             },
             //选取颜色（自己填写）
             inputChange:function (e,index) {
+                var that = this
                 this.colorSpec[index].name = e
                 this.colorSpec[index].show = false
                 if(index >= this.colorSpec.length-1){
                     this.colorSpec.push({
+                        id:parseInt(index)+1,
                         name: '',
                         show: false,
                         checked:false
                     });
                 }
 
+                console.log('吱吱吱')
+                console.log(e)
+                console.log(that.hasValue)
+
+
+                if(that.colorSpec[index].checked == true && this.colorSpec[index].name){
+                    if(that.hasValue){
+                        for(let i=0;i<that.tableData.length;i++){
+                            if(that.tableData[i].id == that.colorSpec[index].id){
+                                // that.tableData[i].name = that.colorSpec[index].name
+                                this.$set(that.tableData,i,{
+                                    id:that.colorSpec[index].id,
+                                    color:that.colorSpec[index].name,
+                                    sizeId:that.tableData[i].sizeId,
+                                    size: that.tableData[i].size,
+                                    price1: '',
+                                    price2: '',
+                                    price3: '',
+                                    price4: '',
+                                    price5: '',
+                                    code: '',
+                                    stock: '',
+                                    miniOrder: ''
+                                })
+                            }
+                        }
+                        console.log(that.tableData)
+                        that.$nextTick(function(){
+                            that.getSpanArr(that.tableData);
+                        });
+                    }else{
+                        for(var i=0;i<that.sizeSpec.length;i++){
+                            if(that.sizeSpec[i].checked == true){
+                                that.tableData.push({
+                                    id:that.colorSpec[index].id,
+                                    color: e,
+                                    sizeId:that.sizeSpec[i].sizeId,
+                                    size: that.sizeSpec[i].name,
+                                    price1: '',
+                                    price2: '',
+                                    price3: '',
+                                    price4: '',
+                                    price5: '',
+                                    code: '',
+                                    stock: '',
+                                    miniOrder: ''
+                                });
+                            }
+                        }
+                        that.$nextTick(function(){
+                            that.getSpanArr(that.tableData);
+                        });
+                    }
+
+                }else{
+                    var myColor = that.colorSpec[index].id;
+                    let newArr = [];
+                    that.tableData.forEach(function (value,key,arr) {
+                        if(value.id != myColor){
+                            newArr.push(value)
+                        }
+                    });
+                    that.tableData = newArr;
+
+                    that.$nextTick(function(){
+                        that.getSpanArr(that.tableData);
+                    });
+                }
+
+
             },
             //自定义尺码
             sizeChange(e,index){
-                this.sizeSpec[index].name=e
-                this.sizeSpec.push({
-                    name:'',
-                    custom:true,
-                    checked:false
-                })
+                console.log('自定义尺码')
+                var that = this
+                this.sizeSpec[index].name = e
+                console.log(this.sizeSpec[index].name)
+                console.log(this.sizeSpec)
+
+                console.log('index:'+index)
+                console.log('长度:'+this.sizeSpec.length)
+                if(index>=this.sizeSpec.length-1){
+                    this.sizeSpec.push({
+                        sizeId:index+1,
+                        name:'',
+                        custom:true,
+                        checked:false
+                    })
+                }
+                if(this.sizeSpec[index].checked == true && that.sizeSpec[index].name){
+                    alert(that.sizeHasValue)
+                    if(that.sizeHasValue){
+                        for(let i=0;i<that.tableData.length;i++){
+                            if(that.tableData[i].sizeId == that.sizeSpec[index].sizeId){
+                                this.$set(that.tableData,i,{
+                                    id:that.tableData[i].id,
+                                    color:that.tableData[i].name,
+                                    sizeId:that.sizeSpec[index].sizeId,
+                                    size: that.sizeSpec[index].name,
+                                    price1: '',
+                                    price2: '',
+                                    price3: '',
+                                    price4: '',
+                                    price5: '',
+                                    code: '',
+                                    stock: '',
+                                    miniOrder: ''
+                                })
+                            }
+                        }
+                        console.log(that.tableData)
+                        that.$nextTick(function(){
+                            that.getSpanArr(that.tableData);
+                        });
+                    }else{
+                        for(var i=0;i<that.colorSpec.length;i++){
+                            if(that.colorSpec[i].checked == true){
+                                that.tableData.push({
+                                    id:that.colorSpec[i].id,
+                                    color: that.colorSpec[i].name,
+                                    sizeId:this.sizeSpec[index].sizeId,
+                                    size: e,
+                                    price1: '',
+                                    price2: '',
+                                    price3: '',
+                                    price4: '',
+                                    price5: '',
+                                    code: '',
+                                    stock: '',
+                                    miniOrder: ''
+                                });
+                                that.tableData = that.transSort(that.tableData)
+                            }
+                        }
+
+                        that.$nextTick(function(){
+                            that.getSpanArr(that.tableData);
+                        });
+                    }
+
+                }else{
+                    var mySize = that.sizeSpec[index].sizeId;
+                    let newArr = [];
+                    that.tableData.forEach(function (value,key,arr) {
+                        if(value.sizeId != mySize){
+                            newArr.push(value)
+                        }
+                    });
+                    that.tableData = newArr;
+                    that.$nextTick(function(){
+                        that.getSpanArr(that.tableData);
+                    });
+                }
             },
             tab: function (index) {
                 for (var i = 0; i < this.list.length; i++) {
@@ -767,7 +1102,9 @@
                         for(var i=0;i<that.sizeSpec.length;i++){
                             if(that.sizeSpec[i].checked == true){
                                 that.tableData.push({
+                                    id:that.colorSpec[index].id,
                                     color: myColor,
+                                    sizeId:that.sizeSpec[i].sizeId,
                                     size: that.sizeSpec[i].name,
                                     price1: '',
                                     price2: '',
@@ -789,11 +1126,11 @@
                 }else{
                     // that.tableData.$remove(index)
 
-                    var myColor = that.colorSpec[index].name;
+                    var myColor = that.colorSpec[index].id;
 
                     let newArr = [];
                     that.tableData.forEach(function (value,key,arr) {
-                        if(value.color != myColor){
+                        if(value.id != myColor){
                             newArr.push(value)
                         }
                     });
@@ -811,13 +1148,14 @@
                 }
             },
             getSpanArr(data) {
+                this.spanArr=[]
                 for (var i = 0; i < data.length; i++) {
                     if (i === 0) {
                         this.spanArr.push(1);
                         this.pos = 0
                     } else {
                         // 判断当前元素与上一个元素是否相同
-                        if (data[i].color === data[i - 1].color) {
+                        if (data[i].id === data[i - 1].id) {
                             this.spanArr[this.pos] += 1;
                             this.spanArr.push(0);
                         } else {
@@ -1012,7 +1350,7 @@
             padding: 10px 20px 20px;
             ul {
                 li {
-                    margin: 0 20px;
+                    padding: 0 20px;
                 }
             }
         }

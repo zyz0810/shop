@@ -4,13 +4,13 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters" class="demo-form-inline">
 				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+					<el-input :size="size" v-model="filters.name" placeholder="姓名"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUsers">查询</el-button>
+					<el-button :size="size" type="primary" v-on:click="getUsers">查询</el-button>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" @click="handleAdd">新增</el-button>
+					<el-button :size="size" type="primary" @click="handleAdd">新增</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -27,18 +27,18 @@
 				<template slot-scope="scope">
 
 
-					<el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-					<el-button size="small">预览</el-button>
-					<el-button size="small">下载二维码</el-button>
-					<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">下架</el-button>
+					<el-button :size="size" size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+					<el-button :size="size" size="small">预览</el-button>
+					<el-button :size="size" size="small">下载二维码</el-button>
+					<el-button :size="size" type="danger" size="small" @click="handleDel(scope.$index, scope.row)">下架</el-button>
 				</template>
 			</el-table-column>
 		</el-table>
 
 		<!--工具条-->
 		<el-col :span="24" class="toolbar mt20">
-			<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-			<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
+			<el-button :size="size" type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
+			<el-pagination :size="size" layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
 			</el-pagination>
 		</el-col>
 
@@ -46,27 +46,27 @@
 		<el-dialog title="编辑" v-model="editFormVisible" :close-on-click-modal="false">
 			<el-form :model="editForm" label-width="80px" :rules="editFormRules" ref="editForm">
 				<el-form-item label="姓名" prop="name">
-					<el-input v-model="editForm.name" auto-complete="off"></el-input>
+					<el-input :size="size" v-model="editForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="性别">
-					<el-radio-group v-model="editForm.sex">
+					<el-radio-group :size="size" v-model="editForm.sex">
 						<el-radio class="radio" :label="1">男</el-radio>
 						<el-radio class="radio" :label="0">女</el-radio>
 					</el-radio-group>
 				</el-form-item>
 				<el-form-item label="年龄">
-					<el-input-number v-model="editForm.age" :min="0" :max="200"></el-input-number>
+					<el-input-number :size="size" v-model="editForm.age" :min="0" :max="200"></el-input-number>
 				</el-form-item>
 				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
+					<el-date-picker :size="size" type="date" placeholder="选择日期" v-model="editForm.birth"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="地址">
-					<el-input type="textarea" v-model="editForm.addr"></el-input>
+					<el-input :size="size" type="textarea" v-model="editForm.addr"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="editFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
+				<el-button :size="size" @click.native="editFormVisible = false">取消</el-button>
+				<el-button :size="size" type="primary" @click.native="editSubmit" :loading="editLoading">提交</el-button>
 			</div>
 		</el-dialog>
 
@@ -74,10 +74,10 @@
 		<el-dialog title="新增" v-model="addFormVisible" :close-on-click-modal="false">
 			<el-form :model="addForm" label-width="80px" :rules="addFormRules" ref="addForm">
 				<el-form-item label="姓名" prop="name">
-					<el-input v-model="addForm.name" auto-complete="off"></el-input>
+					<el-input :size="size" v-model="addForm.name" auto-complete="off"></el-input>
 				</el-form-item>
 				<el-form-item label="性别">
-					<el-radio-group v-model="addForm.sex">
+					<el-radio-group :size="size" v-model="addForm.sex">
 						<el-radio class="radio" :label="1">男</el-radio>
 						<el-radio class="radio" :label="0">女</el-radio>
 					</el-radio-group>
@@ -86,15 +86,15 @@
 					<el-input-number v-model="addForm.age" :min="0" :max="200"></el-input-number>
 				</el-form-item>
 				<el-form-item label="生日">
-					<el-date-picker type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
+					<el-date-picker :size="size" type="date" placeholder="选择日期" v-model="addForm.birth"></el-date-picker>
 				</el-form-item>
 				<el-form-item label="地址">
-					<el-input type="textarea" v-model="addForm.addr"></el-input>
+					<el-input :size="size" type="textarea" v-model="addForm.addr"></el-input>
 				</el-form-item>
 			</el-form>
 			<div slot="footer" class="dialog-footer">
-				<el-button @click.native="addFormVisible = false">取消</el-button>
-				<el-button type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
+				<el-button :size="size" @click.native="addFormVisible = false">取消</el-button>
+				<el-button :size="size" type="primary" @click.native="addSubmit" :loading="addLoading">提交</el-button>
 			</div>
 		</el-dialog>
 	</section>
@@ -107,6 +107,7 @@
 	export default {
 		data() {
 			return {
+                size:this.GLOBAL.size,
                 screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
 				filters: {

@@ -5,7 +5,7 @@
             <el-input :size="size" v-model="form.name" clearable class="inputOne"></el-input>
         </el-form-item>
         <el-form-item required label="最低消费">
-            <el-input  :size="size":class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
+            <el-input :size="size" :class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
             <span class="help is-danger">{{ errors.first('email') }}</span>
         </el-form-item>
         <el-form-item required label="券的库存">
@@ -13,22 +13,22 @@
             <span class="help is-danger">{{ errors.first('phone') }}</span>
         </el-form-item>
         <el-form-item label="领券限制">
-            <el-input :size="size" v-model="form.qq" class="inputOne"></el-input>
+            <el-input v-model="form.qq" class="inputOne" :size="size"></el-input>
         </el-form-item>
         <el-form-item label="开始时间">
-            <el-input :size="size" v-model="form.url" class="inputOne" v-validate="{url: {require_protocol: true }}" data-vv-as="field" name="url_field"></el-input>
+            <el-input v-model="form.url" class="inputOne" :size="size" v-validate="{url: {require_protocol: true }}" data-vv-as="field" name="url_field"></el-input>
         </el-form-item>
 
         <el-form-item required label="结束时间">
-            <el-input :size="size" v-model="form.address" class="inputOne"></el-input>
+            <el-input v-model="form.address" class="inputOne" :size="size"></el-input>
         </el-form-item>
 
 
         <el-form-item label="分享文案">
-            <el-input :size="size" type="textarea" v-model="form.desc"></el-input>
+            <el-input type="textarea" v-model="form.desc" :size="size"></el-input>
         </el-form-item>
         <el-form-item>
-            <el-button :size="size" type="primary" @click="onSubmit()">立即创建</el-button>
+            <el-button type="primary" :size="size" @click="onSubmit()">立即创建</el-button>
             <el-button :size="size" @click.native.prevent>取消</el-button>
         </el-form-item>
     </el-form>

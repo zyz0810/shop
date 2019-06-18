@@ -2,10 +2,10 @@
     <el-form ref="form" :model="form" hideRequiredSterisk="true" label-width="80px" class="tenantInput"
              @submit.prevent="onSubmit" style="min-width:600px;">
         <el-form-item required label="券的面额">
-            <el-input :size="size" v-model="form.name" clearable class="inputOne"></el-input>
+            <el-input v-model="form.name" :size="size" clearable class="inputOne"></el-input>
         </el-form-item>
         <el-form-item required label="最低消费">
-            <el-input  :size="size":class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
+            <el-input :size="size" :class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
             <span class="help is-danger">{{ errors.first('email') }}</span>
         </el-form-item>
         <el-form-item required label="券的库存">

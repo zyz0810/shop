@@ -18,11 +18,19 @@ import tenant from './page/tenant/tenant.vue'
 import shop from './page/tenant/shop.vue'
 
 //营销工具
-import coupon from './page/marketing/coupon/coupon.vue'
-import couponAdd from './page/marketing/coupon/add.vue'
+import coupon from './page/marketing/coupon/coupon.vue'//优惠券
+import assembleList from './page/marketing/assemble/list.vue'//拼团列表
+import postage from './page/marketing/postage/index.vue'//拼团列表
+//库存
+import warehouseQuery from './page/warehouse/index/index.vue'//库存查询
+import warehouseOut from './page/warehouse/manage/out.vue'//出库单
+import warehouseManage from './page/warehouse/warehouse/manage.vue'//仓库管理
+import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
 
 //商品
 import addProduct from './page/product/add.vue'
+import img from './page/product/img.vue'
+import maodian from './page/product/maodian.vue'
 
 let routes = [
     // {
@@ -91,8 +99,8 @@ let routes = [
         children: [
             { path: '/echarts', component: echarts,leaf: true, name: '商品分类' },
             { path: '/echarts1', component: addProduct,leaf: true, name: '发布新品' },
-            { path: '/echarts2', component: echarts,leaf: true, name: '商品列表' },
-            { path: '/echarts3', component: echarts,leaf: true, name: '商品库' },
+            { path: '/echarts2', component: img,leaf: true, name: '商品列表' },
+            { path: '/echarts3', component: maodian,leaf: true, name: '商品库' },
             { path: '/echarts4', component: echarts,leaf: true, name: '网店商品' },
             { path: '/echarts5', component: echarts,leaf: true, name: '门店商品' },
             { path: '/echarts6', component: echarts,leaf: true, name: '评论管理' },
@@ -108,17 +116,17 @@ let routes = [
         name: '库存',
         iconCls: 'fa fa-bar-chart',
         children: [
-            { path: '/echarts', component: echarts,leaf: true, name: '商品分类' },
-            { path: '/echarts1', component: echarts,leaf: true, name: '发布新品' },
-            { path: '/echarts2', component: echarts,leaf: true, name: '商品列表' },
-            { path: '/echarts3', component: echarts,leaf: true, name: '商品库' },
-            { path: '/echarts4', component: echarts,leaf: true, name: '网店商品' },
-            { path: '/echarts5', component: echarts,leaf: true, name: '门店商品' },
-            { path: '/echarts6', component: echarts,leaf: true, name: '评论管理' },
-            { path: '/echarts7', component: echarts,leaf: true, name: '众卖推荐' },
-            { path: '/echarts8', component: echarts,leaf: true, name: '推广文章' },
-            { path: '/echarts9', component: echarts,leaf: true, name: '文章分类' },
-            { path: '/echarts10', component: echarts,leaf: true, name: '文章管理' }
+            { path: '/warehouse', component: tenant,leaf: false, name: '库存查询',children:[
+                {path: '/warehouse/index', component: warehouseQuery,leaf: false, name: '库存查询'}
+                ]},
+            { path: '/warehouse/manage', component: tenant,leaf: false, name: '库存管理',children:[
+                    {path: '/warehouse/put', component: warehouseQuery,leaf: false, name: '入库单'},
+                    {path: '/warehouse/out', component: warehouseOut,leaf: false, name: '出库单'},
+                ]},
+            { path: '/warehouse/warehouse', component: tenant,leaf: false, name: '仓库管理' ,children:[
+                    {path: '/warehouse/warehouse', component: warehouseManage,leaf: false, name: '仓库管理'},
+                    {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
+                ]}
         ]
     },
     {
@@ -210,8 +218,8 @@ let routes = [
         iconCls: 'fa fa-bar-chart',
         children: [
             { path: '/coupon', component: coupon,leaf: true, name: '代金券' },
-            { path: '/customer8', component: echarts,leaf: true, name: '拼团' },
-            { path: '/customer9', component: echarts,leaf: true, name: '满包邮' },
+            { path: '/assemble', component: assembleList,leaf: true, name: '拼团' },
+            { path: '/postage', component: postage,leaf: true, name: '满包邮' },
             { path: '/customer10', component: echarts,leaf: true, name: '满配送' },
             { path: '/customer11', component: echarts,leaf: true, name: '限时折扣' },
             { path: '/customer12', component: echarts,leaf: true, name: '买赠搭配' },

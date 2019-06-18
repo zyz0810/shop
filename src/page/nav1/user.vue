@@ -4,10 +4,10 @@
 		<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
 			<el-form :inline="true" :model="filters">
 				<el-form-item>
-					<el-input v-model="filters.name" placeholder="姓名"></el-input>
+					<el-input :size="size" v-model="filters.name" placeholder="姓名"></el-input>
 				</el-form-item>
 				<el-form-item>
-					<el-button type="primary" v-on:click="getUser">查询</el-button>
+					<el-button :size="size" type="primary" v-on:click="getUser">查询</el-button>
 				</el-form-item>
 			</el-form>
 		</el-col>
@@ -38,6 +38,7 @@
 	export default {
 		data() {
 			return {
+                size:this.GLOBAL.size,
 				filters: {
 					name: ''
 				},

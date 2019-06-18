@@ -11,23 +11,29 @@ import Vuex from 'vuex'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
 import Mock from './mock'
-
+import global_ from './components/global'//全局变量
+Vue.prototype.GLOBAL = global_//全局变量挂载到Vue实例上面
+import base from './components/base'//引用
+Vue.use(base);//将全局函数当做插件来进行注册
 Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
 import './styles/iconfont.scss'
-import './styles/common.scss'
+import './assets/common.scss'
 import './styles/color.scss'
 import 'element-ui/lib/theme-chalk/display.css';
-
+//富文本编辑框
 import VueQuillEditor from 'vue-quill-editor'
 import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
 import 'quill/dist/quill.bubble.css'
 import addQuillTitle from './common/js/quill-title.js';
-
+import scrollIt from './library/scroll.js';
+//图片剪裁
+import VueCropper from 'vue-cropper'
+import $ from 'jquery'
 Vue.prototype.$addQuillTitle = addQuillTitle
 Vue.use(VueQuillEditor)
-
+Vue.use(VueCropper)
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
@@ -49,6 +55,7 @@ const config = {
     fieldsBagName: 'vee-fields',
     i18n,
     i18nRootKey: 'validation',
+    silentTranslationWarn: true,//去掉 warning
     dictionary: {
         zh_CN,
         zh_CN: {

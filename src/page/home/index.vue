@@ -77,6 +77,7 @@
 	export default {
 		data() {
 			return {
+                size:this.GLOBAL.size,
 				filters: {
 					name: ''
 				},

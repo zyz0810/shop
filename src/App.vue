@@ -84,7 +84,7 @@
 				<el-main>
 					<div class="grid-content">
 						<el-row>
-							<el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20">
+							<el-col :xs="24" :sm="24" :md="24" :lg="20" :xl="20" @scroll="handleScroll" ref="content">
 								<el-col :span="24" class="breadcrumb-container">
 									<el-col :span="24" class="home_tit clearfix" v-if="navIndex == 0">
 										<strong class="title fl">测试环境</strong>
@@ -120,9 +120,11 @@
 									<!--</el-breadcrumb-item>-->
 									<!--</el-breadcrumb>-->
 								</el-col>
-								<el-col :span="24" class="content-wrapper" ref="table" :style="contentStyleObj">
+								<!--<el-col :span="24" class="content-wrapper" ref="table" :style="contentStyleObj">-->
+									<el-col :span="24" class="content-wrapper" ref="table" :style="contentStyleObj">
 									<transition name="fade" mode="out-in">
-										<router-view></router-view>
+										<!--<router-view></router-view>-->
+										<router-view :scrollTop="scrollTop" @viewScroll="viewScroll" ref="scrollTo"></router-view>
 									</transition>
 								</el-col>
 							</el-col>
@@ -154,23 +156,36 @@
                 sysUserAvatar: '',
                 navIndex:0,
                 // leaf:1,
-                screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
+                fullHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
                 contentStyleObj:{
                     height:''
                 },
                 navLeaf:0,
-				pageActive:''
+				pageActive:'',
+                scrollTop:''
             }
         },
         watch: {
             // 监听屏幕高度改变表格高度
-            screenHeight(val) {
+            fullHeight(val) {
                 // 初始化表格高度
-                this.contentStyleObj.height = window.innerHeight - this.$refs.table.$el.offsetTop+'px';
+                this.contentStyleObj.height = window.innerHeight - this.$refs.table.$el.offsetTop - 60 + 'px';
+                console.log('content高度：'+this.contentStyleObj.height)
             }
         },
         methods: {
+
+            handleScroll (el) {
+                console.log('dada')
+                this.scrollTop = this.$refs.content.scrollTop
+            },
+            viewScroll (val, index) {
+                this.clickIndex = index
+                this.scrollIt(val, 500, 'linear')
+            },
+
+
             onSubmit() {
                 console.log('submit!');
             },
@@ -253,9 +268,9 @@
             // 监听屏幕高度
             window.onresize = () => {
                 return (() => {
-                    window.screenHeight = document.documentElement.clientHeight || document.body.clientHeight;
-                    this.screenHeight = window.screenHeight;
-                    // console.log('屏幕高度：'+ window.screenHeight)
+                    window.fullHeight = document.documentElement.clientHeight || document.body.clientHeight;
+                    this.fullHeight = window.fullHeight;
+                    // console.log('屏幕高度：'+ window.fullHeight)
                 })();
             };
         }

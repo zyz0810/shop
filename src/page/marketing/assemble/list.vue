@@ -1,92 +1,72 @@
 <template>
 	<div class="coupon">
 		<div v-if="pageType == 'couponList'">
-			<el-form :inline="true" :model="filters" class="demo-form-inline" style="">
-				<el-form-item style="margin-bottom: 10px;">
-					<el-button type="primary" :size="size" @click="add">添加</el-button>
-				</el-form-item>
-			</el-form>
-
-			<div class="couponTab">
-				<el-tabs v-model="activeName" @tab-click="handleClick">
-					<el-tab-pane label="可领用" name="first">
-						<!--工具条-->
-						<el-col :span="24" class="toolbar" style="padding-bottom: 0px;">
-							<el-form :inline="true" :model="filters" class="demo-form-inline">
-								<el-form-item>
-									<el-button :size="size">刷新</el-button>
-								</el-form-item>
-								<el-form-item>
-									<el-date-picker :size="size" v-model="selectedData" type="daterange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
-								</el-form-item>
-							</el-form>
-						</el-col>
-						<!--列表-->
-						<el-table stripe :data="users" ref="table" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;" :height="tableHeight">
-							<el-table-column type="selection" fixed width="55"></el-table-column>
-							<el-table-column type="index" label="编号" width="80"></el-table-column>
-							<el-table-column prop="name" label="名称" width="120" sortable></el-table-column>
-							<el-table-column prop="sex" label="图片" width="100" :formatter="formatSex" sortable></el-table-column>
-							<el-table-column prop="age" label="商品分类" width="100" sortable></el-table-column>
-							<el-table-column prop="birth" label="销售价" width="120" sortable></el-table-column>
-							<el-table-column prop="addr" label="库存" min-width="180" sortable></el-table-column>
-							<el-table-column fixed="right" label="操作" width="220">
-								<template slot-scope="scope">
-									<el-button size="small">分享</el-button>
-									<el-button size="small">统计</el-button>
-									<el-button type="danger" size="small" @click="handleDel(scope.$index, scope.row)">删除</el-button>
-								</template>
-							</el-table-column>
-						</el-table>
-
-						<!--工具条-->
-						<el-col :span="24" class="toolbar mt20">
-							<el-button type="danger" @click="batchRemove" :disabled="this.sels.length===0">批量删除</el-button>
-							<el-pagination layout="prev, pager, next" @current-change="handleCurrentChange" :page-size="20" :total="total" style="float:right;">
-							</el-pagination>
-						</el-col>
-					</el-tab-pane>
-					<el-tab-pane label="未开始" name="second">
-						<div class="listNone tc">暂无信息</div>
-					</el-tab-pane>
-					<el-tab-pane label="已领完" name="third">
-						<div class="listNone tc">暂无信息</div>
-					</el-tab-pane>
-					<el-tab-pane label="已过期" name="fourth">
-						<div class="listNone tc">暂无信息</div>
-					</el-tab-pane>
-				</el-tabs>
+			<div class="operation">
+				<el-button type="primary" :size="size" @click="add">添加</el-button>
+				<el-button type="danger" :size="size" @click="handleDel">删除</el-button>
+				<el-button :size="size">刷新</el-button>
+				<el-button :size="size">导出</el-button>
+				<el-select v-model="value" :size="size" clearable placeholder="活动状态">
+					<el-option
+							v-for="item in options"
+							:key="item.value"
+							:label="item.label"
+							:value="item.value">
+					</el-option>
+				</el-select>
 			</div>
+
+
+
+			<!--列表-->
+			<el-table stripe :data="users" ref="table" highlight-current-row v-loading="listLoading" @selection-change="selsChange" style="width: 100%;margin-top: 20px;" :height="tableHeight">
+				<el-table-column type="selection" fixed width="55"></el-table-column>
+				<el-table-column prop="name0" label="活动名称"></el-table-column>
+				<el-table-column prop="name1" label="活动范围" ></el-table-column>
+				<el-table-column prop="name2" label="参与角色"></el-table-column>
+				<el-table-column prop="name3" label="开始时间"></el-table-column>
+				<el-table-column prop="name4" label="结束时间"></el-table-column>
+				<el-table-column prop="name5" label="活动状态"></el-table-column>
+				<el-table-column prop="name6" label="排名模板"></el-table-column>
+				<el-table-column prop="name7" label="销售额"></el-table-column>
+				<el-table-column prop="name8" label="支出佣金"></el-table-column>
+				<el-table-column prop="name9" label="奖池"></el-table-column>
+				<el-table-column fixed="right" label="操作" width="100">
+					<template slot-scope="scope">
+						<el-button :size="size">查看</el-button>
+					</template>
+				</el-table-column>
+			</el-table>
 		</div>
 
 		<div v-if="pageType == 'couponAdd'">
 			<el-form ref="form" :model="form" hideRequiredSterisk="true" label-width="80px" class="tenantInput"
 					 @submit.prevent="onSubmit" style="min-width:600px;">
 				<el-form-item required label="券的面额">
-					<el-input :size="size" v-model="form.name" clearable class="inputOne"></el-input>
+					<el-input v-model="form.name" clearable class="inputOne" :size="size"></el-input>
 				</el-form-item>
 				<el-form-item required label="最低消费">
-					<el-input :size="size" :class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
+					<el-input :class="{'input': true, 'is-danger': errors.has('email') }" :size="size" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
 					<span class="help is-danger">{{ errors.first('email') }}</span>
 				</el-form-item>
 				<el-form-item required label="券的库存">
-					<el-input :size="size" v-validate="'required|phone'" name="phone" type="number" placeholder="Mobile" v-model="form.phone" :class="{'input': true, 'is-danger': errors.has('phone') }" class="inputOne"></el-input>
+					<el-input v-validate="'required|phone'" :size="size" name="phone" type="number" placeholder="Mobile" v-model="form.phone" :class="{'input': true, 'is-danger': errors.has('phone') }" class="inputOne"></el-input>
 					<span class="help is-danger">{{ errors.first('phone') }}</span>
 				</el-form-item>
 				<el-form-item label="领券限制">
-					<el-input :size="size" v-model="form.qq" class="inputOne"></el-input>
+					<el-input v-model="form.qq" :size="size" class="inputOne"></el-input>
 				</el-form-item>
 				<el-form-item label="开始时间">
-					<el-input :size="size" v-model="form.url" class="inputOne" v-validate="{url: {require_protocol: true }}" data-vv-as="field" name="url_field"></el-input>
+					<el-input v-model="form.url" class="inputOne" :size="size" v-validate="{url: {require_protocol: true }}" data-vv-as="field" name="url_field"></el-input>
 				</el-form-item>
 
 				<el-form-item required label="结束时间">
-					<el-input :size="size" v-model="form.address" class="inputOne"></el-input>
+					<el-input v-model="form.address" :size="size" class="inputOne"></el-input>
 				</el-form-item>
 
 
 				<el-form-item label="分享文案">
-					<el-input :size="size" type="textarea" v-model="form.desc"></el-input>
+					<el-input type="textarea" :size="size" v-model="form.desc"></el-input>
 				</el-form-item>
 				<el-form-item>
 					<el-button :size="size" type="primary" @click="onSubmit()">立即创建</el-button>
@@ -107,12 +87,78 @@
         data() {
             return {
                 size:this.GLOBAL.size,
+                options: [{
+                    value: '选项1',
+                    label: '未开始'
+                }, {
+                    value: '选项2',
+                    label: '进行中'
+                }, {
+                    value: '选项3',
+                    label: '已结束'
+                }],
+                value: '',
                 screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
                 filters: {
                     name: ''
                 },
-                users: [],
+                users: [{
+                    name0:'2019第一周',
+					name1:'中国',
+                    name2:'或加店主',
+                    name3:'2019-9-8',
+                    name4:'2019-9-8',
+                    name5:'已结束',
+                    name6:'52054第一周u',
+                    name7:'￥89',
+                    name8:'￥878',
+                    name9:'￥855',
+				},{
+                    name0:'2019第一周',
+                    name1:'中国',
+                    name2:'或加店主',
+                    name3:'2019-9-8',
+                    name4:'2019-9-8',
+                    name5:'已结束',
+                    name6:'52054第一周u',
+                    name7:'￥89',
+                    name8:'￥878',
+                    name9:'￥855',
+                },{
+                    name0:'2019第一周',
+                    name1:'中国',
+                    name2:'或加店主',
+                    name3:'2019-9-8',
+                    name4:'2019-9-8',
+                    name5:'已结束',
+                    name6:'52054第一周u',
+                    name7:'￥89',
+                    name8:'￥878',
+                    name9:'￥855',
+                },{
+                    name0:'2019第一周',
+                    name1:'中国',
+                    name2:'或加店主',
+                    name3:'2019-9-8',
+                    name4:'2019-9-8',
+                    name5:'已结束',
+                    name6:'52054第一周u',
+                    name7:'￥89',
+                    name8:'￥878',
+                    name9:'￥855',
+                },{
+                    name0:'2019第一周',
+                    name1:'中国',
+                    name2:'或加店主',
+                    name3:'2019-9-8',
+                    name4:'2019-9-8',
+                    name5:'已结束',
+                    name6:'52054第一周u',
+                    name7:'￥89',
+                    name8:'￥878',
+                    name9:'￥855',
+                }],
                 total: 0,
                 page: 1,
                 listLoading: false,
@@ -219,23 +265,23 @@
                 this.getUsers();
             },
             //获取用户列表
-            getUsers() {
-                let para = {
-                    page: this.page,
-                    name: this.filters.name
-                };
-                this.listLoading = true;
-                //NProgress.start();
-                getUserListPage(para).then((res) => {
-                    this.total = res.data.total;
-                    this.users = res.data.users;
-                    this.listLoading = false;
-                    //NProgress.done();
-                });
-            },
+            // getUsers() {
+            //     let para = {
+            //         page: this.page,
+            //         name: this.filters.name
+            //     };
+            //     this.listLoading = true;
+            //     //NProgress.start();
+            //     getUserListPage(para).then((res) => {
+            //         this.total = res.data.total;
+            //         this.users = res.data.users;
+            //         this.listLoading = false;
+            //         //NProgress.done();
+            //     });
+            // },
             //删除
-            handleDel: function (index, row) {
-                this.$confirm('下架后商品无法被搜索到，确定下架?', '提示', {
+            handleDel: function () {
+                this.$confirm('确定删除?', '提示', {
                     type: 'warning'
                 }).then(() => {
                     this.listLoading = true;
@@ -300,24 +346,12 @@
 
 </script>
 
-<style lang="scss">
+<style lang="scss" type="text/scss">
 	@import '../../../styles/color.scss';
 	@import '../../../styles/common.scss';
-	.coupon{
-
-		.is-active{
-			background: transparent;
-		}
-		.el-tabs__header{
-			margin: 0;
-		}
-		.toolbar{
-			padding: 10px;
-			background: #f2f2f2;
-		}
-		.couponTab{
-			padding: 10px;
-			background: $white01;
+	.operation{
+		button{
+			margin-right: 10px;
 		}
 	}
 </style>

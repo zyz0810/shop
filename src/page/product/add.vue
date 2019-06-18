@@ -5,11 +5,19 @@
             <el-step title="2.编辑商品信息"></el-step>
             <el-step title="3.编辑商品详情"></el-step>
         </el-steps>
+        <div>
+            <span>1111</span>
+            <span>2222</span>
+            <span>3333</span>
+            <span>4444</span>
+            <span>5555</span>
+            <span>6666</span>
+        </div>
 
-        <el-form ref="form" :model="form" label-width="150px" hideRequiredSterisk="true" l>
+        <el-form ref="form" :model="form" label-width="150px" hideRequiredSterisk="true">
             <div class="product_tit">类目信息</div>
             <el-form-item required label="选择常用类目">
-                <el-select v-model="value" placeholder="选择常用类目">
+                <el-select :size="size" v-model="value" placeholder="选择常用类目">
                     <el-option v-for="item in options" :key="item.value" :label="item.label"
                                :value="item.value"></el-option>
                 </el-select>
@@ -23,9 +31,9 @@
                 <el-row :gutter="10">
                     <el-col :xs="7" :sm="7" :md="7" :lg="7" :xl="7">
                         <div>
-                            <el-autocomplete v-model="form.categoryOneSearch" :fetch-suggestions="querySearchAsync"
+                            <el-autocomplete :size="size" v-model="form.categoryOneSearch" :fetch-suggestions="querySearchAsync"
                                              placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
-                            <el-button class="categorySearch">搜索</el-button>
+                            <el-button :size="size" class="categorySearch">搜索</el-button>
                         </div>
                         <ul class="categoryUl">
                             <li v-for="(item,index) in oneCategory" :class="categoryOneIndex == index?'selected':''"
@@ -35,9 +43,9 @@
                     </el-col>
                     <el-col :xs="7" :sm="7" :md="7" :lg="7" :xl="7">
                         <div>
-                            <el-autocomplete v-model="form.categoryTwoSearch" :fetch-suggestions="querySearchAsync"
+                            <el-autocomplete :size="size" v-model="form.categoryTwoSearch" :fetch-suggestions="querySearchAsync"
                                              placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
-                            <el-button class="categorySearch">搜索</el-button>
+                            <el-button :size="size" class="categorySearch">搜索</el-button>
                         </div>
                         <template v-for="(item,index) in oneCategory">
                             <ul class="categoryUl" v-if="index == categoryOneIndex">
@@ -46,12 +54,14 @@
                                 </li>
                             </ul>
                         </template>
+
+
                     </el-col>
                     <el-col :xs="7" :sm="7" :md="7" :lg="7" :xl="7">
                         <div>
-                            <el-autocomplete v-model="form.categoryThreeSearch" :fetch-suggestions="querySearchAsync"
+                            <el-autocomplete :size="size" v-model="form.categoryThreeSearch" :fetch-suggestions="querySearchAsync"
                                              placeholder="请输入内容" @select="handleSelect"></el-autocomplete>
-                            <el-button class="categorySearch">搜索</el-button>
+                            <el-button :size="size" class="categorySearch">搜索</el-button>
                         </div>
                         <template v-for="(item,index) in oneCategory" v-if="index == categoryOneIndex">
                             <template v-for="(two,idx) in item.children" v-if="idx == categoryTwoIndex">
@@ -73,51 +83,51 @@
                 <p class="gray11">(商品上架后不可修改，请谨慎选择)</p>
             </el-form-item>
             <el-form-item label="条形码">
-                <el-input v-model="form.code" class="inputOne"></el-input>
+                <el-input :size="size" v-model="form.code" class="inputOne"></el-input>
             </el-form-item>
             <el-form-item label="名称">
-                <el-input v-model="form.name" class="inputOne"></el-input>
+                <el-input :size="size" v-model="form.name" class="inputOne"></el-input>
             </el-form-item>
             <el-form-item label="单位">
-                <el-input v-model="form.unit" class="inputOne"></el-input>
+                <el-input :size="size" v-model="form.unit" class="inputOne"></el-input>
                 <span>计量单位，例：盒、件、箱、瓶。</span>
             </el-form-item>
             <div class="product_tit">分润信息</div>
             <el-form-item label="商品分润">
-                <el-checkbox-group v-model="form.type">
+                <el-checkbox-group :size="size" v-model="form.type">
                     <el-checkbox label="使用分润模板" name="type"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="推广佣金率">
-                <el-input v-model="form.unit" class="inputOne"></el-input>
+                <el-input :size="size" v-model="form.unit" class="inputOne"></el-input>
                 <span>%</span>
             </el-form-item>
             <el-form-item label="返利比例">
-                <el-input v-model="form.unit" class="inputOne"></el-input>
+                <el-input :size="size" v-model="form.unit" class="inputOne"></el-input>
                 <span>%</span>
             </el-form-item>
             <el-form-item label="发展者佣金率">
-                <el-input v-model="form.unit" class="inputOne"></el-input>
+                <el-input :size="size" v-model="form.unit" class="inputOne"></el-input>
                 <span>%</span>
             </el-form-item>
             <el-form-item label="换算规则">
                 <span>1=</span>
-                <el-input v-model="form.unit" class="" style="width: 50px"></el-input>
-                <el-input v-model="form.unit" class="" style="width: 50px"></el-input>
-                <el-button type="primary">清空</el-button>
+                <el-input :size="size" v-model="form.convertOne" class="" style="width: 80px"></el-input>
+                <el-input :size="size" v-model="form.convertTwo" class="" style="width: 80px"></el-input>
+                <el-button :size="size" type="primary" @click="clearConvert">清空</el-button>
             </el-form-item>
             <div class="product_tit">价格库存</div>
             <el-form-item label="商品规格">
-                <el-radio-group v-model="specsLabel" @change="specsButton($event)">
+                <el-radio-group :size="size" v-model="specsLabel" @change="specsButton($event)">
                     <el-radio label="0">统一规格</el-radio>
                     <el-radio label="1">多规格</el-radio>
                     <el-radio label="2">多规格2</el-radio>
                 </el-radio-group>
-                <div class="specifications" v-if="specsLabel == '1'">
+                <div class="specifications" v-show="specsLabel == '1'">
                     <div class="specifications_tit">颜色</div>
                     <ul>
                         <li class="relative" v-for="(item,index) in colorSpec">
-                            <el-checkbox @change="choose($event,index)">
+                            <el-checkbox :size="size" @change="choose($event,index)">
                                 <el-input v-model="colorSpec[index].name" class="color_input"
                                           @focus="inputFocus(index)" @change="inputChange($event,index)"></el-input>
                                 <span class="spec_img tc f20">+</span>
@@ -145,9 +155,9 @@
                     <div class="specifications_tit">尺码</div>
                     <ul class="size_product">
                         <li v-for="(item,index) in sizeSpec">
-                            <el-checkbox @change="chooseSize($event,index)" v-if="!item.custom">{{item.name}}</el-checkbox>
-                            <el-checkbox @change="chooseSize($event,index)" v-if="item.custom">
-                                <el-input v-model="item.value" size="small" placeholder="自定义尺码"
+                            <el-checkbox :size="size" @change="chooseSize($event,index)" v-if="!item.custom">{{item.name}}</el-checkbox>
+                            <el-checkbox :size="size" @change="chooseSize($event,index)" v-if="item.custom">
+                                <el-input :size="size" v-model="item.value" size="small" placeholder="自定义尺码"
                                           style="width: 100px" @focus="sizeFocus(index)" @change="sizeChange($event,index)"></el-input>
                             </el-checkbox>
                         </li>
@@ -157,31 +167,31 @@
                     <ul class="batch_product">
                         <li>批量填充</li>
                         <li>
-                            <el-input placeholder="条形码" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.code" placeholder="条形码" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input placeholder="合伙人" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.price1" placeholder="合伙人" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input placeholder="销售价" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.price2" placeholder="销售价" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input placeholder="市场价" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.price3" placeholder="市场价" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input placeholder="库存" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.stock" placeholder="库存" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input placeholder="成本价" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.price4" placeholder="成本价" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input placeholder="起订量" size="small"></el-input>
+                            <el-input :size="size" v-model="batch.miniOrder" placeholder="起订量" size="small"></el-input>
                         </li>
                         <li>
-                            <el-input size="small"></el-input>
+                            <el-input :size="size" v-model="batch.price5" size="small"></el-input>
                         </li>
                         <li>
-                            <el-button size="small">确定</el-button>
+                            <el-button :size="size" @click="batchBtn">确定</el-button>
                         </li>
                     </ul>
 
@@ -195,155 +205,184 @@
                         <el-table-column align="center" prop="size" label="尺码"></el-table-column>
                         <el-table-column align="center" label="条形码">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.code" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.code" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="合伙人价">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.price1" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.price1" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="销售价">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.price2" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.price2" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="市场价">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.price3" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.price3" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="库存">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.stock" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.stock" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="成本价">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.price4" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.price4" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="起订量">
                             <template slot-scope="scope">
                                 <!--<div v-html="scope.row.miniOrder"></div>-->
-                                <el-input v-model="scope.row.miniOrder" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.miniOrder" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                         <el-table-column align="center" label="">
                             <template slot-scope="scope">
-                                <el-input v-model="scope.row.price5" clearable size="mini"></el-input>
+                                <el-input v-model="scope.row.price5" clearable :size="size"></el-input>
                             </template>
                         </el-table-column>
                     </el-table>
                 </div>
-                <div class="specifications" v-if="specsLabel == '2'">
-                    <div><el-button>增加商品规格</el-button></div>
-                    <template>
-                        <el-table :data="specData" border style="width: 100%">
+                <div class="specifications" v-show="specsLabel == '2'">
+                    <div class="tc addSpecButton2"><el-button @click="addSpecTwo">增加商品规格</el-button></div>
 
+                        <el-table :data="specData" border style="width: 100%" class="specTwoTable">
                             <el-table-column align="center" label="条形码">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.code" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.code" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
 
                             <el-table-column align="center">
                                 <template slot="header" slot-scope="scope">
-                                    <el-input
-                                            v-model="specTit1"
-                                            size="mini"
-                                            placeholder="输入关键字搜索"/>
+                                    <el-checkbox @change="specOne($event)" class="check_input">
+                                        <el-input v-model="specTitOne.name" :size="size" class="tit_input tc"></el-input>
+                                    </el-checkbox>
                                 </template>
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.color" clearable size="mini"></el-input>
-                                </template>
-                            </el-table-column>
-                            <!--<el-table-column align="center" prop="id" label="id"></el-table-column>-->
-                            <!--<el-table-column align="center" prop="sizeId" label="sizeId"></el-table-column>-->
-                            <el-table-column align="center" label="尺码">
-                                <template slot-scope="scope">
-                                    <el-input v-model="scope.row.size" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.color" :disabled="!specTitOne.checked" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
 
+                            <el-table-column align="center">
+                                <template slot="header" slot-scope="scope">
+                                    <el-checkbox @change="specTwo($event)" class="check_input">
+                                        <el-input v-model="specTitTwo.name" :size="size" class="tit_input tc"></el-input>
+                                    </el-checkbox>
+                                </template>
+                                <template slot-scope="scope">
+                                    <el-input v-model="scope.row.size" :disabled="!specTitTwo.checked" clearable :size="size"></el-input>
+                                </template>
+                            </el-table-column>
 
                             <el-table-column align="center" label="合伙人价">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.price1" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.price1" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column align="center" label="销售价">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.price2" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.price2" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column align="center" label="市场价">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.price3" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.price3" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column align="center" label="库存">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.stock" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.stock" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column align="center" label="成本价">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.price4" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.price4" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column align="center" label="起订量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.miniOrder" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.miniOrder" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                             <el-table-column align="center" label="起订量">
                                 <template slot-scope="scope">
-                                    <el-input v-model="scope.row.price5" clearable size="mini"></el-input>
+                                    <el-input v-model="scope.row.price5" clearable :size="size"></el-input>
                                 </template>
                             </el-table-column>
                         </el-table>
-                    </template>
+
 
                 </div>
             </el-form-item>
 
 
             <el-form-item label="启用会员卡">
-                <el-checkbox-group v-model="form.type">
+                <el-checkbox-group :size="size" v-model="form.type">
                     <el-checkbox label="启用会员卡" name="type"></el-checkbox>
                 </el-checkbox-group>
             </el-form-item>
             <el-form-item label="商品图片">
-                <el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"
-                           :on-preview="handlePictureCardPreview">
-                    <i class="el-icon-plus"></i>
-                </el-upload>
+                <!--<el-upload action="https://jsonplaceholder.typicode.com/posts/" list-type="picture-card"-->
+                           <!--:on-preview="handlePictureCardPreview">-->
+                    <!--<i class="el-icon-plus"></i>-->
+                <!--</el-upload>-->
+                <div class="tc addSpecButton2"><el-button @click="addProductImg()">增加图片</el-button>目前只支持jpg,jpeg,bmp,gif,pngG图片格式，图片大小不能超过2MB！</div>
+                <el-table :data="productImg" stripe border style="width: 100%">
+                    <el-table-column prop="date" label="文件" align="center">
+                        <template slot-scope="scope">
+                            <span class="spec_img tc f20">+</span>
+                            <!--<el-button @click="dialogVisible = true">上传图片</el-button>-->
+                            <el-button :size="size" @click="uploadPicture('subimg',1)">上传图片</el-button>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="标题" align="center">
+                        <template slot-scope="scope">
+                            <el-input :size="size" v-model="scope.row.tit" clearable size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="排序" align="center">
+                        <template slot-scope="scope">
+                            <el-input :size="size" v-model="scope.row.sorting" clearable size="mini"></el-input>
+                        </template>
+                    </el-table-column>
+                    <el-table-column label="删除" align="center">
+                        <template slot-scope="scope">
+                            <el-button :size="size" type="text" @click="delProductImg(scope.row.index)">删除</el-button>
+                        </template>
+                    </el-table-column>
+                </el-table>
+
+
+
                 <!--<el-dialog :visible.sync="dialogVisible">-->
                 <!--<img width="100%" :src="dialogImageUrl" alt="">-->
                 <!--</el-dialog>-->
             </el-form-item>
-
-            <!--<div class="setMore">-->
-            <!--<p>更多设置</p>-->
-            <!--<el-form-item label="好的的打">-->
-            <!--<el-input v-model="form.unit" class="" style="width: 50px"></el-input>-->
-            <!--</el-form-item>-->
-            <!--</div>-->
-
+            <el-form-item label="推荐理由" style="height: 300px;">
+                <quill-editor
+                        class="info-editor"
+                        v-model="content"
+                        ref="VueQuillEditor"
+                        :options="editorOption" style="height: 120px;">
+                </quill-editor>
+            </el-form-item>
 
             <el-collapse class="setMore bornone" v-model="activeNames" @change="handleChange">
                 <el-collapse-item title="更多设置" name="1" class="baseColor">
                     <el-form-item label="推广佣金率">
-                        <el-input v-model="form.unit" class="inputOne"></el-input>
+                        <el-input :size="size" v-model="form.unit" class="inputOne"></el-input>
                     </el-form-item>
                     <el-form-item label="返利比例">
-                        <el-input v-model="form.unit" class="inputOne"></el-input>
+                        <el-input :size="size" v-model="form.unit" class="inputOne"></el-input>
                     </el-form-item>
                 </el-collapse-item>
             </el-collapse>
             <el-form-item>
-                <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+                <el-button :size="size" style="margin-top: 12px;" @click="next">下一步</el-button>
             </el-form-item>
 
         </el-form>
@@ -352,7 +391,7 @@
         <el-dialog title="选择文件" :visible.sync="dialogVisible" width="50%" :before-close="handleClose">
 			<span>
 				<img v-if="imageUrl" :src="imageUrl" class="avatar">
-				<i v-else class="el-icon-plus avatar-uploader-icon"></i>
+                <p v-else>请上传本地文件……</p>
 			</span>
             <span slot="footer" class="dialog-footer">
 			<el-upload class="upload-demo" ref="upload" action="https://jsonplaceholder.typicode.com/posts/"
@@ -370,6 +409,18 @@
 
         </el-dialog>
         <div class="mask" v-if="maskShow" @click="closeMask"></div>
+
+
+        <el-dialog
+                title="选择图片"
+                :visible.sync="cropperModel"
+                width="800px"
+                center
+                @open="show()">
+            <vue-cropper :Options="cropperOption" :Name="cropperName"  ref="child"></vue-cropper>
+        </el-dialog>
+
+
     </div>
 </template>
 
@@ -377,24 +428,74 @@
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
-
+    import vueCropper from './../../components/vue-cropper.vue';
+    // 工具栏配置
+    const toolbarOptions = [
+        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
+        ['blockquote', 'code-block'],
+        [{'header': 1}, {'header': 2}],               // custom button values
+        [{'list': 'ordered'}, {'list': 'bullet'}],
+        [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
+        [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
+        [{'direction': 'rtl'}],                         // text direction
+        [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
+        [{'header': [1, 2, 3, 4, 5, 6, false]}],
+        [{'color': []}, {'background': []}],          // dropdown with defaults from theme
+        [{'font': []}],
+        [{'align': []}],
+        ['link', 'image', 'video'],
+        ['clean']                                         // remove formatting button
+    ]
     export default {
         data() {
             return {
-                specTit1:'',
+                size:this.GLOBAL.size,
+                editorOption: {
+                    placeholder: '请输入编辑内容',
+                    theme: 'snow', //主题风格
+                    modules: {
+                        toolbar: {
+                            container: toolbarOptions, // 工具栏
+                            handlers: {
+                                'image': function (value) {
+                                    if (value) {
+                                        document.querySelector('#quill-upload input').click()
+                                    } else {
+                                        this.quill.format('image', false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, // 富文本编辑器配置
+                content: '', //富文本内容
+                productImg:[{
+                    index:0,
+                        img:'',
+                        tit:'',
+                    sorting:'',
+                    }],
+                specTitOne:{
+                    name:'型号',
+                    checked:false
+                },
+                specTitTwo:{
+                    name:'颜色',
+                    checked:false
+                },
                 specData: [{
                     id:'',
                     color: '',
                     sizeId:'',
                     size: '',
-                    price1: '',
+                    price1: '0',
                     price2: '',
                     price3: '',
                     price4: '',
                     price5: '',
                     code: '',
                     stock: '',
-                    miniOrder: ''
+                    miniOrder: '1'
                 }],
                 maskShow:false,
                 options: [{
@@ -419,6 +520,8 @@
                     categoryOneSearch: '',
                     categoryTwoSearch: '',
                     categoryThreeSearch: '',
+                    convertOne:'',
+                    convertTwo:'',
                 },
                 restaurants: [],
                 state: '',
@@ -711,13 +814,150 @@
                 }],
                 specsLabel:'2',
                 hasValue:'',
-                sizeHasValue:''
+                sizeHasValue:'',
+                batch:{
+                    price1: '',
+                    price2: '',
+                    price3: '',
+                    price4: '',
+                    price5: '',
+                    code: '',
+                    stock: '',
+                    miniOrder: ''
+                },
+                //裁切图片参数
+                cropperModel:false,
+                cropperName:'',//裁切图片上传名字
+                cropperOption: {
+                    img: '',
+                    size: 1,
+                    full: true,//新增输出原图比例截图 props名full
+                    outputType: 'png',
+                    canMove: true,
+                    original: false,
+                    canMoveBox: false,
+                    autoCrop: true,
+                    autoCropWidth: 200,
+                    autoCropHeight: 200,
+                    fixedBox: true
+                },
+                formValidate: {
+                    subImages: '',//附图
+                },
             }
         },
+        components:{
+            vueCropper,
+        },
         methods: {
-            specsButton(e){
+            show(){
+                this.$nextTick(function () {
+                    console.log('00:'+this.$refs)
+                    this.$refs.child.changeCropBox(200,200);//裁切大小
+                })
+            },
+            uploadPicture(name,num){
+                this.cropperName = name;
+                this.cropperModel = true;
+            },
+            addProductImg(index){
                 var that = this
-                that.specsLabel = e
+                if(this.productImg.length==0){
+                    this.productImg.push({
+                        index:0,
+                        img:'',
+                        tit:'',
+                        sorting:'',
+                    })
+                }else{
+                    this.productImg.push({
+                        index:that.productImg[0].index++,
+                        img:'',
+                        tit:'',
+                        sorting:'',
+                    })
+                }
+
+                console.log(that.productImg)
+            },
+            delProductImg(index){
+                var that = this
+                console.log('index:'+index)
+                let newArr = [];
+                that.productImg.forEach(function (value,key,arr) {
+                    if(value.index != index){
+                        newArr.push(value)
+                    }
+                });
+                that.productImg = newArr;
+
+            },
+            batchBtn(){
+                var that = this
+                console.log('pil')
+                console.log(that.batch)
+                for(let i=0;i<that.tableData.length;i++){
+                        this.$set(that.tableData,i,{
+                            id:that.tableData[i].id,
+                            color:that.tableData[i].color,
+                            sizeId:that.tableData[i].sizeId,
+                            size: that.tableData[i].size,
+                            price1: that.batch.price1,
+                            price2: that.batch.price2,
+                            price3: that.batch.price3,
+                            price4: that.batch.price4,
+                            price5: that.batch.price5,
+                            code: that.batch.code,
+                            stock: that.batch.stock,
+                            miniOrder: that.batch.miniOrder
+                        })
+
+                }
+                that.$nextTick(function(){
+                    that.getSpanArr(that.tableData);
+                });
+            },
+            clearConvert(){
+                this.form.convertOne = '';
+                this.form.convertTwo = '';
+            },
+            addSpecTwo(){
+                if(this.specTitOne.checked || this.specTitTwo.checked){
+                    this.specData.push({
+                        id:'',
+                        color: '',
+                        sizeId:'',
+                        size: '',
+                        price1: '0',
+                        price2: '',
+                        price3: '',
+                        price4: '',
+                        price5: '',
+                        code: '',
+                        stock: '',
+                        miniOrder: '1'
+                    })
+                }else{
+                    alert('至少选择一项')
+                }
+
+            },
+            specOne(e){
+                var that = this
+                this.specTitOne.checked = e
+                if(!this.specTitOne.checked && !this.specTitTwo.checked){
+                    that.specData = []
+                }
+            },
+            specTwo(e){
+                var that = this
+                this.specTitTwo.checked = e
+                if(!this.specTitOne.checked && !this.specTitTwo.checked){
+                    that.specData = []
+                }
+            },
+            specsButton(e){
+                this.specsLabel = e
             },
             //点击分类
             categoryOne: function (index) {
@@ -1321,6 +1561,7 @@
             }
         },
         mounted() {
+            this.$addQuillTitle();
             this.getSpanArr(this.tableData);
             this.restaurants = this.loadAll();
         }
@@ -1460,9 +1701,41 @@
         line-height: 50px;
     }
 
-    .selected {
+    .categoryUl .selected {
         color: $white01;
         background: $baseColor;
     }
 
+    .addSpecButton2{
+        margin-bottom: 20px;
+    }
+    .tit_input {
+        padding: 0 !important;
+        .el-input__inner{
+            width: 50px;
+            padding: 0 5px;
+        }
+    }
+    .check_input{
+        height: 43px;
+        padding: 0;
+        .el-checkbox__input{
+            float: left;
+            margin-top: 15px;
+        }
+        .el-checkbox__label{
+            float: left;
+            font-size: 0;
+            height: 43px;
+            line-height: 43px !important;
+        }
+    }
+    .specTwoTable{
+        .cell{
+            line-height: 1 !important;
+        }
+    }
+    .el-table__body .cell .el-input__inner{
+        padding: 0 5px !important;
+    }
 </style>

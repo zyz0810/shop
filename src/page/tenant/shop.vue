@@ -44,7 +44,7 @@
                 <el-table-column prop="addr" label="库存" min-width="180" sortable></el-table-column>
                 <el-table-column fixed="right" label="操作" width="80">
                     <template slot-scope="scope">
-                        <el-button size="small" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+                        <el-button :size="size" @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -58,6 +58,7 @@
     export default {
         data() {
             return {
+                size:this.GLOBAL.size,
                 screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
                 filters: {

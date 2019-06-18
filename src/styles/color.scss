@@ -82,3 +82,10 @@ $white01:#fff;
 .baseColor{
   color: $baseColor;
 }
+//表格头部背景色
+.headTableBg{
+  background-color: $gray03 !important;
+  th{
+    background-color: transparent;
+  }
+}

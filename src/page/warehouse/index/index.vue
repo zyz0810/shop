@@ -25,21 +25,36 @@
 			</el-form>
 
 			<!--列表-->
-			<el-table stripe :data="users" ref="table" highlight-current-row v-loading="listLoading" style="width: 100%;" :height="tableHeight">
-				<el-table-column type="selection" fixed width="55"></el-table-column>
-				<el-table-column prop="name0" label="活动名称"></el-table-column>
-				<el-table-column prop="name1" label="活动范围" ></el-table-column>
-				<el-table-column prop="name2" label="参与角色"></el-table-column>
-				<el-table-column prop="name3" label="开始时间"></el-table-column>
-				<el-table-column prop="name4" label="结束时间"></el-table-column>
-				<el-table-column prop="name5" label="活动状态"></el-table-column>
-				<el-table-column prop="name6" label="排名模板"></el-table-column>
-				<el-table-column prop="name7" label="销售额"></el-table-column>
-				<el-table-column prop="name8" label="支出佣金"></el-table-column>
-				<el-table-column prop="name9" label="奖池"></el-table-column>
-				<el-table-column fixed="right" label="操作" width="100">
+			<el-table stripe :data="productSet" :header-row-class-name="headClass" :size="size" ref="table" highlight-current-row v-loading="listLoading" style="width: 100%; margin-top: 20px;" :height="tableHeight">
+				<el-table-column label="商品名称" width="350">
 					<template slot-scope="scope">
-						<el-button :size="size">查看</el-button>
+						<div class="product">
+							<div class="img fl"><img :src="scope.row.name0"></div>
+							<div class="fl">
+								<p>{{scope.row.name1}}</p>
+								<p class="gray10">{{scope.row.name2}}</p>
+							</div>
+						</div>
+					</template>
+				</el-table-column>
+				<el-table-column prop="name3" label="库存单位"></el-table-column>
+				<!--<el-table-column  type="index"></el-table-column>-->
+				<el-table-column prop="name4" label="库存数"></el-table-column>
+				<el-table-column label="期初成本（元）">
+					<template slot-scope="scope">
+						<span>{{ scope.row.name5 | money}}</span>
+						<!--<el-input :size="size" type="number" v-model="scope.row.name5"></el-input>-->
+					</template>
+				</el-table-column>
+				<el-table-column label="总成本（元）">
+					<template slot-scope="scope">
+						<span>{{ scope.row.name6 | money}}</span>
+					</template>
+				</el-table-column>
+				<el-table-column fixed="right" label="操作" width="200">
+					<template slot-scope="scope">
+						<el-button :size="size" type="text" @click="delProduct(scope.$index)">库存分布</el-button>
+						<el-button :size="size" type="text" @click="delProduct(scope.$index)">库存流水</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -64,62 +79,47 @@
                 },
                 screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
-                users: [{
-                    name0:'2019第一周',
-					name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
-				},{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                productSet:[{
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'55',
+                    name5:'10.00',
+                    name6:'2019.00'
                 },{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'5656',
+                    name5:'15.00',
+                    name6:'2019.00'
                 },{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'547',
+                    name5:'20.00',
+                    name6:'2019.00'
                 },{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
-                }],
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'87',
+                    name5:'5.00',
+                    name6:'2019.00'
+                },{
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'56',
+                    name5:'10.00',
+                    name6:'2019.00'
+                },],
                 total: 0,
                 page: 1,
                 listLoading: false,

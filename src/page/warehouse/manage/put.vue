@@ -2,14 +2,14 @@
 	<div class="warehouse">
 		<div v-if="pageType == 'index'">
 			<div class="out_btn">
-				<el-button type="primary" :size="size" @click="onCreate">新建出库单</el-button>
+				<el-button type="primary" :size="size" @click="onCreate">新建入库单</el-button>
 			</div>
 
 			<el-form :inline="true" :model="condition" class="demo-form-inline" label-width="100px">
-				<el-form-item label="商品名称">
-					<el-input v-model="condition.product" :size="size" placeholder="请输入商品名称"></el-input>
-				</el-form-item>
-				<el-form-item label="出库单号">
+				<!--<el-form-item label="商品名称">-->
+					<!--<el-input v-model="condition.product" :size="size" placeholder="请输入商品名称"></el-input>-->
+				<!--</el-form-item>-->
+				<el-form-item label="入库单号">
 					<el-input v-model="condition.num" :size="size" placeholder="请输入出库单号"></el-input>
 				</el-form-item>
 				<el-form-item label="门店/仓库">
@@ -35,6 +35,8 @@
 				</el-form-item>
 				<el-button type="text" @click="clearCondition" style="padding-top: 15px;">清空筛选条件</el-button>
 			</el-form>
+
+
 
 			<!--列表-->
 			<el-table stripe :data="outList" ref="table" highlight-current-row v-loading="listLoading" style="width: 100%;margin-top: 20px;" :header-row-class-name="headClass" :cell-class-name="cellStyle" :height="tableHeight">
@@ -127,6 +129,7 @@
 				<el-form-item label="操作人">
 					<el-input v-model="create.person" :size="size" :disabled="true"></el-input>
 				</el-form-item>
+
 			</el-form>
 			<el-form :inline="true" :model="create" class="demo-form-inline" label-width="100px" hideRequiredSterisk="true">
 				<el-form-item label="备注">
@@ -177,10 +180,6 @@
 					</template>
 				</el-table-column>
 			</el-table>
-			<div class="form_foot tc">
-				<el-button type="primary" @click="dialogProduct = true">确定出库</el-button>
-				<el-button @click="">取消</el-button>
-			</div>
 
 		</div>
 		<!--选择商品-->

@@ -5,22 +5,24 @@
 				<el-button type="primary" :size="size" @click="onCreate">新建仓库</el-button>
 			</div>
 			<!--列表-->
-			<el-table stripe :data="users" ref="table" highlight-current-row v-loading="listLoading" style="width: 100%;" :height="tableHeight">
-				<el-table-column type="selection" fixed width="55"></el-table-column>
-				<el-table-column prop="name0" label="活动名称"></el-table-column>
-				<el-table-column prop="name1" label="活动范围" ></el-table-column>
-				<el-table-column prop="name2" label="参与角色"></el-table-column>
-				<el-table-column prop="name3" label="开始时间"></el-table-column>
-				<el-table-column prop="name4" label="结束时间"></el-table-column>
-				<el-table-column prop="name5" label="活动状态"></el-table-column>
-				<el-table-column prop="name6" label="排名模板"></el-table-column>
-				<el-table-column prop="name7" label="销售额"></el-table-column>
-				<el-table-column prop="name8" label="支出佣金"></el-table-column>
-				<el-table-column prop="name9" label="奖池"></el-table-column>
+			<el-table stripe :data="warehouseList" ref="table" highlight-current-row v-loading="listLoading" style="width: 100%;"  :header-row-class-name="headClass" :height="tableHeight">
+				<!--<el-table-column type="selection" fixed width="55"></el-table-column>-->
+				<el-table-column prop="name0" label="仓库编号"></el-table-column>
+				<el-table-column prop="name1" label="仓库名称" ></el-table-column>
+				<el-table-column prop="name2" label="联系人"></el-table-column>
+				<el-table-column prop="name3" label="联系方式"></el-table-column>
+				<el-table-column prop="name4" width="360" label="仓库地址"></el-table-column>
+				<el-table-column label="状态">
+					<template slot-scope="scope">
+						<span v-if="scope.row.name5 == true">启用</span>
+						<span class="red01" v-else>已禁用</span>
+					</template>
+				</el-table-column>
 				<el-table-column fixed="right" label="操作" width="100">
 					<template slot-scope="scope">
-						<el-button :size="size" type="text">编辑</el-button>
-						<el-button :size="size" type="text" class="red01" @click="handleProhibit">禁用</el-button>
+						<el-button :size="size" type="text" @click="onCreate">编辑</el-button>
+						<el-button v-if="scope.row.name5 == true" :size="size" type="text" class="red01" @click="handleProhibit($event,scope.$index)">禁用</el-button>
+						<el-button v-else :size="size" type="text" @click="start($event,scope.$index)">启用</el-button>
 					</template>
 				</el-table-column>
 			</el-table>
@@ -66,16 +68,12 @@
 			</el-form>
 		</div>
 
-		<el-dialog
-				title="仓库创建成功"
-				:visible.sync="dialogVisible"
-				width="30%"
-				:before-close="handleClose">
+		<el-dialog title="仓库创建成功" :visible.sync="dialogVisible" width="30%">
 			<span>已成功创建<span class="baseColor">南二环是谁的热</span>，现在就去甚至期初库存吗？</span>
 			<span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">暂时放弃</el-button>
-    <el-button type="primary" @click="goPrime">去设置</el-button>
-  </span>
+			<el-button @click="dialogVisible = false">暂时放弃</el-button>
+			<el-button type="primary" @click="goPrime">去设置</el-button>
+		  </span>
 		</el-dialog>
 	</div>
 </template>
@@ -110,61 +108,41 @@
                 },
                 screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
-                users: [{
-                    name0:'2019第一周',
-					name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                warehouseList: [{
+                    name0:'CK001',
+					name1:'国际花都3期仓库',
+                    name2:'1店店长',
+                    name3:'18019952019',
+                    name4:'安徽省合肥市庐阳区逍遥津街道新华巷合肥中心',
+                    name5:true
 				},{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                    name0:'CK001',
+                    name1:'国际花都3期仓库',
+                    name2:'1店店长',
+                    name3:'18019952019',
+                    name4:'安徽省合肥市庐阳区逍遥津街道新华巷合肥中心',
+                    name5:true
                 },{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                    name0:'CK001',
+                    name1:'国际花都3期仓库',
+                    name2:'1店店长',
+                    name3:'18019952019',
+                    name4:'安徽省合肥市庐阳区逍遥津街道新华巷合肥中心',
+                    name5:true
                 },{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                    name0:'CK001',
+                    name1:'国际花都3期仓库',
+                    name2:'1店店长',
+                    name3:'18019952019',
+                    name4:'安徽省合肥市庐阳区逍遥津街道新华巷合肥中心',
+                    name5:false
                 },{
-                    name0:'2019第一周',
-                    name1:'中国',
-                    name2:'或加店主',
-                    name3:'2019-9-8',
-                    name4:'2019-9-8',
-                    name5:'已结束',
-                    name6:'52054第一周u',
-                    name7:'￥89',
-                    name8:'￥878',
-                    name9:'￥855',
+                    name0:'CK001',
+                    name1:'国际花都3期仓库',
+                    name2:'1店店长',
+                    name3:'18019952019',
+                    name4:'安徽省合肥市庐阳区逍遥津街道新华巷合肥中心',
+                    name5:true
                 }],
                 total: 0,
                 page: 1,
@@ -215,7 +193,6 @@
 				this.condition.person=''
                 this.condition.num=''
 			},
-
             handleCurrentChange(val) {
                 this.page = val;
                 // this.getUsers();
@@ -235,26 +212,111 @@
             //         //NProgress.done();
             //     });
             // },
-            //删除
-            handleProhibit: function () {
-                this.$confirm('确定禁用'+ '南二环' +'吗?', '仓库创建成功', {
-                    type: 'warning'
-                }).then(() => {
-                    this.listLoading = true;
-                    //NProgress.start();
-                    let para = { id: row.id };
-                    removeUser(para).then((res) => {
-                        this.listLoading = false;
-                        //NProgress.done();
-                        this.$message({
-                            message: '删除成功',
-                            type: 'success'
-                        });
-                        // this.getUsers();
-                    });
-                }).catch(() => {
+            start(val,index){
+                const h = this.$createElement;
+                this.$msgbox({
+                    title: '仓库创建成功',
+                    message: h('p', null, [
+                        h('span', null, '确定启用'),
+                        h('span', {style: 'color: #409EFF' }, ' 南二环 '),
+                        h('span', null, '仓库？'),
+                    ]),
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    beforeClose: (action, instance, done) => {
+                        if (action === 'confirm') {
+                            this.warehouseList[index].name5 = true
+                            done();
+                        } else {
+                            done();
+                        }
+                    }
+                }).then(action => {
 
                 });
+
+
+
+
+
+
+
+                // this.$confirm('确定启用'+ '南二环' +'吗?', '仓库创建成功', {
+                //     type: 'warning'
+                // }).then(() => {
+                //     // this.listLoading = true;
+                //     this.warehouseList[index].name5 = false
+                //     //NProgress.start();
+                //     // let para = { id: row.id };
+                //     // removeUser(para).then((res) => {
+                //     //     this.listLoading = false;
+                //     //     //NProgress.done();
+                //     //     this.$message({
+                //     //         message: '删除成功',
+                //     //         type: 'success'
+                //     //     });
+                //     //     // this.getUsers();
+                //     // });
+                // }).catch(() => {
+                //
+                // });
+
+			},
+            //删除
+            handleProhibit: function (val,index) {
+                // this.$confirm('确定禁用'+ '南二环' +'吗?', '仓库创建成功', {
+                //     type: 'warning'
+                // }).then(() => {
+                //     // this.listLoading = true;
+					// this.warehouseList[index].name5 = false
+                //     NProgress.start();
+                //     let para = { id: row.id };
+                //     removeUser(para).then((res) => {
+                //         this.listLoading = false;
+                //         //NProgress.done();
+                //         this.$message({
+                //             message: '删除成功',
+                //             type: 'success'
+                //         });
+                //         // this.getUsers();
+                //     });
+                // }).catch(() => {
+                //
+                // });
+
+                const h = this.$createElement;
+                this.$msgbox({
+                    title: '仓库创建成功',
+                    message: h('p', null, [
+                        h('span', null, '确定禁用'),
+                        h('span', {style: 'color: #409EFF' }, ' 南二环 '),
+                        h('span', null, '仓库？'),
+                    ]),
+                    type: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    beforeClose: (action, instance, done) => {
+                        if (action === 'confirm') {
+                            this.warehouseList[index].name5 = false
+                            done();
+                        } else {
+                            done();
+                        }
+                    }
+                }).then(action => {
+
+                });
+
+
+
+
+
+
+
+
             },
         },
         watch: {
@@ -269,6 +331,7 @@
         },
         mounted() {
             // this.getUsers();
+			this.headClass()
             this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 80;
             console.log(this.$refs.table.$el.offsetTop)
             // 监听屏幕高度

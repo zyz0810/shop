@@ -411,12 +411,7 @@
         <div class="mask" v-if="maskShow" @click="closeMask"></div>
 
 
-        <el-dialog
-                title="选择图片"
-                :visible.sync="cropperModel"
-                width="800px"
-                center
-                @open="show()">
+        <el-dialog title="选择图片" :visible.sync="cropperModel" width="800px" center @open="show()">
             <vue-cropper :Options="cropperOption" :Name="cropperName"  ref="child"></vue-cropper>
         </el-dialog>
 

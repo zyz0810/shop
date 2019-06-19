@@ -23,12 +23,18 @@ import assembleList from './page/marketing/assemble/list.vue'//拼团列表
 import postage from './page/marketing/postage/index.vue'//拼团列表
 //库存
 import warehouseQuery from './page/warehouse/index/index.vue'//库存查询
+import warehouseInput from './page/warehouse/manage/put.vue'//入库单
 import warehouseOut from './page/warehouse/manage/out.vue'//出库单
 import warehouseManage from './page/warehouse/warehouse/manage.vue'//仓库管理
 import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
 
+//货架管理
+import shelfManage from './page/shelf/manage.vue'//货架管理
+
+
+
 //商品
-import addProduct from './page/product/add.vue'
+import addProduct from './page/product/add.vue' //新品发布
 import img from './page/product/img.vue'
 import maodian from './page/product/maodian.vue'
 
@@ -83,7 +89,7 @@ let routes = [
         name: '货架',
         iconCls: 'fa fa-bar-chart',
         children: [
-            { path: '/shelf1', component: echarts,leaf: true, name: '货架管理' },
+            { path: '/shelf/index', component: shelfManage,leaf: true, name: '货架管理' },
             { path: '/shelf2', component: echarts,leaf: true, name: '货架套餐' },
             { path: '/shelf3', component: echarts,leaf: true, name: '货架套餐订单' },
             { path: '/shelf4', component: echarts,leaf: true, name: '销售激励' },
@@ -98,7 +104,7 @@ let routes = [
         iconCls: 'fa fa-bar-chart',
         children: [
             { path: '/echarts', component: echarts,leaf: true, name: '商品分类' },
-            { path: '/echarts1', component: addProduct,leaf: true, name: '发布新品' },
+            { path: '/product/add', component: addProduct,leaf: true, name: '发布新品' },
             { path: '/echarts2', component: img,leaf: true, name: '商品列表' },
             { path: '/echarts3', component: maodian,leaf: true, name: '商品库' },
             { path: '/echarts4', component: echarts,leaf: true, name: '网店商品' },
@@ -120,7 +126,7 @@ let routes = [
                 {path: '/warehouse/index', component: warehouseQuery,leaf: false, name: '库存查询'}
                 ]},
             { path: '/warehouse/manage', component: tenant,leaf: false, name: '库存管理',children:[
-                    {path: '/warehouse/put', component: warehouseQuery,leaf: false, name: '入库单'},
+                    {path: '/warehouse/put', component: warehouseInput,leaf: false, name: '入库单'},
                     {path: '/warehouse/out', component: warehouseOut,leaf: false, name: '出库单'},
                 ]},
             { path: '/warehouse/warehouse', component: tenant,leaf: false, name: '仓库管理' ,children:[

@@ -26,7 +26,7 @@
 					<ul class="el-menu el-menu-vertical-demo oneMenu fl" ref="menuOne">
 						<li v-for="(item,index) in $router.options.routes" v-if="!item.hidden" class="el-submenu item">
 							<template v-if="!item.leaf">
-								<div class="el-submenu__title" :class="navIndex == index?'navOne':''" style="padding-left: 10px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)"><i :class="item.iconCls"></i>{{item.name}}</div>
+								<div class="el-submenu__title" :class="navIndex == index?'navOne':''" style="padding-left: 10px;" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)" @click="clickMenu(index,$event,'0')"><i :class="item.iconCls"></i>{{item.name}}</div>
 								<ul class="el-menu submenu childenMenu" :class="'submenu-hook-'+index" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)" :data-index="index" style="display: none;">
 
 									<div class="el-submenu__title erji_title">{{item.name}}</div>
@@ -222,6 +222,10 @@
                 that.$refs.menuOne.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
                 console.log('鼠标指向：'+i)
             },
+            clickMenu(index,$event,leaf){
+                this.navIndex = index;
+                this.navLeaf = leaf;
+			},
             myclick(path,e,index,leaf){
                 // $router.push(child.path)
                 this.$router.push({

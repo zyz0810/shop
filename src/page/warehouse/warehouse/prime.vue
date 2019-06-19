@@ -18,7 +18,7 @@
                 </el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
                     <template slot-scope="scope">
-                        <el-button :size="size" type="text">详情</el-button>
+                        <el-button :size="size" type="text" @click="goView">详情</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -98,9 +98,15 @@
                 </el-form-item>
             </el-form>
 
+            <div class="m18">
+                <el-button type="primary" @click="dialogProduct = true">选择商品</el-button>
+                <el-button :size="size" type="text" @click="goAddProduct">新建商品</el-button>
+            </div>
+
+
             <!--列表-->
             <el-table stripe :data="productSet" :header-row-class-name="headClass" :size="size" ref="table" highlight-current-row v-loading="listLoading" style="width: 100%; margin-top: 20px;" :height="tableHeight">
-                <el-table-column label="商品名称">
+                <el-table-column label="商品名称" width="350">
                     <template slot-scope="scope">
                         <div class="product">
                             <div class="img fl"><img :src="scope.row.name0"></div>
@@ -112,12 +118,26 @@
                     </template>
                 </el-table-column>
                 <el-table-column prop="name3" label="单位" ></el-table-column>
-                <el-table-column prop="name4" label="期初库存数量"></el-table-column>
-                <el-table-column prop="name5" label="期初成本（元）"></el-table-column>
-                <el-table-column prop="name6" label="小计（元）"></el-table-column>
+                <!--<el-table-column  type="index"></el-table-column>-->
+                <el-table-column label="期初库存数量">
+                    <template slot-scope="scope">
+                        <el-input :size="size" v-model="scope.row.name4" @change="inputNum($event,scope.$index)"></el-input>
+                    </template>
+                </el-table-column>
+                <el-table-column label="期初成本（元）">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.name5 | money}}</span>
+                        <!--<el-input :size="size" type="number" v-model="scope.row.name5"></el-input>-->
+                    </template>
+                </el-table-column>
+                <el-table-column label="小计（元）">
+                    <template slot-scope="scope">
+                        <span>{{ scope.row.name6 | money}}</span>
+                    </template>
+                </el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
                     <template slot-scope="scope">
-                        <el-button :size="size" type="text">删除</el-button>
+                        <el-button :size="size" type="text" class="red01" @click="delProduct(scope.$index)">删除</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -126,16 +146,47 @@
 
 
 
-        <el-dialog
-                title="仓库创建成功"
-                :visible.sync="dialogVisible"
-                width="30%"
-                :before-close="handleClose">
+
+
+        <!--选择商品-->
+        <el-dialog title="选择商品" :visible.sync="dialogProduct" width="900px" :before-close="handleClose" class="category">
+            <span class=" clearfix">
+                <el-tree :data="category" :props="defaultProps" @node-click="handleNodeClick" class="fl"></el-tree>
+                <div class="categoryProduct fr">
+                    <p class="baseColor goAddProduct">新建商品</p>
+                    <!--列表-->
+                    <el-table stripe :data="categoryProduct" :header-row-class-name="headClass" @selection-change="checkedProduct" :size="size" ref="productTable" highlight-current-row v-loading="listLoading" style="width: 100%;" height="500">
+                         <el-table-column type="selection" @selection-change="checkedProduct" width="55"></el-table-column>
+                        <el-table-column label="商品名称" width="300">
+                            <template slot-scope="scope">
+                                <div class="product">
+                                    <div class="img fl"><img :src="scope.row.name0"></div>
+                                    <div class="fl">
+                                        <p>{{scope.row.name1}}</p>
+                                        <p class="gray10">{{scope.row.name2}}</p>
+                                    </div>
+                                </div>
+                            </template>
+                        </el-table-column>
+                        <el-table-column prop="name3" label="单位" ></el-table-column>
+                        <el-table-column prop="name4" label="规格"></el-table-column>
+                    </el-table>
+                </div>
+            </span>
+            <span slot="footer" class="dialog-footer">
+                <span>已选商品：{{selectedProduct.length}}</span>
+                <el-button type="primary" @click="goPrime">确定</el-button>
+            </span>
+        </el-dialog>
+
+
+
+        <el-dialog title="仓库创建成功" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
             <span>已成功创建<span class="baseColor">南二环是谁的热</span>，现在就去甚至期初库存吗？</span>
             <span slot="footer" class="dialog-footer">
-    <el-button @click="dialogVisible = false">暂时放弃</el-button>
-    <el-button type="primary" @click="goPrime">去设置</el-button>
-  </span>
+                <el-button @click="dialogVisible = false">暂时放弃</el-button>
+                <el-button type="primary" @click="goPrime">去设置</el-button>
+            </span>
         </el-dialog>
     </div>
 </template>
@@ -148,8 +199,72 @@
     export default {
         data() {
             return {
+                categoryProduct:[{
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'黑色，XXL',
+                },{
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'黑色，XXL',
+                },{
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'黑色，XXL',
+                },{
+                    name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
+                    name1:'小米手环2.0黑色款',
+                    name2:'P201956205363',
+                    name3:'个',
+                    name4:'黑色，XXL',
+                }],
                 autosize:{
                     minRows: 2, maxRows: 6
+                },
+                category: [{
+                    label: '一级 1',
+                    children: [{
+                        label: '二级 1-1',
+                        children: [{
+                            label: '三级 1-1-1'
+                        }]
+                    }]
+                }, {
+                    label: '一级 2',
+                    children: [{
+                        label: '二级 2-1',
+                        children: [{
+                            label: '三级 2-1-1'
+                        }]
+                    }, {
+                        label: '二级 2-2',
+                        children: [{
+                            label: '三级 2-2-1'
+                        }]
+                    }]
+                }, {
+                    label: '一级 3',
+                    children: [{
+                        label: '二级 3-1',
+                        children: [{
+                            label: '三级 3-1-1'
+                        }]
+                    }, {
+                        label: '二级 3-2',
+                        children: [{
+                            label: '三级 3-2-1'
+                        }]
+                    }]
+                }],
+                defaultProps: {
+                    children: 'children',
+                    label: 'label'
                 },
                 form:{
                     name:'',
@@ -174,6 +289,7 @@
                     person:'',
                     num:''
                 },
+                dialogProduct:false,
                 screenHeight: document.body.clientHeight, // 这里是给到了一个默认值 （这个很重要）
                 tableHeight: null, // 表格高度
                 warehouse:[{
@@ -259,7 +375,7 @@
                     name2:'P201956205363',
                     name3:'个',
                     name4:'',
-                    name5:'',
+                    name5:'10.00',
                     name6:'2019.00'
                 },{
                     name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
@@ -267,7 +383,7 @@
                     name2:'P201956205363',
                     name3:'个',
                     name4:'',
-                    name5:'',
+                    name5:'15.00',
                     name6:'2019.00'
                 },{
                     name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
@@ -275,7 +391,7 @@
                     name2:'P201956205363',
                     name3:'个',
                     name4:'',
-                    name5:'',
+                    name5:'20.00',
                     name6:'2019.00'
                 },{
                     name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
@@ -283,7 +399,7 @@
                     name2:'P201956205363',
                     name3:'个',
                     name4:'',
-                    name5:'',
+                    name5:'5.00',
                     name6:'2019.00'
                 },{
                     name0:'http://cdn.tiaohuo.com/upload/image/201802/c8e089cb-4ea7-4127-b2c3-7ccd0ca86dcb.jpg',
@@ -291,14 +407,15 @@
                     name2:'P201956205363',
                     name3:'个',
                     name4:'',
-                    name5:'',
+                    name5:'10.00',
                     name6:'2019.00'
                 },],
                 total: 0,
                 page: 1,
                 listLoading: false,
-                pageType:'create',
-                dialogVisible:false
+                pageType:'manage',
+                dialogVisible:false,
+                selectedProduct:[]
             }
         },
 
@@ -313,7 +430,58 @@
             city,
         },
         methods: {
-            handleClose(){},
+            goView(){
+                this.pageType = 'view'
+            },
+            //新建商品
+            goAddProduct(){
+                this.$router.push({  //核心语句
+                    path:'/product/add',   //跳转的路径
+                    query:{           //路由传参时push和query搭配使用 ，作用时传递参数
+                        index:3,
+                        leaf:0
+                    }
+                })
+            },
+            //设置期初库存时 输入数量计算小计
+            inputNum(value,index){
+                var that = this
+                console.log(value,index)
+                that.productSet[index].name6 =  that.productSet[index].name5 * value
+            },
+            //删除商品
+            delProduct(index){
+                this.$confirm('确定删除此商品吗?', '提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    type: 'warning'
+                }).then(() => {
+
+                    this.productSet.splice(index,1);
+                    this.$message({
+                        type: 'success',
+                        message: '删除成功!'
+                    });
+                }).catch(() => {
+                    // this.$message({
+                    //     type: 'info',
+                    //     message: '已取消删除'
+                    // });
+                });
+            },
+            //选择商品
+            checkedProduct(val){
+                this.selectedProduct = val;
+                console.log(this.selectedProduct)
+            },
+
+            handleNodeClick(data) {
+                console.log(data);
+            },
+            handleClose(done) {
+                this.dialogVisible = false
+                this.dialogProduct = false
+            },
 
             goBack(){
                 this.pageType = 'manage'
@@ -456,6 +624,34 @@
                     height: 100%;
                 }
             }
+        }
+        .category{
+            .el-dialog{
+                padding: 10px;
+            }
+            .el-dialog__header{
+                padding: 2px 0 10px;
+                border-bottom: 1px solid $gray02;
+            }
+            .el-dialog__body{
+                padding: 0;
+            }
+            .dialog-footer{
+                &>span{
+                    margin-right: 40px;
+                }
+            }
+            .el-tree{
+                width: 180px;
+            }
+            .categoryProduct{
+                width: 670px;
+                padding-left: 20px;
+                border-left: 1px solid $gray02;
+            }
+        }
+        .goAddProduct{
+            margin-bottom: 10px;
         }
     }
 </style>

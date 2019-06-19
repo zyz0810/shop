@@ -37,6 +37,27 @@ Vue.use(VueCropper)
 Vue.use(ElementUI)
 Vue.use(VueRouter)
 Vue.use(Vuex)
+
+Vue.filter('money', function(val) {
+    val = val.toString().replace(/\$|\,/g,'');
+    if(isNaN(val)) {
+        val = "0";
+    }
+    let sign = (val == (val = Math.abs(val)));
+    val = Math.floor(val*100+0.50000000001);
+    let cents = val%100;
+    val = Math.floor(val/100).toString();
+    if(cents<10) {
+        cents = "0" + cents
+    }
+    for (var i = 0; i < Math.floor((val.length-(1+i))/3); i++) {
+        val = val.substring(0,val.length-(4*i+3))+',' + val.substring(val.length-(4*i+3));
+    }
+
+    return (((sign)?'':'-') + val + '.' + cents);
+})
+
+
 //表单验证
 import VeeValidate,{ Validator } from 'vee-validate';
 //错误提示转为中文

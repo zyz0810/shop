@@ -185,7 +185,7 @@
             quillEditor
         },
         mounted(){
-            this.$addQuillTitle();
+            // this.$addQuillTitle();
         },
         methods: {
             myColor(res) {

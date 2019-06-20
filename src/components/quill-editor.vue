@@ -1,13 +1,13 @@
 <template>
-  <quill-editor
-          class="info-editor"
-          v-model="content"
-          ref="VueQuillEditor"
-          :options="editorOption" style="height: 120px;">
-  </quill-editor>
+    <quill-editor
+            class="info-editor"
+            v-model="content"
+            ref="VueQuillEditor"
+            :options="editorOption" @change="onEditorChange($event)" style="height: 120px;">
+    </quill-editor>
 </template>
 <script>
-    import { addQuillTitle } from './../common/js/quill-title.js'
+    import {addQuillTitle} from './../common/js/quill-title.js'
     // 工具栏配置
     const toolbarOptions = [
         ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
@@ -25,39 +25,41 @@
         ['link', 'image', 'video'],
         ['clean']                                         // remove formatting button
     ];
-  export default {
+    export default {
 
-    props:['Content'],
-    data() {
-      return {
-          content:this.Content,
-          editorOption: {
-              placeholder: '请输入编辑内容',
-              theme: 'snow', //主题风格
-              modules: {
-                  toolbar: {
-                      container: toolbarOptions, // 工具栏
-                      handlers: {
-                          'image': function (value) {
-                              if (value) {
-                                  document.querySelector('#quill-upload input').click()
-                              } else {
-                                  this.quill.format('image', false);
-                              }
-                          }
-                      }
-                  }
-              }
-          }, // 富文本编辑器配置
-      };
-    },
-    methods: {
-
-    },
-      mounted(){
-          addQuillTitle()
-      }
-  }
+        props: ['Content'],
+        data() {
+            return {
+                content: this.Content,
+                editorOption: {
+                    placeholder: '请输入编辑内容',
+                    theme: 'snow', //主题风格
+                    modules: {
+                        toolbar: {
+                            container: toolbarOptions, // 工具栏
+                            handlers: {
+                                'image': function (value) {
+                                    if (value) {
+                                        document.querySelector('#quill-upload input').click()
+                                    } else {
+                                        this.quill.format('image', false);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }, // 富文本编辑器配置
+            };
+        },
+        methods: {
+            onEditorChange(e) {
+                console.log(e)
+            }, // 内容改变事件
+        },
+        mounted() {
+            addQuillTitle()
+        }
+    }
 </script>
 <style scoped lang="scss">
 

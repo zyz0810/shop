@@ -24,79 +24,62 @@
 
         </div>
         <div v-if="pageType=='add'">
-            <p class="title">添加布点商家</p>
+            <p class="title">新建套餐</p>
             <el-form ref="form" :model="addForm" hideRequiredSterisk="true" label-width="160px">
-                <el-form-item required label="公司名称">
-                    <el-input :size="size" v-model="addForm.name" class="inputOne" :disabled="true"></el-input>
-                    <!--<el-input :size="size" v-model="addForm.name" v-validate="'required'" data-vv-as="公司名称" name="addForm.name" :class="{'input': true, 'is-danger': errors.has('name') }" class="inputOne"  :disabled="true"></el-input>-->
-                    <!--<span class="help is-danger">{{ errors.first('addForm.name') }}</span>-->
+                <el-form-item required label="套餐名称">
+                    <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
+                    <el-input :size="size" v-model="addForm.name" placeholder="20个汉字以内" v-validate="'required'" data-vv-as="公司名称" name="editForm.name" :class="{'input': true, 'is-danger': errors.has('name') }" class="inputOne"></el-input>
+                    <span class="help is-danger">{{ errors.first('addForm.name') }}</span>
                 </el-form-item>
-                <el-form-item required label="绑定货架所在门店">
-                    <el-select :size="size" v-model="addForm.shop" class="inputOne" placeholder="绑定货架所在门店">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">刷新</el-button>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">新建门店</el-button>
+                <el-form-item required label="套餐销售价">
+                    <el-input :size="size" v-model="addForm.price" placeholder="请填写金额数字，如：3600" v-validate="'required'" data-vv-as="套餐销售价" name="editForm.price" :class="{'input': true, 'is-danger': errors.has('price') }" class="inputOne"></el-input>
+                    <span>元</span>
+                    <span class="help is-danger">{{ errors.first('addForm.price') }}</span>
                 </el-form-item>
-                <el-form-item required label="推广渠道">
-                    <el-select :size="size" v-model="addForm.channel" class="inputOne" placeholder="绑定货架所在门店">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">刷新</el-button>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">新建门店</el-button>
+                <el-form-item required label="货架绑定数量">
+                    <el-input :size="size" v-model="addForm.num" v-validate="'required'" placeholder="请填写整数数字，如：3600" data-vv-as="货架绑定数量" name="editForm.num" :class="{'input': true, 'is-danger': errors.has('num') }" class="inputOne"></el-input>
+                    <span>个</span>
+                    <span class="help is-danger">{{ errors.first('addForm.num') }}</span>
                 </el-form-item>
-                <el-form-item required label="选择图片展示模板">
+                <el-form-item required label="套餐模式">
                     <el-radio-group :size="size" v-model="addForm.show">
-                        <el-radio label="big">大图</el-radio>
-                        <el-radio label="small">小图</el-radio>
+                        <el-radio label="0">货品保证金</el-radio>
                     </el-radio-group>
-                    <el-button :size="size" type="text" style="margin-left: 20px;" @click="dialogExample = true">查看示例</el-button>
                 </el-form-item>
-                <el-form-item required label="分润模板">
-                    <el-button :size="size" type="primary" @click="myProfit('addForm')">{{addForm.profit}}</el-button>
-                    <el-button :size="size" type="text" @click="delProfit">取消</el-button>
-                    <el-button :size="size" type="text">新建模板</el-button>
+                <el-form-item required label="保证金时长">
+                    <el-input :size="size" v-model="addForm.time" placeholder="请填写整数数字，如：24" v-validate="'required'" data-vv-as="保证金时长" name="addForm.time" :class="{'input': true, 'is-danger': errors.has('time') }" class="inputOne"></el-input>
+                    <span>月</span>
+                    <span class="help is-danger">{{ errors.first('addForm.time') }}</span>
                 </el-form-item>
-                <el-form-item v-if="addForm.profit != '选择模板'" required label="分配角色">
-                    <p>
-                        <el-input :size="size" v-model="addForm.role1" :disabled="true" style="width: 200px;"></el-input>
-                        <el-input :size="size" v-model="addForm.role1Profit" :disabled="true" style="width: 200px;"></el-input>
-                        <span>%</span>
-                        <el-button type="primary" @click="choosePerson('0','addForm')">选择推广人</el-button>
-                        <el-button :size="size" type="text" @click="addStaff">添加员工</el-button>
-                    </p>
-                    <p v-if="addForm.role1Name">姓名<el-input :size="size" v-model="addForm.role1Name" :disabled="true" style="width: 200px; margin-left: 10px"></el-input></p>
-                    <p>
-                        <el-input :size="size" v-model="addForm.role2" :disabled="true" style="width: 200px;"></el-input>
-                        <el-input :size="size" v-model="addForm.role2Profit" :disabled="true" style="width: 200px;"></el-input>
-                        <span>%</span>
-                        <el-button type="primary" @click="choosePerson('1','addForm')">选择推广人</el-button>
-                        <el-button :size="size" type="text" @click="addStaff">添加员工</el-button>
-                    </p>
-                    <p v-if="addForm.role2Name">姓名<el-input :size="size" v-model="addForm.role2Name" :disabled="true" style="width: 200px; margin-left: 10px"></el-input></p>
+                <el-form-item required label="货架套餐分享佣金">
+                    <el-input :size="size" v-model="addForm.money" placeholder="请填写数字，如：20" v-validate="'required'" data-vv-as="货架套餐分享佣金" name="addForm.money" :class="{'input': true, 'is-danger': errors.has('money') }" class="inputOne"></el-input>
+                    <span>元</span>
+                    <span class="help is-danger">{{ errors.first('addForm.money') }}</span>
                 </el-form-item>
-                <el-form-item required label="货架分润">
-                    <p>店主：<el-input :size="size" v-model="addForm.adminProfit" style="width: 200px;"></el-input><span>%(分润比例：0~100，例如：10)</span></p>
-                    <p>员工：<el-input :size="size" v-model="addForm.staffProfit" style="width: 200px;"></el-input><span>%(分润比例：0~100，例如：10)</span></p>
-                </el-form-item>
-                <el-form-item label="货架绑定二维码">
-                    <el-input :size="size" v-model="addForm.code" class="inputOne"></el-input>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">申请二维码编号</el-button>
-                    <!--<span class="baseColor">申请二维码编号</span>-->
-                </el-form-item>
-                <el-form-item label="关联货架套餐订单">
-                    <el-select :size="size" v-model="addForm.package" placeholder="绑定货架所在门店" class="inputOne">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                    <p class="gray10">关联货架套餐订单后，可方便管理店铺库存</p>
-                </el-form-item>
-                <el-form-item label="关联商品信息">
-                    <p>无相关商品</p>
+                <el-form-item required label="套餐描述">
+                    <!--<quillEditor v-model="content"></quillEditor>-->
+                    <quillEditor :Content="addForm.describe"></quillEditor>
+                    <span class="help is-danger">{{ errors.first('addForm.describe') }}</span>
                 </el-form-item>
 
+                <el-form-item required label="微信分享描述">
+                    <el-input :size="size" v-model="addForm.extension" v-validate="'required'" placeholder="20个汉字以内" data-vv-as="货架推广话术" name="addForm.extension" :class="{'input': true, 'is-danger': errors.has('extension') }" class="inputOne"></el-input>
+                    <span class="help is-danger">{{ errors.first('addForm.extension') }}</span>
+                </el-form-item>
+                <el-form-item required label="多图上传">
+                    <ul class="avatar-uploader">
+                        <li v-for="(item,index) in imageUrl" class="fl">
+                            <i class="el-icon-error f26 gray10" @click="delImg(index)"></i>
+                            <img :src="item" class="avatar">
+                        </li>
+                    </ul>
+                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :auto-upload="false" :show-file-list="false" :on-change="onchange" :multiple="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
+                        <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
+                        <i class="el-icon-plus avatar-uploader-icon"></i>
+                    </el-upload>
+                    <p>仅支持gif、jpeg、png、bmp 4种格式，大小不超过3.0MB，数量最多5张，用于幻灯片位置展示</p>
+                    <span class="help is-danger">{{ errors.first('addForm.img') }}</span>
+                </el-form-item>
                 <el-form-item>
                     <el-button type="primary" @click="addSubmit">提 交</el-button>
                     <el-button @click="pageType = 'index'">返 回</el-button>
@@ -133,6 +116,7 @@
                     <!--<quillEditor v-model="content"></quillEditor>-->
 
                     <quillEditor :Content="content"></quillEditor>
+
 
                     <span class="help is-danger">{{ errors.first('editForm.describe') }}</span>
                 </el-form-item>
@@ -193,12 +177,11 @@
                     num:'',
                     show:'0',
                     time:'',
+                    money:'',
                     describe:'',
                     extension:'',
                     img:''
                 },
-
-
                 pageType:'index',
                 keyWord:'',
                 size: this.GLOBAL.size,

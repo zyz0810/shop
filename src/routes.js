@@ -30,8 +30,9 @@ import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
 
 //货架管理
 import shelfManage from './page/shelf/manage.vue'//货架管理
-import shelfPackages from './page/shelf/packages.vue'//货架管理
-
+import shelfPackages from './page/shelf/packages.vue'//货架套餐
+import shelfOrder from './page/shelf/order.vue'//货架套餐订单
+import shelfExcitation from './page/shelf/excitation.vue'//货架销售激励
 
 
 //商品
@@ -92,8 +93,8 @@ let routes = [
         children: [
             { path: '/shelf/index', component: shelfManage,leaf: true, name: '货架管理' },
             { path: '/shelf/packages', component: shelfPackages,leaf: true, name: '货架套餐' },
-            { path: '/shelf3', component: echarts,leaf: true, name: '货架套餐订单' },
-            { path: '/shelf4', component: echarts,leaf: true, name: '销售激励' },
+            { path: '/shelf/order', component: shelfOrder,leaf: true, name: '货架套餐订单' },
+            { path: '/shelf/excitation', component: shelfExcitation,leaf: true, name: '销售激励' },
             { path: '/shelf5', component: echarts,leaf: true, name: '货架统计' },
             { path: '/shelf6', component: echarts,leaf: true, name: '货架二维码管理' }
         ]

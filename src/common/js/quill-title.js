@@ -23,8 +23,6 @@ const titleConfig = {
     'ql-clean':'清除字体样式'
 };
 
-
-
 export function addQuillTitle(){
     const oToolBar = document.querySelector('.ql-toolbar'),
         aButton = oToolBar.querySelectorAll('button'),

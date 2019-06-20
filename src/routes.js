@@ -30,6 +30,7 @@ import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
 
 //货架管理
 import shelfManage from './page/shelf/manage.vue'//货架管理
+import shelfPackages from './page/shelf/packages.vue'//货架管理
 
 
 
@@ -90,7 +91,7 @@ let routes = [
         iconCls: 'fa fa-bar-chart',
         children: [
             { path: '/shelf/index', component: shelfManage,leaf: true, name: '货架管理' },
-            { path: '/shelf2', component: echarts,leaf: true, name: '货架套餐' },
+            { path: '/shelf/packages', component: shelfPackages,leaf: true, name: '货架套餐' },
             { path: '/shelf3', component: echarts,leaf: true, name: '货架套餐订单' },
             { path: '/shelf4', component: echarts,leaf: true, name: '销售激励' },
             { path: '/shelf5', component: echarts,leaf: true, name: '货架统计' },

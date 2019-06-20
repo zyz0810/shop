@@ -22,12 +22,12 @@
             <span>如：www.tiaohuo.com</span>
         </el-form-item>
         <el-form-item :size="size" required label="店铺简介">
-            <quill-editor
-                    class="info-editor"
-                    v-model="content"
-                    ref="VueQuillEditor"
-                    :options="editorOption">
-            </quill-editor>
+            <!--<quill-editor-->
+                    <!--class="info-editor"-->
+                    <!--v-model="content"-->
+                    <!--ref="VueQuillEditor">-->
+            <!--</quill-editor>-->
+            <quillEditor :Content="content"></quillEditor>
         </el-form-item>
         <el-form-item required label="店铺地址">
             <el-input :size="size" v-model="form.address" class="inputOne"></el-input>
@@ -117,20 +117,22 @@
         </el-form-item>
 
         <el-form-item label="企业补充资料" style="height: 200px;">
-            <quill-editor
-                    class="info-editor"
-                    v-model="content"
-                    ref="VueQuillEditor"
-                    :options="editorOption" style="height: 120px;">
-            </quill-editor>
+            <!--<quill-editor-->
+                    <!--class="info-editor"-->
+                    <!--v-model="content"-->
+                    <!--ref="VueQuillEditor"-->
+                    <!--:options="editorOption" style="height: 120px;">-->
+            <!--</quill-editor>-->
+            <quillEditor :Content="content"></quillEditor>
         </el-form-item>
         <el-form-item label="我要加盟" style="height: 200px;">
-            <quill-editor
-                    class="info-editor"
-                    v-model="content"
-                    ref="VueQuillEditor"
-                    :options="editorOption" style="height: 120px;">
-            </quill-editor>
+            <!--<quill-editor-->
+                    <!--class="info-editor"-->
+                    <!--v-model="content"-->
+                    <!--ref="VueQuillEditor"-->
+                     <!--style="height: 120px;">-->
+            <!--</quill-editor>-->
+            <quillEditor :Content="content"></quillEditor>
         </el-form-item>
 
         <!--<el-form-item label="即时配送">-->
@@ -157,23 +159,7 @@
 </template>
 
 <script>
-    // 工具栏配置
-    const toolbarOptions = [
-        ['bold', 'italic', 'underline', 'strike'],        // toggled buttons
-        ['blockquote', 'code-block'],
-        [{'header': 1}, {'header': 2}],               // custom button values
-        [{'list': 'ordered'}, {'list': 'bullet'}],
-        [{'script': 'sub'}, {'script': 'super'}],      // superscript/subscript
-        [{'indent': '-1'}, {'indent': '+1'}],          // outdent/indent
-        [{'direction': 'rtl'}],                         // text direction
-        [{'size': ['small', false, 'large', 'huge']}],  // custom dropdown
-        [{'header': [1, 2, 3, 4, 5, 6, false]}],
-        [{'color': []}, {'background': []}],          // dropdown with defaults from theme
-        [{'font': []}],
-        [{'align': []}],
-        ['link', 'image', 'video'],
-        ['clean']                                         // remove formatting button
-    ]
+    import quillEditor from './../../components/quill-editor.vue';
     export default {
         data() {
             return {
@@ -191,27 +177,12 @@
                     phone: ''
                 },
                 phoneFocus: false,
-                editorOption: {
-                    placeholder: '请输入编辑内容',
-                    theme: 'snow', //主题风格
-                    modules: {
-                        toolbar: {
-                            container: toolbarOptions, // 工具栏
-                            handlers: {
-                                'image': function (value) {
-                                    if (value) {
-                                        document.querySelector('#quill-upload input').click()
-                                    } else {
-                                        this.quill.format('image', false);
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }, // 富文本编辑器配置
                 content: '', //富文本内容
 
             }
+        },
+        components:{
+            quillEditor
         },
         mounted(){
             this.$addQuillTitle();

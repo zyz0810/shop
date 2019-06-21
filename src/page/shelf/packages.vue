@@ -143,7 +143,7 @@
 
 
                 <el-form-item>
-                    <el-button type="primary" @click="addSubmit">提 交</el-button>
+                    <el-button type="primary" @click="editSubmit">提 交</el-button>
                     <el-button @click="pageType = 'index'">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -156,7 +156,6 @@
     //import NProgress from 'nprogress'
     import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
     import quillEditor from './../../components/quill-editor.vue';
-    import { addQuillTitle } from './../../common/js/quill-title.js'
     export default {
         data() {
             return {
@@ -451,7 +450,6 @@
 
         },
         mounted() {
-            addQuillTitle()
             this.headClass()
             this.getUsers();
             this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 100 - 60;

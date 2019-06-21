@@ -82,7 +82,9 @@ const config = {
         zh_CN: {
             messages: {
                 email: () => '请填写正确邮箱',
-                required: (field) => "请输入" + field
+                required: (field) => "请输入" + field,
+                numeric:(field)=> field+'必须是数字',
+                between:(field)=> field+'必须是数字，且在0-100之间 ',
             },
             attributes: {
                 // <input type="text" v-model="phoneNumber" name="phone" v-validate="'required|phone'">
@@ -101,7 +103,7 @@ Validator.extend('phone', {
         return value.length == 11 && /^((13|14|15|17|18)[0-9]{1}\d{8})$/.test(value)
     },
     // 提示信息，不符合规则提示语
-    getMessage: (field) => '请填写正确' + field
+    getMessages: (field) => '请填写正确' + field
 })
 
 const router = new VueRouter({

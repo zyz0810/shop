@@ -59,60 +59,88 @@
             <el-form ref="form" :model="addForm" hideRequiredSterisk="true" label-width="160px">
                 <el-form-item required label="活动名称">
                     <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
-                    <el-input :size="size" v-model="addForm.name" placeholder="活动名称" v-validate="'required'" data-vv-as="活动名称" name="editForm.name" :class="{'input': true, 'is-danger': errors.has('name') }" class="inputOne"></el-input>
+                    <el-input :size="size" v-model="addForm.name" placeholder="活动名称" v-validate="'required'" data-vv-as="活动名称" name="addForm.name" :class="{'input': true, 'is-danger': errors.has('name') }" class="inputOne"></el-input>
                     <span class="help is-danger">{{ errors.first('addForm.name') }}</span>
                 </el-form-item>
                 <el-form-item required label="参与角色">
-                    <el-input :size="size" v-model="addForm.price" placeholder="请填写金额数字，如：3600" v-validate="'required'" data-vv-as="套餐销售价" name="editForm.price" :class="{'input': true, 'is-danger': errors.has('price') }" class="inputOne"></el-input>
-                    <span>元</span>
-                    <span class="help is-danger">{{ errors.first('addForm.price') }}</span>
+                    <el-select v-model="addForm.role" placeholder="参与角色" :size="size" class="inputOne" style="margin-right: 10px;">
+                        <el-option
+                                v-for="item in state"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
+                    <span class="help is-danger">{{ errors.first('addForm.role') }}</span>
                 </el-form-item>
                 <el-form-item required label="活动范围">
-                    <el-input :size="size" v-model="addForm.num" v-validate="'required'" placeholder="请填写整数数字，如：3600" data-vv-as="货架绑定数量" name="editForm.num" :class="{'input': true, 'is-danger': errors.has('num') }" class="inputOne"></el-input>
-                    <span>个</span>
+                    <el-select v-model="addForm.range" placeholder="活动范围" :size="size" class="inputOne" style="margin-right: 10px;">
+                        <el-option
+                                v-for="item in state"
+                                :key="item.value"
+                                :label="item.label"
+                                :value="item.value">
+                        </el-option>
+                    </el-select>
                     <span class="help is-danger">{{ errors.first('addForm.num') }}</span>
                 </el-form-item>
                 <el-form-item required label="开始时间">
-                    <el-radio-group :size="size" v-model="addForm.show">
-                        <el-radio label="0">货品保证金</el-radio>
-                    </el-radio-group>
+                    <el-date-picker v-model="addForm.startTime" type="datetime" placeholder="选择开始时间" default-time="12:00:00" data-vv-as="开始时间" name="addForm.startTime" class="inputOne"></el-date-picker>
                 </el-form-item>
                 <el-form-item required label="结束时间">
-                    <el-input :size="size" v-model="addForm.time" placeholder="请填写整数数字，如：24" v-validate="'required'" data-vv-as="保证金时长" name="addForm.time" :class="{'input': true, 'is-danger': errors.has('time') }" class="inputOne"></el-input>
-                    <span>月</span>
-                    <span class="help is-danger">{{ errors.first('addForm.time') }}</span>
+                    <el-date-picker v-model="addForm.endTime" type="datetime" placeholder="选择结束时间" default-time="12:00:00" data-vv-as="结束时间" name="addForm.endTime" class="inputOne"></el-date-picker>
+                    <span class="help is-danger">{{ errors.first('addForm.endTime') }}</span>
                 </el-form-item>
-                <el-form-item required label="货架套餐分享佣金">
-                    <el-input :size="size" v-model="addForm.money" placeholder="请填写数字，如：20" v-validate="'required'" data-vv-as="货架套餐分享佣金" name="addForm.money" :class="{'input': true, 'is-danger': errors.has('money') }" class="inputOne"></el-input>
-                    <span>元</span>
+                <el-form-item required label="初始奖池">
+                    <el-input :size="size" v-model="addForm.money" placeholder="请输入初始奖池金额（元）" v-validate="'required'" data-vv-as="初始奖池" name="addForm.money" :class="{'input': true, 'is-danger': errors.has('money') }" class="inputOne"></el-input>
                     <span class="help is-danger">{{ errors.first('addForm.money') }}</span>
                 </el-form-item>
-                <el-form-item required label="套餐描述">
-                    <!--<quillEditor v-model="content"></quillEditor>-->
-                    <quillEditor :Content="addForm.describe"></quillEditor>
-                    <span class="help is-danger">{{ errors.first('addForm.describe') }}</span>
+                <el-form-item required label="奖池比例">
+                    <el-input :size="size" v-model="addForm.scale" placeholder="按交易的百分比（%）" v-validate="'required'" data-vv-as="奖池比例" name="addForm.scale" :class="{'input': true, 'is-danger': errors.has('money') }" class="inputOne"></el-input>
+                    <span class="help is-danger">{{ errors.first('addForm.scale') }}</span>
                 </el-form-item>
 
-                <el-form-item required label="微信分享描述">
-                    <el-input :size="size" v-model="addForm.extension" v-validate="'required'" placeholder="20个汉字以内" data-vv-as="货架推广话术" name="addForm.extension" :class="{'input': true, 'is-danger': errors.has('extension') }" class="inputOne"></el-input>
-                    <span class="help is-danger">{{ errors.first('addForm.extension') }}</span>
+
+                <el-form-item required label="排名奖励">
+                    <el-select v-model="addForm.rank" placeholder="排名奖励" :size="size" class="inputOne" style="margin-right: 10px;">
+                        <el-option v-for="item in state" :key="item.value" :label="item.label" :value="item.value"></el-option>
+                    </el-select>
+                    <el-button :size="size" @click="pageType == 'createTemplate'">新建模板</el-button>
+                    <span class="help is-danger">{{ errors.first('addForm.rank') }}</span>
+                    <p><el-button :size="size">查看模板</el-button></p>
                 </el-form-item>
-                <el-form-item required label="多图上传">
-                    <ul class="avatar-uploader">
-                        <li v-for="(item,index) in imageUrl" class="fl">
-                            <i class="el-icon-error f26 gray10" @click="delImg(index)"></i>
-                            <img :src="item" class="avatar">
-                        </li>
-                    </ul>
-                    <el-upload class="avatar-uploader" action="https://jsonplaceholder.typicode.com/posts/" :auto-upload="false" :show-file-list="false" :on-change="onchange" :multiple="false" :on-success="handleAvatarSuccess" :before-upload="beforeAvatarUpload">
-                        <!--<img v-if="imageUrl" :src="imageUrl" class="avatar">-->
-                        <i class="el-icon-plus avatar-uploader-icon"></i>
-                    </el-upload>
-                    <p>仅支持gif、jpeg、png、bmp 4种格式，大小不超过3.0MB，数量最多5张，用于幻灯片位置展示</p>
-                    <span class="help is-danger">{{ errors.first('addForm.img') }}</span>
+
+
+                <el-form-item required label="规则描述">
+                    <quillEditor :Content="addForm.describe"></quillEditor>
+                    <span class="help is-danger">{{ errors.first('addForm.describe') }}</span>
+                    <p class="red01">活动结束后第7天结算</p>
                 </el-form-item>
+
+
                 <el-form-item>
-                    <el-button type="primary" @click="addSubmit">提 交</el-button>
+                    <el-button type="primary" @click="addSubmit">确 定</el-button>
+                    <el-button @click="pageType = 'index'">返 回</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div v-if="pageType=='createTemplate'">
+            <p class="title">新建排名模板</p>
+            <el-form ref="form" :model="addTemplate" hideRequiredSterisk="true" label-width="160px">
+                <el-form-item required label="模板名称">
+                    <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
+                    <el-input :size="size" v-model="addTemplate.name" placeholder="模板名称" v-validate="'required'" data-vv-as="模板名称" name="addTemplate.name" :class="{'input': true, 'is-danger': errors.has('addTemplate.name') }" class="inputOne"></el-input>
+                    <span class="help is-danger">{{ errors.first('addTemplate.name') }}</span>
+                </el-form-item>
+                <el-form-item required label="排名人数">
+                    <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
+                    <el-input :size="size" v-model="addTemplate.num" placeholder="排名人数0-100中间" v-validate="'required|between:0,100'" data-vv-as="排名人数" name="addTemplate.num" :class="{'input': true, 'is-danger': errors.has('addTemplate.num') }" class="inputOne"></el-input>
+                    <el-button @click="createTable">生成</el-button>
+                    <span class="help is-danger">{{ errors.first('addTemplate.num') }}</span>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="addSubmit">确 定</el-button>
                     <el-button @click="pageType = 'index'">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -143,9 +171,14 @@
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
+    import quillEditor from './../../components/quill-editor.vue';
     export default {
         data() {
             return {
+                addTemplate:{
+                    name:'',
+                    num:'',
+                },
                 addForm:{
                     name:'',
                     price:'',
@@ -180,7 +213,7 @@
                     commission:'6.86',
                     state:false
                 }],
-                pageType:'add',
+                pageType:'createTemplate',
                 time:'',
                 state:[{
                     label:'未开始',
@@ -260,7 +293,9 @@
                 editLoading: false,
             }
         },
-
+        components:{
+            quillEditor,
+        },
         watch: {
             // 监听屏幕高度改变表格高度
             screenHeight(val) {
@@ -269,7 +304,17 @@
             }
         },
         methods: {
+            //新建排名模板生成表格
+            createTable(){
 
+                this.$validator.validateAll().then((result) => {
+                    // this.dialogVisible = true
+                });
+
+            },
+            addSubmit(){
+                this.pageType = 'index'
+            },
             getStaffRow(index,row){
                 if(this.personForm == 'addForm'){
                     if(this.addForm.role == '0'){

@@ -76,8 +76,9 @@
 				<!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
 				<el-input :size="size" v-model="addTemplate.num" placeholder="排名人数0-100中间" v-validate="'required|between:0,100'" data-vv-as="排名人数" name="addTemplate.num" :class="{'input': true, 'is-danger': errors.has('addTemplate.num') }" class="inputOne"></el-input>
 				<el-button @click="createTable">生成</el-button>
-				<span class="help is-danger">{{ errors.first('addTemplate.num') }}</span>
+				<span class="help is-danger" >{{ errors.first('addTemplate.num') }}</span>
 			</el-form-item>
+
 
 		</el-form>
 	</section>

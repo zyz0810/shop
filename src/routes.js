@@ -33,7 +33,8 @@ import shelfManage from './page/shelf/manage.vue'//货架管理
 import shelfPackages from './page/shelf/packages.vue'//货架套餐
 import shelfOrder from './page/shelf/order.vue'//货架套餐订单
 import shelfExcitation from './page/shelf/excitation.vue'//货架销售激励
-
+import shelfStatistics from './page/shelf/statistics.vue'//货架统计
+import shelfCode from './page/shelf/code.vue'//货架二维码管理
 
 //商品
 import addProduct from './page/product/add.vue' //新品发布
@@ -95,8 +96,8 @@ let routes = [
             { path: '/shelf/packages', component: shelfPackages,leaf: true, name: '货架套餐' },
             { path: '/shelf/order', component: shelfOrder,leaf: true, name: '货架套餐订单' },
             { path: '/shelf/excitation', component: shelfExcitation,leaf: true, name: '销售激励' },
-            { path: '/shelf5', component: echarts,leaf: true, name: '货架统计' },
-            { path: '/shelf6', component: echarts,leaf: true, name: '货架二维码管理' }
+            { path: '/shelf/Statistics', component: shelfStatistics,leaf: true, name: '货架统计' },
+            { path: '/shelf/code', component: shelfCode,leaf: true, name: '货架二维码管理' }
         ]
     },
     {

@@ -135,12 +135,48 @@
                 <el-form-item required label="排名人数">
                     <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
                     <el-input :size="size" v-model="addTemplate.num" placeholder="排名人数0-100中间" v-validate="'required|between:0,100'" data-vv-as="排名人数" name="addTemplate.num" :class="{'input': true, 'is-danger': errors.has('addTemplate.num') }" class="inputOne"></el-input>
-                    <el-button @click="createTable">生成</el-button>
+                    <el-button :size="size" @click="createTable">生成</el-button>
+                    <el-button :size="size" @click="importTable">导入</el-button>
                     <span class="help is-danger">{{ errors.first('addTemplate.num') }}</span>
+                    <el-table :data="TableAddTemplate" :header-row-class-name="headClass" class="mt20">
+                        <el-table-column type="index" label="排名" align="center" width="200"></el-table-column>
+                        <el-table-column label="比例" align="center" width="200">
+                            <template slot-scope="scope">
+                                <el-input :size="size" v-model="scope.row.range" placeholder="请输入比例"></el-input>
+                            </template>
+                        </el-table-column>
+                    </el-table>
                 </el-form-item>
 
                 <el-form-item>
-                    <el-button type="primary" @click="addSubmit">确 定</el-button>
+                    <el-button type="primary" @click="createTemplateSubmit">确 定</el-button>
+                    <el-button @click="pageType = 'index'">返 回</el-button>
+                </el-form-item>
+            </el-form>
+        </div>
+        <div v-if="pageType=='editTemplate'">
+            <p class="title">查看排名模板</p>
+            <el-form ref="form" :model="editTemplate" hideRequiredSterisk="true" label-width="160px">
+                <el-form-item required label="模板名称">
+                    <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
+                    <el-input :size="size" v-model="editTemplate.name" placeholder="模板名称" v-validate="'required'" data-vv-as="模板名称" name="editTemplate.name" :class="{'input': true, 'is-danger': errors.has('editTemplate.name') }" class="inputOne"></el-input>
+                    <span class="help is-danger">{{ errors.first('editTemplate.name') }}</span>
+                </el-form-item>
+                <el-form-item required label="排名人数">
+                    <!--<el-input :size="size" v-model="editForm.name" class="inputOne"></el-input>-->
+                    <el-input :size="size" v-model="editTemplate.num" class="inputOne" :disabled="true"></el-input>
+                    <el-table :data="TableEditTemplate" :header-row-class-name="headClass" class="mt20">
+                        <el-table-column type="index" label="排名" align="center" width="200"></el-table-column>
+                        <el-table-column label="比例" align="center" width="200">
+                            <template slot-scope="scope">
+                                <el-input :size="size" v-model="scope.row.range" placeholder="请输入比例"></el-input>
+                            </template>
+                        </el-table-column>
+                    </el-table>
+                </el-form-item>
+
+                <el-form-item>
+                    <el-button type="primary" @click="editTemplateSubmit">确 定</el-button>
                     <el-button @click="pageType = 'index'">返 回</el-button>
                 </el-form-item>
             </el-form>
@@ -175,6 +211,20 @@
     export default {
         data() {
             return {
+                TableEditTemplate:[{
+                    range:'5'
+                },{
+                    range:'3'
+                },{
+                    range:'1'
+                },{
+                    range:'1'
+                },],
+                editTemplate:{
+                    name:'激励',
+                    num:'4',
+                },
+                TableAddTemplate:[],
                 addTemplate:{
                     name:'',
                     num:'',
@@ -213,7 +263,7 @@
                     commission:'6.86',
                     state:false
                 }],
-                pageType:'createTemplate',
+                pageType:'index',
                 time:'',
                 state:[{
                     label:'未开始',
@@ -304,16 +354,61 @@
             }
         },
         methods: {
+            addShelf(){
+                this.pageType = 'add'
+            },
             //新建排名模板生成表格
             createTable(){
 
                 this.$validator.validateAll().then((result) => {
                     // this.dialogVisible = true
+                    this.TableAddTemplate = []
+                    for(let i=0;i<this.addTemplate.num;i++){
+                        this.TableAddTemplate.push({range:''})
+                    }
                 });
 
             },
+            editTemplateSubmit(){
+                this.$validator.validateAll().then((result) => {
+                    if(result == true){
+
+                            var sum = 0;
+                            this.TableEditTemplate.forEach((item) => {
+                                sum += Number(item.range);
+                            });
+                            if(sum!==100){
+                                this.$message.error('比例总和需要等于100');
+                            }else{
+                                this.pageType = 'add'
+                            }
+
+                    }
+                });
+            },
             addSubmit(){
                 this.pageType = 'index'
+            },
+            //提交新建排名模板
+            createTemplateSubmit(){
+
+                this.$validator.validateAll().then((result) => {
+                    if(result == true){
+                        if(this.TableAddTemplate.length == 0){
+                            this.$message.error('还没有生成表格');
+                        }else{
+                            var sum = 0;
+                            this.TableAddTemplate.forEach((item) => {
+                                sum += Number(item.range);
+                            });
+                            if(sum!==100){
+                                this.$message.error('比例总和需要等于100');
+                            }else{
+                                this.pageType = 'add'
+                            }
+                        }
+                    }
+                });
             },
             getStaffRow(index,row){
                 if(this.personForm == 'addForm'){

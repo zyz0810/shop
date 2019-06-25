@@ -233,8 +233,7 @@
 </script>
 
 <style scoped lang="scss">
-	@import '~scss_vars';
-	@import '../styles/color.scss';
+	@import '../common/style/color.scss';
 
 .width90{
 	width: 90px !important;

@@ -97,7 +97,7 @@
                 listLoading: false,
                 sels: [],//列表选中列
                 editLoading: false,
-                pageType:'add'
+                pageType:'index'
             }
         },
 
@@ -156,13 +156,4 @@
 
 </script>
 
-<style lang="scss" type="text/scss">
-    @import '../../styles/color.scss';
 
-    .shelf {
-     .code_img{
-         width: 30px;
-         height: 30px;
-     }
-    }
-</style>

@@ -1,0 +1,52 @@
+//店铺管理
+.tenantInput{
+  padding: 10px;
+  background: $white01;
+  .el-form-item__content {
+    margin-left: 150px !important;
+  }
+  .uploadImg {
+    .el-upload {
+      margin: 0 10px 0 20px;
+    }
+
+  }
+
+  .myColor {
+    width: 200px;
+    margin-left: 20px;
+  }
+
+  .quill-editor {
+    width: 85%;
+  }
+}
+//门店管理及货架管理样式
+.shop {
+  .el-submenu__title{
+    position: relative;
+  }
+  .el-badge{
+    position: absolute;
+    top: 0;
+    right: 35px;
+  }
+  .el-badge__content{
+    background: #999;
+  }
+  .el-submenu .el-menu-item:hover, .el-submenu__title:hover{
+    color: $baseColor;
+    background: #fff;
+  }
+  .el-submenu .el-menu-item.is-active:hover, .el-submenu__title.is-active:hover{
+    color: $white01 !important;
+    background: $baseColor;
+  }
+  .is-active{
+    background: transparent;
+  }
+  .el-menu-item.is-active{
+    color: $white01 !important;
+    background: $baseColor;
+  }
+}

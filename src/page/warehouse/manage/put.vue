@@ -600,22 +600,3 @@
     }
 
 </script>
-
-<style lang="scss" type="text/scss">
-	@import '../../../styles/color.scss';
-	@import '../../../styles/common.scss';
-	.warehouse{
-		padding: 10px;
-		background: $white01;
-		.out_btn{
-			padding: 10px;
-		}
-		.demo-form-inline{
-			padding: 10px;
-			background: $gray06;
-			.el-form-item{
-				margin-bottom: 0;
-			}
-		}
-	}
-</style>

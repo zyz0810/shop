@@ -262,8 +262,7 @@
 </script>
 
 <style scoped lang="scss">
-	@import '~scss_vars';
-	@import '../styles/color.scss';
+	@import '../common/style/color.scss';
 
 	.container {
 		position: absolute;

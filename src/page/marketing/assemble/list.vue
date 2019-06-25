@@ -38,7 +38,6 @@
 				</el-table-column>
 			</el-table>
 		</div>
-
 		<div v-if="pageType == 'couponAdd'">
 			<el-form ref="form" :model="form" hideRequiredSterisk="true" label-width="80px" class="tenantInput"
 					 @submit.prevent="onSubmit" style="min-width:600px;">
@@ -74,8 +73,6 @@
 				</el-form-item>
 			</el-form>
 		</div>
-
-
 	</div>
 </template>
 
@@ -345,13 +342,3 @@
     }
 
 </script>
-
-<style lang="scss" type="text/scss">
-	@import '../../../styles/color.scss';
-	@import '../../../styles/common.scss';
-	.operation{
-		button{
-			margin-right: 10px;
-		}
-	}
-</style>

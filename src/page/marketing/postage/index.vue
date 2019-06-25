@@ -87,19 +87,3 @@
     }
 
 </script>
-
-<style lang="scss" type="text/scss">
-	@import '../../../styles/color.scss';
-	@import '../../../styles/common.scss';
-	.postage{
-		padding: 20px 0;
-		background: $white01;
-		.rule{
-			padding-left: 20px;
-			li{
-				list-style: circle;
-			}
-		}
-	}
-
-</style>

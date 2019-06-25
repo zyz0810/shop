@@ -199,18 +199,3 @@
         }
     }
 </script>
-
-<style scoped>
-    .chart-container {
-        width: 100%;
-        float: left;
-    }
-    /*.chart div {
-        height: 400px;
-        float: left;
-    }*/
-
-    .el-col {
-        padding: 30px 20px;
-    }
-</style>

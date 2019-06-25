@@ -1,0 +1,33 @@
+//营销
+.coupon{
+  .operation{
+    button{
+      margin-right: 10px;
+    }
+  }
+  .is-active{
+    background: transparent;
+  }
+  .el-tabs__header{
+    margin: 0;
+  }
+  .toolbar{
+    padding: 10px;
+    background: #f2f2f2;
+  }
+  .couponTab{
+    padding: 10px;
+    background: $white01;
+  }
+}
+//满包邮
+.postage{
+  padding: 20px 0;
+  background: $white01;
+  .rule{
+    padding-left: 20px;
+    li{
+      list-style: circle;
+    }
+  }
+}

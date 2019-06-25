@@ -5,9 +5,6 @@ import Main from './page/Main.vue'
 import Table from './page/nav1/Table.vue'
 import Form from './page/nav1/Form.vue'
 import user from './page/nav1/user.vue'
-import Page4 from './page/nav2/Page4.vue'
-import Page5 from './page/nav2/Page5.vue'
-import Page6 from './page/nav3/Page6.vue'
 import echarts from './page/charts/echarts.vue'
 //店铺
 import tenantEdit from './page/tenant/edit.vue'
@@ -16,7 +13,6 @@ import index from './page/home/index.vue'
 //空二级导航框架
 import tenant from './page/tenant/tenant.vue'
 import shop from './page/tenant/shop.vue'
-
 //营销工具
 import coupon from './page/marketing/coupon/coupon.vue'//优惠券
 import assembleList from './page/marketing/assemble/list.vue'//拼团列表
@@ -27,9 +23,9 @@ import warehouseInput from './page/warehouse/manage/put.vue'//入库单
 import warehouseOut from './page/warehouse/manage/out.vue'//出库单
 import warehouseManage from './page/warehouse/warehouse/manage.vue'//仓库管理
 import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
-
 //货架管理
 import shelfManage from './page/shelf/manage.vue'//货架管理
+import shelfManageAdd from './page/view/shelf/manage/add.vue'//货架管理
 import shelfPackages from './page/shelf/packages.vue'//货架套餐
 import shelfOrder from './page/shelf/order.vue'//货架套餐订单
 import shelfExcitation from './page/shelf/excitation.vue'//货架销售激励
@@ -49,7 +45,7 @@ let routes = [
     //     hidden: true
     // },
     {
-        path: '/index',
+        path: '/',
         component: index,
         iconCls: 'el-icon-message',//图标样式class
         name: '概况',
@@ -92,12 +88,37 @@ let routes = [
         name: '货架',
         iconCls: 'fa fa-bar-chart',
         children: [
-            { path: '/shelf/index', component: shelfManage,leaf: true, name: '货架管理' },
+            // { path: '/shelf/index', component: shelfManage,leaf: true, name: '货架管理'},
+            { path: '/shelf/index', component: tenant,leaf: true, name: '货架56管理',
+                children:[{
+                    name:'货55架管理',
+                    path: '/shelf/index',
+                    hidden:true,
+                    component: shelfManage,
+                },{
+                    name:'货架66管理/新建',
+                    path: '/shelf/index/add',
+                    hidden:true,
+                    component: shelfManageAdd,
+                }]
+            },
             { path: '/shelf/packages', component: shelfPackages,leaf: true, name: '货架套餐' },
             { path: '/shelf/order', component: shelfOrder,leaf: true, name: '货架套餐订单' },
             { path: '/shelf/excitation', component: shelfExcitation,leaf: true, name: '销售激励' },
             { path: '/shelf/Statistics', component: shelfStatistics,leaf: true, name: '货架统计' },
-            { path: '/shelf/code', component: shelfCode,leaf: true, name: '货架二维码管理' }
+            { path: '/shelf/code', component: shelfCode,leaf: true, name: '货架二维码管理' ,
+                children:[{
+                    name:'二525维码',
+                    path: '/shelf/index',
+                    hidden:true,
+                    component: shelfManage,
+                },{
+                    name:'我二58维码',
+                    path: '/shelf/index/add',
+                    hidden:true,
+                    component: shelfManageAdd,
+                }]
+            }
         ]
     },
     {

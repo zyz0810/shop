@@ -58,7 +58,6 @@
 				</el-tabs>
 			</div>
 		</div>
-
 		<div v-if="pageType == 'couponAdd'">
 			<el-form ref="form" :model="form" hideRequiredSterisk="true" label-width="80px" class="tenantInput"
 					 @submit.prevent="onSubmit" style="min-width:600px;">
@@ -94,11 +93,8 @@
 				</el-form-item>
 			</el-form>
 		</div>
-
-
 	</div>
 </template>
-
 <script>
     import util from '../../../common/js/util'
     //import NProgress from 'nprogress'
@@ -299,25 +295,3 @@
     }
 
 </script>
-
-<style lang="scss">
-	@import '../../../styles/color.scss';
-	@import '../../../styles/common.scss';
-	.coupon{
-
-		.is-active{
-			background: transparent;
-		}
-		.el-tabs__header{
-			margin: 0;
-		}
-		.toolbar{
-			padding: 10px;
-			background: #f2f2f2;
-		}
-		.couponTab{
-			padding: 10px;
-			background: $white01;
-		}
-	}
-</style>

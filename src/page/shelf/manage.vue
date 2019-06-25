@@ -1,8 +1,9 @@
 <template>
     <div class="shelf">
-        <el-row :gutter="10" v-if="pageType == 'index'">
+
+        <el-row v-show="showAdd == false && showEdit == false" :gutter="10">
             <el-col class="hidden-sm-and-down" :md="6" :lg="6" :xl="6">
-                <el-menu :default-openeds="openeds" class="el-menu-vertical-demo shop" default-openeds="[1]">
+                <el-menu :default-openeds="openeds" class="el-menu-vertical-demo shop">
                     <el-submenu index="1" class="gray08">
                         <template slot="title" class="gray08">
                             <i class="el-icon-s-shop"></i>
@@ -69,7 +70,7 @@
                     <el-input class="search fr" placeholder="请输入内容" :size="size" v-model="keyWord"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
                 </div>
                 <el-table stripe :data="shelfList" ref="table" highlight-current-row v-loading="listLoading"
-                          @selection-change="selsChange" style="width: 100%; margin-top: 20px;" :header-row-class-name="headClass" :height="tableHeight">
+                          style="width: 100%; margin-top: 20px;" :header-row-class-name="headClass" :height="tableHeight">
                     <el-table-column type="selection" fixed width="55"></el-table-column>
                     <el-table-column prop="num" label="货架号"></el-table-column>
                     <el-table-column prop="name" label="门店名称"></el-table-column>
@@ -93,88 +94,98 @@
                         </template>
                     </el-table-column>
                 </el-table>
+                <el-pagination background layout="prev, pager, next" :total="100" :hide-on-single-page="true" class="fr">
+                </el-pagination>
             </el-col>
         </el-row>
-        <div v-if="pageType=='add'">
-            <p class="title">添加布点商家</p>
-            <el-form ref="form" :model="addForm" hideRequiredSterisk="true" label-width="160px">
-                <el-form-item required label="公司名称">
-                    <el-input :size="size" v-model="addForm.name" class="inputOne" :disabled="true"></el-input>
-                    <!--<el-input :size="size" v-model="addForm.name" v-validate="'required'" data-vv-as="公司名称" name="addForm.name" :class="{'input': true, 'is-danger': errors.has('name') }" class="inputOne"  :disabled="true"></el-input>-->
-                    <!--<span class="help is-danger">{{ errors.first('addForm.name') }}</span>-->
-                </el-form-item>
-                <el-form-item required label="绑定货架所在门店">
-                    <el-select :size="size" v-model="addForm.shop" class="inputOne" placeholder="绑定货架所在门店">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">刷新</el-button>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">新建门店</el-button>
-                </el-form-item>
-                <el-form-item required label="推广渠道">
-                    <el-select :size="size" v-model="addForm.channel" class="inputOne" placeholder="绑定货架所在门店">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">刷新</el-button>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">新建门店</el-button>
-                </el-form-item>
-                <el-form-item required label="选择图片展示模板">
-                    <el-radio-group :size="size" v-model="addForm.show">
-                        <el-radio label="big">大图</el-radio>
-                        <el-radio label="small">小图</el-radio>
-                    </el-radio-group>
-                    <el-button :size="size" type="text" style="margin-left: 20px;" @click="dialogExample = true">查看示例</el-button>
-                </el-form-item>
-                <el-form-item required label="分润模板">
-                    <el-button :size="size" type="primary" @click="myProfit('addForm')">{{addForm.profit}}</el-button>
-                    <el-button :size="size" type="text" @click="delProfit">取消</el-button>
-                    <el-button :size="size" type="text">新建模板</el-button>
-                </el-form-item>
-                <el-form-item v-if="addForm.profit != '选择模板'" required label="分配角色">
-                    <p>
-                        <el-input :size="size" v-model="addForm.role1" :disabled="true" style="width: 200px;"></el-input>
-                        <el-input :size="size" v-model="addForm.role1Profit" :disabled="true" style="width: 200px;"></el-input>
-                        <span>%</span>
-                        <el-button type="primary" @click="choosePerson('0','addForm')">选择推广人</el-button>
-                        <el-button :size="size" type="text" @click="addStaff">添加员工</el-button>
-                    </p>
-                    <p v-if="addForm.role1Name">姓名<el-input :size="size" v-model="addForm.role1Name" :disabled="true" style="width: 200px; margin-left: 10px"></el-input></p>
-                    <p>
-                        <el-input :size="size" v-model="addForm.role2" :disabled="true" style="width: 200px;"></el-input>
-                        <el-input :size="size" v-model="addForm.role2Profit" :disabled="true" style="width: 200px;"></el-input>
-                        <span>%</span>
-                        <el-button type="primary" @click="choosePerson('1','addForm')">选择推广人</el-button>
-                        <el-button :size="size" type="text" @click="addStaff">添加员工</el-button>
-                    </p>
-                    <p v-if="addForm.role2Name">姓名<el-input :size="size" v-model="addForm.role2Name" :disabled="true" style="width: 200px; margin-left: 10px"></el-input></p>
-                </el-form-item>
-                <el-form-item required label="货架分润">
-                    <p>店主：<el-input :size="size" v-model="addForm.adminProfit" style="width: 200px;"></el-input><span>%(分润比例：0~100，例如：10)</span></p>
-                    <p>员工：<el-input :size="size" v-model="addForm.staffProfit" style="width: 200px;"></el-input><span>%(分润比例：0~100，例如：10)</span></p>
-                </el-form-item>
-                <el-form-item label="货架绑定二维码">
-                    <el-input :size="size" v-model="addForm.code" class="inputOne"></el-input>
-                    <el-button :size="size" type="text" style="margin-left: 20px;">申请二维码编号</el-button>
-                    <!--<span class="baseColor">申请二维码编号</span>-->
-                </el-form-item>
-                <el-form-item label="关联货架套餐订单">
-                    <el-select :size="size" v-model="addForm.package" placeholder="绑定货架所在门店" class="inputOne">
-                        <el-option label="区域一" value="shanghai"></el-option>
-                        <el-option label="区域二" value="beijing"></el-option>
-                    </el-select>
-                    <p class="gray10">关联货架套餐订单后，可方便管理店铺库存</p>
-                </el-form-item>
-                <el-form-item label="关联商品信息">
-                    <p>无相关商品</p>
-                </el-form-item>
+        <!--<Add v-show="showAdd"></Add>-->
+        <transition name="fade" mode="out-in">
+            <router-view></router-view>
+        </transition>
 
-                <el-form-item>
-                    <el-button type="primary" @click="addSubmit">提 交</el-button>
-                    <el-button @click="pageType = 'index'">返 回</el-button>
-                </el-form-item>
-            </el-form>
-        </div>
+
+
+
+        <!--<div v-if="pageType=='add'">-->
+            <!--<p class="title">添加布点商家</p>-->
+            <!--<el-form ref="form" :model="addForm" hideRequiredSterisk="true" label-width="160px">-->
+                <!--<el-form-item required label="公司名称">-->
+                    <!--<el-input :size="size" v-model="addForm.name" class="inputOne" :disabled="true"></el-input>-->
+                    <!--&lt;!&ndash;<el-input :size="size" v-model="addForm.name" v-validate="'required'" data-vv-as="公司名称" name="addForm.name" :class="{'input': true, 'is-danger': errors.has('name') }" class="inputOne"  :disabled="true"></el-input>&ndash;&gt;-->
+                    <!--&lt;!&ndash;<span class="help is-danger">{{ errors.first('addForm.name') }}</span>&ndash;&gt;-->
+                <!--</el-form-item>-->
+                <!--<el-form-item required label="绑定货架所在门店">-->
+                    <!--<el-select :size="size" v-model="addForm.shop" class="inputOne" placeholder="绑定货架所在门店">-->
+                        <!--<el-option label="区域一" value="shanghai"></el-option>-->
+                        <!--<el-option label="区域二" value="beijing"></el-option>-->
+                    <!--</el-select>-->
+                    <!--<el-button :size="size" type="text" style="margin-left: 20px;">刷新</el-button>-->
+                    <!--<el-button :size="size" type="text" style="margin-left: 20px;">新建门店</el-button>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item required label="推广渠道">-->
+                    <!--<el-select :size="size" v-model="addForm.channel" class="inputOne" placeholder="绑定货架所在门店">-->
+                        <!--<el-option label="区域一" value="shanghai"></el-option>-->
+                        <!--<el-option label="区域二" value="beijing"></el-option>-->
+                    <!--</el-select>-->
+                    <!--<el-button :size="size" type="text" style="margin-left: 20px;">刷新</el-button>-->
+                    <!--<el-button :size="size" type="text" style="margin-left: 20px;">新建门店</el-button>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item required label="选择图片展示模板">-->
+                    <!--<el-radio-group :size="size" v-model="addForm.show">-->
+                        <!--<el-radio label="big">大图</el-radio>-->
+                        <!--<el-radio label="small">小图</el-radio>-->
+                    <!--</el-radio-group>-->
+                    <!--<el-button :size="size" type="text" style="margin-left: 20px;" @click="dialogExample = true">查看示例</el-button>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item required label="分润模板">-->
+                    <!--<el-button :size="size" type="primary" @click="myProfit('addForm')">{{addForm.profit}}</el-button>-->
+                    <!--<el-button :size="size" type="text" @click="delProfit">取消</el-button>-->
+                    <!--<el-button :size="size" type="text">新建模板</el-button>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item v-if="addForm.profit != '选择模板'" required label="分配角色">-->
+                    <!--<p>-->
+                        <!--<el-input :size="size" v-model="addForm.role1" :disabled="true" style="width: 200px;"></el-input>-->
+                        <!--<el-input :size="size" v-model="addForm.role1Profit" :disabled="true" style="width: 200px;"></el-input>-->
+                        <!--<span>%</span>-->
+                        <!--<el-button type="primary" @click="choosePerson('0','addForm')">选择推广人</el-button>-->
+                        <!--<el-button :size="size" type="text" @click="addStaff">添加员工</el-button>-->
+                    <!--</p>-->
+                    <!--<p v-if="addForm.role1Name">姓名<el-input :size="size" v-model="addForm.role1Name" :disabled="true" style="width: 200px; margin-left: 10px"></el-input></p>-->
+                    <!--<p>-->
+                        <!--<el-input :size="size" v-model="addForm.role2" :disabled="true" style="width: 200px;"></el-input>-->
+                        <!--<el-input :size="size" v-model="addForm.role2Profit" :disabled="true" style="width: 200px;"></el-input>-->
+                        <!--<span>%</span>-->
+                        <!--<el-button type="primary" @click="choosePerson('1','addForm')">选择推广人</el-button>-->
+                        <!--<el-button :size="size" type="text" @click="addStaff">添加员工</el-button>-->
+                    <!--</p>-->
+                    <!--<p v-if="addForm.role2Name">姓名<el-input :size="size" v-model="addForm.role2Name" :disabled="true" style="width: 200px; margin-left: 10px"></el-input></p>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item required label="货架分润">-->
+                    <!--<p>店主：<el-input :size="size" v-model="addForm.adminProfit" style="width: 200px;"></el-input><span>%(分润比例：0~100，例如：10)</span></p>-->
+                    <!--<p>员工：<el-input :size="size" v-model="addForm.staffProfit" style="width: 200px;"></el-input><span>%(分润比例：0~100，例如：10)</span></p>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="货架绑定二维码">-->
+                    <!--<el-input :size="size" v-model="addForm.code" class="inputOne"></el-input>-->
+                    <!--<el-button :size="size" type="text" style="margin-left: 20px;">申请二维码编号</el-button>-->
+                    <!--&lt;!&ndash;<span class="baseColor">申请二维码编号</span>&ndash;&gt;-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="关联货架套餐订单">-->
+                    <!--<el-select :size="size" v-model="addForm.package" placeholder="绑定货架所在门店" class="inputOne">-->
+                        <!--<el-option label="区域一" value="shanghai"></el-option>-->
+                        <!--<el-option label="区域二" value="beijing"></el-option>-->
+                    <!--</el-select>-->
+                    <!--<p class="gray10">关联货架套餐订单后，可方便管理店铺库存</p>-->
+                <!--</el-form-item>-->
+                <!--<el-form-item label="关联商品信息">-->
+                    <!--<p>无相关商品</p>-->
+                <!--</el-form-item>-->
+
+                <!--<el-form-item>-->
+                    <!--<el-button type="primary" @click="addSubmit">提 交</el-button>-->
+                    <!--<el-button @click="pageType = 'index'">返 回</el-button>-->
+                <!--</el-form-item>-->
+            <!--</el-form>-->
+        <!--</div>-->
         <div v-if="pageType=='edit'">
             <el-tabs v-model="activeTab">
                 <el-tab-pane label="基本资料" name="first">
@@ -273,7 +284,7 @@
                         <el-input class="search fr" placeholder="请输入内容" :size="size" v-model="keyWord"><i slot="prefix" class="el-input__icon el-icon-search"></i></el-input>
                     </div>
                     <el-table stripe :data="productList" ref="table" highlight-current-row v-loading="listLoading"
-                              @selection-change="selsChange" style="width: 100%; margin-top: 20px;" :header-row-class-name="headClass" :height="tableHeight">
+                              style="width: 100%; margin-top: 20px;" :header-row-class-name="headClass" :height="tableHeight">
                         <el-table-column type="selection" fixed width="55"></el-table-column>
                         <el-table-column prop="name" label="商品名" width="300"></el-table-column>
                         <el-table-column prop="spec" label="规格"></el-table-column>
@@ -483,10 +494,13 @@
     import util from '../../common/js/util'
     //import NProgress from 'nprogress'
     import {getUserListPage, removeUser, batchRemoveUser, editUser, addUser} from '../../api/api';
-
+    import Add from '../view/shelf/manage/add.vue'
     export default {
         data() {
             return {
+                showAdd:false,
+                showEdit:false,
+                openeds:['1'],
                 productData:[{
                     id: 1,
                     label: '草本精华国产组合套装含（1盒日用/1盒夜用/1盒护垫）',
@@ -719,12 +733,12 @@
                 form:''
             }
         },
-
+        components:{Add},
         watch: {
             // 监听屏幕高度改变表格高度
             screenHeight(val) {
                 // 初始化表格高度
-                this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 100 - 60;
+                this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 100 - 60 -32;
             }
         },
         methods: {
@@ -738,7 +752,17 @@
                 this.pageType = 'edit'
             },
             addShelf(){
-                this.pageType = 'add'
+                // this.showAdd = true
+                console.log(565)
+                this.$router.push({
+                    path:'/shelf/index/add',
+                    query:{
+                        index:'2',
+                        leaf:'0'
+                    }
+                });
+
+
             },
             productSubmit(){
                 this.pageType = 'edit'
@@ -858,8 +882,7 @@
                 this.dialogVisible = true
             },
             myclick1: function () {
-                console.log('4455')
-                this.$router.push('/tenant/edit')
+                this.shelfList = []
             },
             handleCurrentChange(val) {
                 this.page = val;
@@ -930,7 +953,7 @@
         mounted() {
             this.headClass()
             this.getUsers();
-            this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 100 - 60;
+            this.tableHeight = window.innerHeight - this.$refs.table.$el.offsetTop - 100 - 60 -32;
             // 监听屏幕高度
             window.onresize = () => {
                 return (() => {
@@ -941,20 +964,5 @@
             };
         }
     }
-
 </script>
 
-<style lang="scss" type="text/scss">
-    @import '../../styles/color.scss';
-
-    .shelf {
-        padding: 10px;
-        background: $white01;
-        .search{
-            width: 200px;
-        }
-        .title{
-            margin-bottom: 20px;
-        }
-    }
-</style>

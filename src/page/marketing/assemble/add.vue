@@ -32,7 +32,6 @@
             <el-button :size="size" @click.native.prevent>取消</el-button>
         </el-form-item>
     </el-form>
-
 </template>
 
 <script>
@@ -76,36 +75,3 @@
     }
 
 </script>
-<style lang="scss">
-    @import '../../../styles/color.scss';
-
-    .uploadImg {
-
-    /*.el-input {*/
-        /*width: 50%;*/
-    /*}*/
-
-    .el-upload {
-        margin: 0 10px 0 20px;
-    }
-
-    }
-    .el-form-item__label {
-        width: 150px !important;
-    }
-
-    .tenantInput .el-form-item__content {
-        margin-left: 150px !important;
-    }
-
-    .myColor {
-        width: 200px;
-        margin-left: 20px;
-    }
-
-    .tenantInput {
-        padding: 10px;
-        background: $white01;
-    }
-
-</style>

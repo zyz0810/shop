@@ -1,0 +1,74 @@
+
+//分割线 用法.mixin(right,solid,@border-gray);
+@mixin border ($direction, $color:#e6e6e6,$opacity:1) {
+  content: '';
+  position: absolute;
+  @if $direction == 'left' {
+    border-left: 1px solid $color;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 100%;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+    -webkit-transform-origin: 0 0;
+    transform-origin: 0 0;
+    opacity: $opacity;
+  } @else if $direction == 'bottom' {
+    width: 100%;
+    border-bottom: 1px solid $color;
+    left: 0;
+    bottom: 0;
+    transform-origin: 0 bottom;
+    opacity: $opacity;
+  } @else if $direction == 'top' {
+    width: 100%;
+    border-bottom: 1px solid $color;
+    left: 0;
+    top: 0;
+    transform-origin: 0 bottom;
+    opacity: $opacity;
+  } @else if $direction == 'right' {
+
+
+
+    opacity: $opacity;
+    border-right: 1px solid $color;
+    top: 0;
+    right: 0;
+    width: 1px;
+    height: 100%;
+    -webkit-transform: scaleX(0.5);
+    transform: scaleX(0.5);
+    -webkit-transform-origin: 100% 0;
+    transform-origin: 100% 0;
+
+  }
+
+  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
+    @if $direction == 'left' {
+      height: 200%;
+    } @else {
+      width: 200%;
+    }
+    transform: scale(.5);
+    @if $direction == 'right' {
+      height: 200%;
+    } @else {
+      width: 200%;
+    }
+  }
+  @media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 3dppx) {
+    @if $direction == 'left' {
+      height: 300%;
+    } @else {
+      width: 300%;
+    }
+    @if $direction == 'right' {
+      height: 300%;
+    } @else {
+      width: 300%;
+    }
+    transform: scale(.33);
+  }
+}

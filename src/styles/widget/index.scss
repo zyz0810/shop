@@ -1,0 +1,56 @@
+//首页
+.home{
+  .home_block {
+    margin-bottom: 20px;
+    padding: 20px;
+    background: $white01;
+    .el-col {
+      margin: 10px 0;
+    }
+  }
+
+  .block_left {
+
+    position: relative;
+    &:after {
+      @include border(right, $gray05, 1)
+    }
+  }
+
+  .added {
+    margin-left: 10px;
+  }
+
+  .color_block {
+    .el-col {
+      a {
+        display: block;
+        border-radius: 10px;
+        padding: 20px 0;
+
+      }
+      &:nth-child(1) {
+        a {
+          background: #87C988;
+        }
+      }
+      &:nth-child(2) {
+        a {
+          background: #87B6C9;
+        }
+
+      }
+      &:nth-child(3) {
+        a {
+          background: #7B92C8;
+        }
+
+      }
+      &:nth-child(4) {
+        a {
+          background: #A07BC8;
+        }
+      }
+    }
+  }
+}

@@ -1,9 +1,9 @@
 <template>
     <quill-editor
-            class="info-editor"
+            class="info-editor ql-editor p0 quill-editor"
             v-model="content"
             ref="VueQuillEditor"
-            :options="editorOption" @change="onEditorChange($event)" style="height: 120px;">
+            :options="editorOption" @change="onEditorChange($event)">
     </quill-editor>
 </template>
 <script>
@@ -61,6 +61,3 @@
         }
     }
 </script>
-<style scoped lang="scss">
-
-</style>

@@ -11,23 +11,20 @@ import Vuex from 'vuex'
 //import 'nprogress/nprogress.css'
 import routes from './routes'
 import Mock from './mock'
-import global_ from './components/global'//全局变量
+import global_ from './common/js/global'//全局变量
 Vue.prototype.GLOBAL = global_//全局变量挂载到Vue实例上面
-import base from './components/base'//引用
+import base from './common/js/base'//引用
 Vue.use(base);//将全局函数当做插件来进行注册
 Mock.bootstrap();
 import 'font-awesome/css/font-awesome.min.css'
-import './styles/iconfont.scss'
-import './assets/common.scss'
-import './styles/color.scss'
+import './styles/style.scss'
 import 'element-ui/lib/theme-chalk/display.css';
 //富文本编辑框
 import VueQuillEditor from 'vue-quill-editor'
-import 'quill/dist/quill.core.css'
+// import 'quill/dist/quill.core.css'
 import 'quill/dist/quill.snow.css'
-import 'quill/dist/quill.bubble.css'
+// import 'quill/dist/quill.bubble.css'
 import addQuillTitle from './common/js/quill-title.js';
-import scrollIt from './library/scroll.js';
 //图片剪裁
 import VueCropper from 'vue-cropper'
 import $ from 'jquery'
@@ -35,9 +32,11 @@ Vue.prototype.$addQuillTitle = addQuillTitle
 Vue.use(VueQuillEditor)
 Vue.use(VueCropper)
 Vue.use(ElementUI)
+
 Vue.use(VueRouter)
 Vue.use(Vuex)
 
+//金额格式
 Vue.filter('money', function(val) {
     val = val.toString().replace(/\$|\,/g,'');
     if(isNaN(val)) {
@@ -53,7 +52,6 @@ Vue.filter('money', function(val) {
     for (var i = 0; i < Math.floor((val.length-(1+i))/3); i++) {
         val = val.substring(0,val.length-(4*i+3))+',' + val.substring(val.length-(4*i+3));
     }
-
     return (((sign)?'':'-') + val + '.' + cents);
 })
 

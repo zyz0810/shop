@@ -272,33 +272,3 @@
     }
 
 </script>
-
-<style lang="scss">
-    @import '../../styles/color.scss';
-    .shop .el-submenu__title{
-        position: relative;
-    }
-    .shop .el-badge{
-        position: absolute;
-        top: 0;
-        right: 35px;
-    }
-    .shop .el-badge__content{
-        background: #999;
-    }
-    .shop .el-submenu .el-menu-item:hover, .shop .el-submenu__title:hover{
-        color: $baseColor;
-        background: #fff;
-    }
-    .shop .el-submenu .el-menu-item.is-active:hover, .shop .el-submenu__title.is-active:hover{
-        color: $white01 !important;
-        background: $baseColor;
-    }
-    .shop .is-active{
-        background: transparent;
-    }
-    .shop .el-menu-item.is-active{
-        color: $white01 !important;
-        background: $baseColor;
-    }
-</style>

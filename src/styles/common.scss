@@ -1,4 +1,18 @@
-@import '../styles/color.scss';
+@import '../common/style/color';
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
+  font-size: 14px;
+  -webkit-font-smoothing: antialiased;
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+}
 a{
   text-decoration: none;
 }
@@ -10,6 +24,12 @@ ul{
   list-style: none;
   padding: 0;
   margin: 0;
+}
+img{
+  max-width: 100%;
+}
+.ql-editor{
+  width: 80%;
 }
 //富文本编辑框头部样式
 .ql-toolbar.ql-snow .ql-formats{
@@ -65,10 +85,9 @@ input[type="number"]{
   box-shadow: 0 -3px 5px #eee;
   margin: 0;
   padding: 10px 0;
+  width: 100%;
 }
-.m18{
-  margin: 18px;
-}
+
 $font-size-base: 10px;
 .f10 {
   font-size: $font-size-base;
@@ -185,7 +204,68 @@ $font-size-base: 10px;
 .f100 {
   font-size: $font-size-base + 90;
 }
-
+//颜色
+.red01{
+  color: $red01;
+}
+.blue01{
+  color: $blue01;
+}
+.gray01{
+  color: $gray01;
+}
+.gray02{
+  color: $gray02;
+}
+.gray03{
+  color: $gray03;
+}
+.gray04{
+  color: $gray04;
+}
+.gray05{
+  color: $gray05;
+}
+.gray06{
+  color: $gray06;
+}
+.gray07{
+  color: $gray07;
+}
+.gray08{
+  color: $gray08;
+}
+.gray09{
+  color: $gray09;
+}
+.gray10{
+  color: $gray10;
+}
+.gray11{
+  color: $gray11;
+}
+.black01{
+  color: $black01;
+}
+.black02{
+  color: $block02;
+}
+.white01{
+  color: $white01;
+}
+.green01{
+  color: $green01;
+}
+.baseColor{
+  color: $baseColor;
+}
+//表格头部背景色
+.headTableBg{
+  background-color: $gray03 !important;
+  th{
+    background-color: transparent;
+  }
+}
 //消除浮动
 .clearfix:after {
   content: ".";
@@ -198,15 +278,22 @@ $font-size-base: 10px;
 .clearfix {
   display: inline-block;
 }
-
+.p0{
+  padding: 0 !important;
+}
 .p20 {
   padding: 20px;
+}
+.m18{
+  margin: 18px;
 }
 
 .mt20 {
   margin-top: 20px;
 }
-
+.mb20{
+  margin-bottom: 20px;
+}
 .tc {
   text-align: center;
 }
@@ -255,79 +342,6 @@ h2{
 //  width: 600px;
 //}
 
-//分割线 用法.mixin(right,solid,@border-gray);
-@mixin border ($direction, $color:#e6e6e6,$opacity:1) {
-  content: '';
-  position: absolute;
-  @if $direction == 'left' {
-    border-left: 1px solid $color;
-    top: 0;
-    left: 0;
-    width: 1px;
-    height: 100%;
-    -webkit-transform: scaleX(0.5);
-    transform: scaleX(0.5);
-    -webkit-transform-origin: 0 0;
-    transform-origin: 0 0;
-    opacity: $opacity;
-  } @else if $direction == 'bottom' {
-    width: 100%;
-    border-bottom: 1px solid $color;
-    left: 0;
-    bottom: 0;
-    transform-origin: 0 bottom;
-    opacity: $opacity;
-  } @else if $direction == 'top' {
-    width: 100%;
-    border-bottom: 1px solid $color;
-    left: 0;
-    top: 0;
-    transform-origin: 0 bottom;
-    opacity: $opacity;
-  } @else if $direction == 'right' {
-
-
-
-    opacity: $opacity;
-    border-right: 1px solid $color;
-    top: 0;
-    right: 0;
-    width: 1px;
-    height: 100%;
-    -webkit-transform: scaleX(0.5);
-    transform: scaleX(0.5);
-    -webkit-transform-origin: 100% 0;
-    transform-origin: 100% 0;
-
-  }
-
-  @media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 2dppx) {
-    @if $direction == 'left' {
-      height: 200%;
-    } @else {
-      width: 200%;
-    }
-    transform: scale(.5);
-    @if $direction == 'right' {
-      height: 200%;
-    } @else {
-      width: 200%;
-    }
-  }
-  @media (-webkit-min-device-pixel-ratio: 3), (min-resolution: 3dppx) {
-    @if $direction == 'left' {
-      height: 300%;
-    } @else {
-      width: 300%;
-    }
-    @if $direction == 'right' {
-      height: 300%;
-    } @else {
-      width: 300%;
-    }
-    transform: scale(.33);
-  }
-}
 .weui-cell_access {
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
   color: inherit;
@@ -449,7 +463,7 @@ h2{
 
 .menu {
   font-size: 0;
-  width: 230px !important;
+  width: 240px !important;
   //position: relative;
 }
 
@@ -632,8 +646,31 @@ h2{
     }
   }
 }
+.el-submenu [class^=fa] {
+  vertical-align: baseline;
+  margin-right: 10px;
+}
 
-  //中间主体内容高度
+.el-menu-item [class^=fa] {
+  vertical-align: baseline;
+  margin-right: 10px;
+}
+.menu.width90{
+  width: 90px !important;
+}
+
+.fade-enter-active,
+.fade-leave-active {
+  transition: all .2s ease;
+}
+
+.fade-enter,
+.fade-leave-active {
+  opacity: 0;
+}
+
+
+//中间主体内容高度
 .content-wrapper{
   overflow: auto;
   box-sizing: border-box;
@@ -653,4 +690,7 @@ h2{
 
 .listNone{
   padding: 50px 0;
+}
+.width90{
+  width: 90px !important;
 }

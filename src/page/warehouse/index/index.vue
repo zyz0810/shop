@@ -218,9 +218,3 @@
     }
 
 </script>
-
-<style lang="scss" type="text/scss">
-	@import '../../../styles/color.scss';
-	@import '../../../styles/common.scss';
-
-</style>

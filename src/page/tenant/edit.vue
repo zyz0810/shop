@@ -5,27 +5,31 @@
             <el-input :size="size" v-model="form.name" clearable class="inputOne"></el-input>
         </el-form-item>
         <el-form-item required label="联系人">
-            <el-input :size="size" :class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person" v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
+            <el-input :size="size" :class="{'input': true, 'is-danger': errors.has('email') }" v-model="form.person"
+                      v-validate="'required|email'" name="email" type="text" clearable class="inputOne"></el-input>
             <span class="help is-danger">{{ errors.first('email') }}</span>
         </el-form-item>
         <el-form-item required label="联系电话">
             <!--<el-input v-model="form.phone" type="number" oninput="if(value.length>11)value=value.slice(0,11)"-->
-                      <!--clearable></el-input>-->
-            <el-input :size="size" v-validate="'required|phone'" name="phone" type="number" placeholder="Mobile" v-model="form.phone" :class="{'input': true, 'is-danger': errors.has('phone') }" class="inputOne"></el-input>
+            <!--clearable></el-input>-->
+            <el-input :size="size" v-validate="'required|phone'" name="phone" type="number" placeholder="Mobile"
+                      v-model="form.phone" :class="{'input': true, 'is-danger': errors.has('phone') }"
+                      class="inputOne"></el-input>
             <span class="help is-danger">{{ errors.first('phone') }}</span>
         </el-form-item>
         <el-form-item label="QQ">
             <el-input :size="size" v-model="form.qq" class="inputOne"></el-input>
         </el-form-item>
         <el-form-item label="绑定域名">
-            <el-input :size="size" v-model="form.url" class="inputOne" v-validate="{url: {require_protocol: true }}" data-vv-as="field" name="url_field"></el-input>
+            <el-input :size="size" v-model="form.url" class="inputOne" v-validate="{url: {require_protocol: true }}"
+                      data-vv-as="field" name="url_field"></el-input>
             <span>如：www.tiaohuo.com</span>
         </el-form-item>
         <el-form-item :size="size" required label="店铺简介">
             <!--<quill-editor-->
-                    <!--class="info-editor"-->
-                    <!--v-model="content"-->
-                    <!--ref="VueQuillEditor">-->
+            <!--class="info-editor"-->
+            <!--v-model="content"-->
+            <!--ref="VueQuillEditor">-->
             <!--</quill-editor>-->
             <quillEditor :Content="content"></quillEditor>
         </el-form-item>
@@ -47,15 +51,15 @@
         </el-form-item>
 
         <!--<el-form-item label="活动时间">-->
-            <!--<el-col :span="11">-->
-                <!--<el-date-picker type="date" placeholder="选择日期" v-model="form.date1"-->
-                                <!--style="width: 100%;"></el-date-picker>-->
-            <!--</el-col>-->
-            <!--<el-col class="line" :span="2">-</el-col>-->
-            <!--<el-col :span="11">-->
-                <!--<el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2"-->
-                                <!--style="width: 100%;"></el-time-picker>-->
-            <!--</el-col>-->
+        <!--<el-col :span="11">-->
+        <!--<el-date-picker type="date" placeholder="选择日期" v-model="form.date1"-->
+        <!--style="width: 100%;"></el-date-picker>-->
+        <!--</el-col>-->
+        <!--<el-col class="line" :span="2">-</el-col>-->
+        <!--<el-col :span="11">-->
+        <!--<el-time-picker type="fixed-time" placeholder="选择时间" v-model="form.date2"-->
+        <!--style="width: 100%;"></el-time-picker>-->
+        <!--</el-col>-->
         <!--</el-form-item>-->
         <el-form-item required label="店铺头像" class="uploadImg">
             <el-input :size="size" v-model="form.headImg" class="fl inputOne"></el-input>
@@ -118,25 +122,25 @@
 
         <el-form-item label="企业补充资料" style="height: 200px;">
             <!--<quill-editor-->
-                    <!--class="info-editor"-->
-                    <!--v-model="content"-->
-                    <!--ref="VueQuillEditor"-->
-                    <!--:options="editorOption" style="height: 120px;">-->
+            <!--class="info-editor"-->
+            <!--v-model="content"-->
+            <!--ref="VueQuillEditor"-->
+            <!--:options="editorOption" style="height: 120px;">-->
             <!--</quill-editor>-->
             <quillEditor :Content="content"></quillEditor>
         </el-form-item>
         <el-form-item label="我要加盟" style="height: 200px;">
             <!--<quill-editor-->
-                    <!--class="info-editor"-->
-                    <!--v-model="content"-->
-                    <!--ref="VueQuillEditor"-->
-                     <!--style="height: 120px;">-->
+            <!--class="info-editor"-->
+            <!--v-model="content"-->
+            <!--ref="VueQuillEditor"-->
+            <!--style="height: 120px;">-->
             <!--</quill-editor>-->
             <quillEditor :Content="content"></quillEditor>
         </el-form-item>
 
         <!--<el-form-item label="即时配送">-->
-            <!--<el-switch on-text="" off-text="" v-model="form.delivery"></el-switch>-->
+        <!--<el-switch on-text="" off-text="" v-model="form.delivery"></el-switch>-->
         <!--</el-form-item>-->
         <el-form-item label="">
             <el-checkbox-group :size="size" v-model="form.type">
@@ -148,22 +152,22 @@
         </el-form-item>
 
         <!--<el-form-item label="活动形式">-->
-            <!--<el-input type="textarea" v-model="form.desc"></el-input>-->
+        <!--<el-input type="textarea" v-model="form.desc"></el-input>-->
         <!--</el-form-item>-->
         <el-col class="form_foot tc" :xs="24" :sm="24" :md="24" :lg="16" :xl="16">
             <el-button :size="size" type="primary" @click="onSubmit()">立即创建</el-button>
             <el-button :size="size" @click.native.prevent>取消</el-button>
         </el-col>
     </el-form>
-
 </template>
 
 <script>
     import quillEditor from './../../components/quill-editor.vue';
+
     export default {
         data() {
             return {
-                size:this.GLOBAL.size,
+                size: this.GLOBAL.size,
                 form: {
                     name: '',
                     region: '',
@@ -181,10 +185,10 @@
 
             }
         },
-        components:{
+        components: {
             quillEditor
         },
-        mounted(){
+        mounted() {
             // this.$addQuillTitle();
         },
         methods: {
@@ -208,35 +212,3 @@
     }
 
 </script>
-<style lang="scss" type="text/scss">
-    @import '../../styles/color.scss';
-
-    .uploadImg {
-
-    /*.el-input {*/
-        /*width: 50%;*/
-    /*}*/
-
-    .el-upload {
-        margin: 0 10px 0 20px;
-    }
-
-    }
-
-    .tenantInput .el-form-item__content {
-        margin-left: 150px !important;
-    }
-
-    .myColor {
-        width: 200px;
-        margin-left: 20px;
-    }
-
-    .tenantInput {
-        padding: 10px;
-        background: $white01;
-    }
-    .quill-editor {
-        width: 85%;
-    }
-</style>

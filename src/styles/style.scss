@@ -1,0 +1,13 @@
+
+@import './iconfont.scss';//icon图标
+@import '../common/style/color';//图片变量
+@import '../common/style/mixin.scss';
+@import './common.scss';//公共样式
+@import './widget/vue-cropper.scss';//图片剪裁组件
+@import './widget/quill-editor.scss';//富文本组件
+@import './widget/index.scss';//首页
+@import './widget/shelf.scss';//货架
+@import './widget/warehouse.scss';//库存
+@import './widget/product.scss';//商品
+@import './widget/tenant.scss';//店铺
+@import './widget/marketing.scss';//营销

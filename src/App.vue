@@ -57,7 +57,7 @@
 
 							<ul class="el-menu submenu childenMenu" :class="['submenu-hook-'+index, navIndex == index ? 'block':'none']" :data-index="index">
 
-								<li class="el-submenu__title erji_title" @click="showHide(index)">{{item.name}}</li>=
+								<li class="el-submenu__title erji_title" @click="showHide(index)">{{item.name}}</li>
 								<li v-for="child in item.children" v-if="!child.hidden && !child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;">
 									<div class="three_title" @click="show(index,)">{{child.name}}<i class="el-icon-arrow-down"></i></div>
 									<ul class="threeMenu" :data-index="index">
@@ -72,9 +72,13 @@
 										<!--</template>-->
 									<!--</el-submenu>-->
 								<!--</el-menu>-->
+								<ul v-for="child in item.children" v-if="!child.hidden && child.leaf" :key="child.path" :data-index="index">
+									<li v-for="(three,threeIndex) in child.children" class="el-menu-item" style="padding-left: 20px;" v-if="child.children" :data-id="pageActive" :class="$route.path==child.path || $route.path==three.path ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}55656</li>
+									<li v-if="!child.children" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==child.path || pageActive==child.path  ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}</li>
+								</ul>
+								<!--<li v-for="child in item.children" v-if="!child.hidden && child.leaf && !child.children" :key="child.path" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==child.path || pageActive==child.path  ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}78</li>-->
 
 
-								<li v-for="child in item.children" v-if="!child.hidden && child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==child.path || pageActive==child.path ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}</li>
 							</ul>
 						</template>
 					</div>
@@ -281,48 +285,3 @@
     }
 
 </script>
-
-<style lang="scss">
-body {
-	margin: 0;
-	padding: 0;
-	font-family: Helvetica Neue, Helvetica, PingFang SC, Hiragino Sans GB, Microsoft YaHei, SimSun, sans-serif;
-	font-size: 14px;
-	-webkit-font-smoothing: antialiased;
-}
-
-#app {
-	position: absolute;
-	top: 0;
-	bottom: 0;
-	width: 100%;
-}
-
-.el-submenu [class^=fa] {
-	vertical-align: baseline;
-	margin-right: 10px;
-}
-
-.el-menu-item [class^=fa] {
-	vertical-align: baseline;
-	margin-right: 10px;
-}
-.menu.width90{
-	width: 90px !important;
-}
-
-.fade-enter-active,
-.fade-leave-active {
-	transition: all .2s ease;
-}
-
-.fade-enter,
-.fade-leave-active {
-	opacity: 0;
-}
-.el-submenu .el-menu{
-	background: #28353A !important;
-}
-
-
-</style>

@@ -228,22 +228,7 @@
                     console.log('屏幕高度：'+ window.screenHeight)
                 })();
             };
-
-
         }
     }
 
 </script>
-
-<style scoped lang="scss">
-	@import '~scss_vars';
-	@import '../styles/color.scss';
-
-	.width90{
-		width: 90px !important;
-	}
-
-
-
-
-</style>

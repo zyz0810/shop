@@ -5,6 +5,7 @@
                 <el-button type="primary" :size="size" icon="el-icon-plus" @click="addShelf">添加</el-button>
                 <el-button type="danger" :size="size" icon="el-icon-close">删除</el-button>
                 <el-button :size="size" icon="el-icon-refresh">刷新</el-button>
+                <el-button :size="size" @click="getExcel(orderList)">导出</el-button>
                 <el-select v-model="valueState" placeholder="活动状态" :size="size" style="margin-right: 10px;width: 100px;">
                     <el-option
                             v-for="item in state"
@@ -30,7 +31,7 @@
                 <el-table-column prop="jackpot" label="奖池"></el-table-column>
                 <el-table-column fixed="right" label="操作" width="100">
                     <template slot-scope="scope">
-                        <el-button :size="size" type="text" @click="handleEdit(scope.$index, scope.row)">查看</el-button>
+                        <el-button :size="size" type="text" @click="handleWatch(scope.$index, scope.row)">查看</el-button>
                     </template>
                 </el-table-column>
             </el-table>
@@ -105,9 +106,9 @@
                     <el-select v-model="addForm.rank" placeholder="排名奖励" :size="size" class="inputOne" style="margin-right: 10px;">
                         <el-option v-for="item in state" :key="item.value" :label="item.label" :value="item.value"></el-option>
                     </el-select>
-                    <el-button :size="size" @click="pageType == 'createTemplate'">新建模板</el-button>
+                    <el-button :size="size" @click="pageType = 'createTemplate'">新建模板</el-button>
                     <span class="help is-danger">{{ errors.first('addForm.rank') }}</span>
-                    <p><el-button :size="size">查看模板</el-button></p>
+                    <p><el-button :size="size" @click="pageType = 'editTemplate'">查看模板</el-button></p>
                 </el-form-item>
 
 
@@ -150,7 +151,7 @@
 
                 <el-form-item>
                     <el-button type="primary" @click="createTemplateSubmit">确 定</el-button>
-                    <el-button @click="pageType = 'index'">返 回</el-button>
+                    <el-button @click="pageType = 'add'">返 回</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -177,7 +178,7 @@
 
                 <el-form-item>
                     <el-button type="primary" @click="editTemplateSubmit">确 定</el-button>
-                    <el-button @click="pageType = 'index'">返 回</el-button>
+                    <el-button @click="pageType = 'add'">返 回</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -354,6 +355,24 @@
             }
         },
         methods: {
+            getExcel(res) {
+                require.ensure([], () => {
+                    const { export_json_to_excel } = require('@/common/js/Export2Excel.js')
+                    const tHeader = ['活动名称', '活动范围','参与角色','开始时间','结束时间','活动状态','排名模板','销售额','支出佣金','奖池']
+                    const filterVal = ['name', 'range','role', 'startTime','endTime', 'state','mode', 'template','money', 'commission', 'jackpot']
+                    const list = res
+                    const data = this.formatJson(filterVal, list)
+                    export_json_to_excel(tHeader, data, '导出列表名称')
+                })
+            },
+
+            formatJson(filterVal, jsonData) {
+                return jsonData.map(v => filterVal.map(j => v[j]))
+            },
+
+            handleWatch(){
+                this.pageType = 'watch'
+            },
             addShelf(){
                 this.pageType = 'add'
             },
@@ -518,54 +537,3 @@
     }
 
 </script>
-
-<style lang="scss" type="text/scss">
-    @import '../../styles/color.scss';
-
-    .shelf {
-        padding: 10px;
-        background: $white01;
-        .search{
-            width: 200px;
-        }
-        .title{
-            margin-bottom: 20px;
-        }
-    }
-    //添加多张图片
-    .avatar-uploader .el-upload {
-        border: 1px dashed #d9d9d9;
-        border-radius: 6px;
-        cursor: pointer;
-        position: relative;
-        overflow: hidden;
-    }
-    .avatar-uploader{
-        li{
-            position: relative;
-            margin-right: 20px;
-            i{
-                position: absolute;
-                top: 0;
-                right: 0;
-                z-index: 99;
-            }
-        }
-    }
-    .avatar-uploader .el-upload:hover {
-        border-color: #409EFF;
-    }
-    .avatar-uploader-icon {
-        font-size: 28px;
-        color: #8c939d;
-        width: 178px;
-        height: 178px;
-        line-height: 178px;
-        text-align: center;
-    }
-    .avatar {
-        width: 178px;
-        height: 178px;
-        display: block;
-    }
-</style>

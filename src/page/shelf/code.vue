@@ -47,7 +47,7 @@
         </div>
         <!--货架二维码-->
         <el-dialog title="查看二维码" :visible.sync="dialogVisible" width="30%">
-            <span><img src="http://cdn.tiaohuo.com/upload/image/201904/1dc3ee49-8b1b-4e15-8be0-04e77e4c3464.jpg"/></span>
+            <span class="block tc"><img src="http://cdn.tiaohuo.com/upload/image/201904/1dc3ee49-8b1b-4e15-8be0-04e77e4c3464.jpg"/></span>
         </el-dialog>
     </div>
 

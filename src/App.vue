@@ -33,10 +33,10 @@
 									<li v-for="child in item.children" v-if="!child.hidden && !child.leaf" :key="child.path" @mouseover="showMenu(index,true)" @mouseout="showMenu(index,false)" class="el-menu-item" style="padding-left: 20px;">
 										<div class="three_title">{{child.name}}</div>
 										<ul class="threeMenu" v-if="!child.leaf" :data-index="index">
-											<li v-for="three in child.children" :key="three.path" class="el-menu-item" style="padding-left: 20px;" :class="$route.path==three.path?'is-active':''" @click="myclick(three.path,$event,index,'0')">{{three.name}}</li>
+											<li v-for="three in child.children" :key="three.path" class="el-menu-item" style="padding-left: 20px;" :class="$route.path==three.path?'is-active':''" @click="myclick(three.path,$event,index,'0','')">{{three.name}}</li>
 										</ul>
 									</li>
-									<li v-for="child in item.children" v-if="!child.hidden && child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;" :class="$route.path==child.path?'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}</li>
+									<li v-for="child in item.children" v-if="!child.hidden && child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;" :class="$route.path==child.path?'is-active':''" @click="myclick(child.path,$event,index,'0','')">{{child.name}}</li>
 
 								</ul>
 							</template>
@@ -44,7 +44,7 @@
 							<template v-else>
 								<li class="el-submenu" :data-index="index">
 						<!--<div class="el-submenu__title" :data-index="index" style="padding-left: 10px;" :class="navIndex == index?'navOne':''" @click="myclick(item.children[0].path,$event,index)"><i :class="item.iconCls"></i>{{item.children[0].name}}</div>-->
-									<div class="el-submenu__title" :data-index="index" style="padding-left: 10px;" :class="navIndex == index?'navOne':''" :data-leaf="item.leaf" @click="myclick(item.path,$event,index,item.leaf)"><i :class="item.iconCls"></i>{{item.name}}</div>
+									<div class="el-submenu__title" :data-index="index" style="padding-left: 10px;" :class="navIndex == index?'navOne':''" :data-leaf="item.leaf" @click="myclick(item.path,$event,index,item.leaf,'')"><i :class="item.iconCls"></i>{{item.name}}</div>
 								</li>
 							</template>
 						</li>
@@ -54,31 +54,22 @@
 
 					<div v-for="(item,index) in $router.options.routes" v-if="!item.hidden" :data-value="index" class="el-submenu item" :class="navIndex == index ? 'block':'none'">
 						<template v-if="!item.leaf">
-
 							<ul class="el-menu submenu childenMenu" :class="['submenu-hook-'+index, navIndex == index ? 'block':'none']" :data-index="index">
-
 								<li class="el-submenu__title erji_title" @click="showHide(index)">{{item.name}}</li>
 								<li v-for="child in item.children" v-if="!child.hidden && !child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;">
 									<div class="three_title" @click="show(index,)">{{child.name}}<i class="el-icon-arrow-down"></i></div>
 									<ul class="threeMenu" :data-index="index">
-										<li v-for="three in child.children" :key="three.path" v-if="!three.leaf && !three.hidden" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==three.path || pageActive==child.path ? 'is-active':''" @click="myclick(three.path,$event,index,'0')">{{three.name}}</li>
+										<li v-for="three in child.children" :key="three.path" v-if="!three.leaf && !three.hidden" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==three.path || pageActive==child.path ? 'is-active':''" @click="myclick(three.path,$event,index,'0','')">{{three.name}}</li>
 									</ul>
 								</li>
-								<!--<el-menu style="padding: 0;" default-openeds="['1',0']">-->
-									<!--<el-submenu v-for="(child,idx) in item.children" :index="idx" v-if="!child.hidden && !child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;padding: 0;color: #323233 !important">-->
-										<!--<template slot="title" class="three_title" style="padding: 0 !important;">{{child.name}}</template>-->
-										<!--<template class="threeMenu" v-if="!child.leaf" :data-index="index">-->
-											<!--<el-menu-item v-for="three in child.children" :key="three.path" class="el-menu-item" style="padding-left: 30px;" :class="$route.path==three.path?'is-active':''" @click="myclick(three.path,$event,index,'0')">{{three.name}}</el-menu-item>-->
-										<!--</template>-->
-									<!--</el-submenu>-->
-								<!--</el-menu>-->
-								<ul v-for="child in item.children" v-if="!child.hidden && child.leaf" :key="child.path" :data-index="index">
-									<li v-for="(three,threeIndex) in child.children" class="el-menu-item" style="padding-left: 20px;" v-if="child.children" :data-id="pageActive" :class="$route.path==child.path || $route.path==three.path ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}55656</li>
-									<li v-if="!child.children" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==child.path || pageActive==child.path  ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}</li>
-								</ul>
+								<li class="el-menu-item" v-for="(child,childIndex) in item.children" v-if="!child.hidden && child.leaf" :key="child.path">
+									<router-link :to="{path:child.path, query:{index:index,leaf:'0'}}">{{child.name}}</router-link>
+								</li>
+								<!--<ul v-for="(child,childIndex) in item.children" v-if="!child.hidden && child.leaf" :key="child.path" :data-index="index">-->
+									<!--<li class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==child.path || childIndex == cIndex ? 'is-active':''" @click="myclick(child.path,$event,index,'0',childIndex)">{{child.name}}</li>-->
+									<!--<li class="el-menu-item" v-for="(child,childIndex) in item.children" v-if="!child.hidden && child.leaf" :key="child.path"><router-link :to='child.path':to="{path:'child.path', query:{index:index,leaf:'0'}}">{{child.name}}</router-link></li>-->
+								<!--</ul>-->
 								<!--<li v-for="child in item.children" v-if="!child.hidden && child.leaf && !child.children" :key="child.path" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==child.path || pageActive==child.path  ? 'is-active':''" @click="myclick(child.path,$event,index,'0')">{{child.name}}78</li>-->
-
-
 							</ul>
 						</template>
 					</div>
@@ -145,9 +136,6 @@
 				</el-main>
 			</el-container>
 		</el-container>
-		<!--<transition name="fade" mode="out-in">-->
-			<!--<router-view></router-view>-->
-		<!--</transition>-->
 	</div>
 </template>
 
@@ -156,6 +144,9 @@
         name:'app',
         data() {
             return {
+                cIndex:'',
+                routerSelected:false,
+                routerChilden:[],
                 sysUserName: '',
                 sysUserAvatar: '',
                 navIndex:0,
@@ -171,6 +162,16 @@
             }
         },
         watch: {
+            $route: {
+                handler: function(val, oldVal){
+                    console.log(val);
+                    if ( this.routerChilden.indexOf(val.path) !== -1) {
+                        this.routerSelected = true
+					}
+                },
+                // 深度观察监听
+                deep: true
+            },
             // 监听屏幕高度改变表格高度
             fullHeight(val) {
                 // 初始化表格高度
@@ -179,7 +180,6 @@
             }
         },
         methods: {
-
             handleScroll (el) {
                 console.log('dada')
                 this.scrollTop = this.$refs.content.scrollTop
@@ -230,8 +230,9 @@
                 this.navIndex = index;
                 this.navLeaf = leaf;
 			},
-            myclick(path,e,index,leaf){
+            myclick(path,e,index,leaf,childIndex){
                 // $router.push(child.path)
+				this.cIndex = childIndex
                 this.$router.push({
                     path,
                     query: {
@@ -244,6 +245,20 @@
                 this.navIndex = e.currentTarget.parentElement.getAttribute("data-index");
 				this.navLeaf = leaf;
                 console.log('点击：'+e.currentTarget.parentElement.getAttribute("data-index"))
+
+				//获取子路由
+                var routes = {
+                    children: this.$router.options.routes
+                };
+                var route = this.$route.matched;
+                for(var i=0; i<route.length-1; i++){
+                    routes = routes.children.find((e) => (e.name == route[i].name));
+                }
+				for(let j=0;j<routes.children.length;j++){
+                    this.routerChilden.push(routes.children[j].path)
+				}
+                return routes.children
+
             }
 
         },

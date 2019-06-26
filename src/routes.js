@@ -24,13 +24,21 @@ import warehouseOut from './page/warehouse/manage/out.vue'//出库单
 import warehouseManage from './page/warehouse/warehouse/manage.vue'//仓库管理
 import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
 //货架管理
-import shelfManage from './page/shelf/manage.vue'//货架管理
-import shelfManageAdd from './page/view/shelf/manage/add.vue'//货架管理
-import shelfPackages from './page/shelf/packages.vue'//货架套餐
+// import shelfManage from './page/shelf/manage.vue'//货架管理
+import shelfManageIndex from './page/view/shelf/manage/index.vue'//货架管理-管理
+import shelfManageAdd from './page/view/shelf/manage/add.vue'//货架管理-新建
+import shelfManageEdit from './page/view/shelf/manage/edit.vue'//货架管理-管理
+// import shelfPackages from './page/shelf/packages.vue'//货架套餐
+import shelfPackagesIndex from './page/view/shelf/packages/index.vue'//货架套餐
+import shelfPackagesAdd from './page/view/shelf/packages/add.vue'//货架管理-新建
+import shelfPackagesEdit from './page/view/shelf/packages/edit.vue'//货架管理-编辑
 import shelfOrder from './page/shelf/order.vue'//货架套餐订单
-import shelfExcitation from './page/shelf/excitation.vue'//货架销售激励
+import shelfExcitationIndex from './page/view/shelf/excitation/index.vue'//货架销售激励
+import shelfExcitationAdd from './page/view/shelf/excitation/add.vue'//货架销售激励-新建
+import shelfExcitationWatch from './page/view/shelf/excitation/watch.vue'//货架销售激励-查看
 import shelfStatistics from './page/shelf/statistics.vue'//货架统计
-import shelfCode from './page/shelf/code.vue'//货架二维码管理
+import shelfCodeIndex from './page/view/shelf/code/index.vue'//货架二维码管理
+import shelfCodeAdd from './page/view/shelf/code/add.vue'//货架二维码管理-添加
 
 //商品
 import addProduct from './page/product/add.vue' //新品发布
@@ -89,36 +97,74 @@ let routes = [
         iconCls: 'fa fa-bar-chart',
         children: [
             // { path: '/shelf/index', component: shelfManage,leaf: true, name: '货架管理'},
-            { path: '/shelf/index', component: tenant,leaf: true, name: '货架56管理',
+            { path: '/shelf/index', component: tenant,leaf: true, name: '货架管理',
                 children:[{
-                    name:'货55架管理',
-                    path: '/shelf/index',
+                    name:'货架管理',
+                    path: '',
                     hidden:true,
-                    component: shelfManage,
+                    component: shelfManageIndex,
                 },{
-                    name:'货架66管理/新建',
-                    path: '/shelf/index/add',
+                    name:'货架管理 / 新建',
+                    path: 'add',
                     hidden:true,
                     component: shelfManageAdd,
+                },{
+                    name:'货架管理 / 管理',
+                    path: 'edit',
+                    hidden:true,
+                    component: shelfManageEdit,
                 }]
             },
-            { path: '/shelf/packages', component: shelfPackages,leaf: true, name: '货架套餐' },
-            { path: '/shelf/order', component: shelfOrder,leaf: true, name: '货架套餐订单' },
-            { path: '/shelf/excitation', component: shelfExcitation,leaf: true, name: '销售激励' },
-            { path: '/shelf/Statistics', component: shelfStatistics,leaf: true, name: '货架统计' },
-            { path: '/shelf/code', component: shelfCode,leaf: true, name: '货架二维码管理' ,
+            { path: '/shelf/packages', component: tenant,leaf: true, name: '货架套餐',
                 children:[{
-                    name:'二525维码',
-                    path: '/shelf/index',
+                    name:'货架套餐',
+                    path: '',
                     hidden:true,
-                    component: shelfManage,
+                    component: shelfPackagesIndex,
                 },{
-                    name:'我二58维码',
-                    path: '/shelf/index/add',
+                    name:'货架套餐 / 新建',
+                    path: 'add',
                     hidden:true,
-                    component: shelfManageAdd,
+                    component: shelfPackagesAdd,
+                },{
+                    name:'货架套餐 / 编辑',
+                    path: 'edit',
+                    hidden:true,
+                    component: shelfPackagesEdit,
                 }]
-            }
+            },
+            { path: '/shelf/order', component: shelfOrder,leaf: true, name: '货架套餐订单' },
+            { path: '/shelf/excitation', component: tenant,leaf: true, name: '销售激励',
+                children:[{
+                    name:'销售激励',
+                    path: '',
+                    hidden:true,
+                    component: shelfExcitationIndex,
+                },{
+                    name:'查看销售激励',
+                    path: 'watch',
+                    hidden:true,
+                    component: shelfExcitationWatch,
+                },{
+                    name:'销售激励 / 新建',
+                    path: 'add',
+                    hidden:true,
+                    component: shelfExcitationAdd,
+                }]
+            },
+            { path: '/shelf/Statistics', component: shelfStatistics,leaf: true, name: '货架统计' },
+            { path: '/shelf/code', component: tenant,leaf: true, name: '货架二维码管理',
+                children:[{
+                    name:'货架二维码管理',
+                    path: '',
+                    hidden:true,
+                    component: shelfCodeIndex,
+                },{
+                    name:'货架二维码管理 / 新建',
+                    path: 'add',
+                    hidden:true,
+                    component: shelfCodeAdd,
+                }] }
         ]
     },
     {
@@ -156,6 +202,10 @@ let routes = [
             { path: '/warehouse/warehouse', component: tenant,leaf: false, name: '仓库管理' ,children:[
                     {path: '/warehouse/warehouse', component: warehouseManage,leaf: false, name: '仓库管理'},
                     {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
+                ]},
+            { path: '/warehouse/delivery', component: tenant,leaf: false, name: '配送管理' ,children:[
+                    {path: '/warehouse/warehouse', component: warehouseManage,leaf: false, name: '配送出库'},
+                    // {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
                 ]}
         ]
     },

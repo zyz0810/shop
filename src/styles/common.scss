@@ -14,6 +14,7 @@ body {
   width: 100%;
 }
 a{
+  color: $gray08;
   text-decoration: none;
 }
 p{
@@ -28,6 +29,8 @@ ul{
 img{
   max-width: 100%;
 }
+
+
 .ql-editor{
   width: 80%;
 }
@@ -693,4 +696,19 @@ h2{
 }
 .width90{
   width: 90px !important;
+}
+
+
+.childenMenu{
+  .el-menu-item{
+    padding: 0;
+    a{
+      display: block;
+      width: 100px;
+      padding-left: 20px;
+    }
+  }
+}
+.router-link-active{
+  background: $gray05!important;
 }

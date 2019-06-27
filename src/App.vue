@@ -59,7 +59,10 @@
 								<li v-for="child in item.children" v-if="!child.hidden && !child.leaf" :key="child.path" class="el-menu-item" style="padding-left: 20px;">
 									<div class="three_title" @click="show(index,)">{{child.name}}<i class="el-icon-arrow-down"></i></div>
 									<ul class="threeMenu" :data-index="index">
-										<li v-for="three in child.children" :key="three.path" v-if="!three.leaf && !three.hidden" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==three.path || pageActive==child.path ? 'is-active':''" @click="myclick(three.path,$event,index,'0','')">{{three.name}}</li>
+										<!--<li v-for="three in child.children" :key="three.path" v-if="!three.leaf && !three.hidden" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==three.path || pageActive==child.path ? 'is-active':''" @click="myclick(three.path,$event,index,'0','')">{{three.name}}</li>-->
+										<li v-for="three in child.children" :key="three.path" v-if="!three.leaf && !three.hidden" class="el-menu-item" style="padding-left: 20px;" :data-id="pageActive" :class="$route.path==three.path || pageActive==child.path ? 'is-active':''">
+											<router-link :to="{path:three.path, query:{index:index,leaf:'0'}}">{{three.name}}</router-link>
+										</li>
 									</ul>
 								</li>
 								<li class="el-menu-item" v-for="(child,childIndex) in item.children" v-if="!child.hidden && child.leaf" :key="child.path">

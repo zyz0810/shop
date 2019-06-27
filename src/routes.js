@@ -21,8 +21,18 @@ import postage from './page/marketing/postage/index.vue'//拼团列表
 import warehouseQuery from './page/warehouse/index/index.vue'//库存查询
 import warehouseInput from './page/warehouse/manage/put.vue'//入库单
 import warehouseOut from './page/warehouse/manage/out.vue'//出库单
+import warehouseOutIndex from './page/view/warehouse/manage/out/index.vue'//出库单
+import warehouseOutAdd from './page/view/warehouse/manage/out/add.vue'//出库单-新建
+import warehouseOutView from './page/view/warehouse/manage/out/view.vue'//出库单-详情
 import warehouseManage from './page/warehouse/warehouse/manage.vue'//仓库管理
+import warehouseManageIndex from './page/view/warehouse/warehouse/manage/index.vue'//仓库管理
+import warehouseManageAdd from './page/view/warehouse/warehouse/manage/add.vue'//仓库管理-新建
+import warehouseManageEdit from './page/view/warehouse/warehouse/manage/edit.vue'//仓库管理-编辑
+
 import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
+import warehouseWarningIndex from './page/view/warehouse/warning/index.vue'//货架管理-库存预警
+import warehouseWarningReplenish from './page/view/warehouse/warning/replenish.vue'//库存预警-补货
+import warehouseWarningSet from './page/view/warehouse/warning/set.vue'//库存预警-设置预警
 //货架管理
 // import shelfManage from './page/shelf/manage.vue'//货架管理
 import shelfManageIndex from './page/view/shelf/manage/index.vue'//货架管理-管理
@@ -195,16 +205,29 @@ let routes = [
             { path: '/warehouse', component: tenant,leaf: false, name: '库存查询',children:[
                 {path: '/warehouse/index', component: warehouseQuery,leaf: false, name: '库存查询'}
                 ]},
+            { path: '/warehouse/warning', component: tenant,leaf: true, name: '库存预警' ,children:[
+                    {path: '', component: warehouseWarningIndex, name: '库存预警'},
+                    {path: 'replenish', component: warehouseWarningReplenish, name: '补货'},
+                    {path: 'set', component: warehouseWarningSet, name: '设置预警'},
+                ]},
             { path: '/warehouse/manage', component: tenant,leaf: false, name: '库存管理',children:[
                     {path: '/warehouse/put', component: warehouseInput,leaf: false, name: '入库单'},
-                    {path: '/warehouse/out', component: warehouseOut,leaf: false, name: '出库单'},
+                    {path: '/warehouse/out', component: tenant,leaf: false, name: '出库单',children:[
+                            {path: '', component: warehouseOutIndex,leaf: false, name: '出库单'},
+                            {path: 'add', component: warehouseOutAdd,leaf: false, name: '出库单 / 新建'},
+                            {path: 'view', component: warehouseOutView,leaf: false, name: '出库单 / 详情'},
+                        ]},
                 ]},
             { path: '/warehouse/warehouse', component: tenant,leaf: false, name: '仓库管理' ,children:[
-                    {path: '/warehouse/warehouse', component: warehouseManage,leaf: false, name: '仓库管理'},
+                    {path: '/warehouse/warehouse', component: tenant,leaf: false, name: '仓库管理',children:[
+                            {path: '', component: warehouseManageIndex,leaf: false, name: '仓库管理'},
+                            {path: 'add', component: warehouseManageAdd,leaf: false, name: '仓库管理 / 新建'},
+                            {path: 'edit', component: warehouseManageEdit,leaf: false, name: '仓库管理 / 编辑'},
+                        ]},
                     {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
                 ]},
             { path: '/warehouse/delivery', component: tenant,leaf: false, name: '配送管理' ,children:[
-                    {path: '/warehouse/warehouse', component: warehouseManage,leaf: false, name: '配送出库'},
+                    {path: '/warehouse/delivery', component: warehouseManage,leaf: false, name: '配送出库'},
                     // {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
                 ]}
         ]

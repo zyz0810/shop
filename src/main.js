@@ -35,8 +35,10 @@ Vue.use(ElementUI)
 
 Vue.use(VueRouter)
 Vue.use(Vuex)
-import Print from 'vue-print-nb'//打印
-Vue.use(Print);
+// import Print from 'vue-print-nb'//打印
+// Vue.use(Print);
+import Print from './common/js/print'
+Vue.use(Print)
 //金额格式
 Vue.filter('money', function(val) {
     val = val.toString().replace(/\$|\,/g,'');

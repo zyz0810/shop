@@ -1131,11 +1131,6 @@
                     });
                 }
 
-                console.log('吱吱吱')
-                console.log(e)
-                console.log(that.hasValue)
-
-
                 if(that.colorSpec[index].checked == true && this.colorSpec[index].name){
                     if(that.hasValue){
                         for(let i=0;i<that.tableData.length;i++){

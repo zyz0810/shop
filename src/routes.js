@@ -19,6 +19,8 @@ import assembleList from './page/marketing/assemble/list.vue'//拼团列表
 import postage from './page/marketing/postage/index.vue'//拼团列表
 //库存
 import warehouseQuery from './page/warehouse/index/index.vue'//库存查询
+import warehouseQueryIndex from './page/view/warehouse/query/index.vue'//库存查询
+import warehouseTurnover from './page/view/warehouse/query/turnover.vue'//库存查询-库存流水
 import warehouseInput from './page/warehouse/manage/put.vue'//入库单
 import warehouseOut from './page/warehouse/manage/out.vue'//出库单
 import warehouseOutIndex from './page/view/warehouse/manage/out/index.vue'//出库单
@@ -33,6 +35,8 @@ import warehousePrime from './page/warehouse/warehouse/prime.vue'//仓库管理
 import warehouseWarningIndex from './page/view/warehouse/warning/index.vue'//货架管理-库存预警
 import warehouseWarningReplenish from './page/view/warehouse/warning/replenish.vue'//库存预警-补货
 import warehouseWarningSet from './page/view/warehouse/warning/set.vue'//库存预警-设置预警
+import warehouseDeliveryIndex from './page/view/warehouse/delivery/index.vue'//配送出库
+import warehouseDeliveryWatch from './page/view/warehouse/delivery/watch.vue'//配送出库-查看
 //货架管理
 // import shelfManage from './page/shelf/manage.vue'//货架管理
 import shelfManageIndex from './page/view/shelf/manage/index.vue'//货架管理-管理
@@ -203,19 +207,23 @@ let routes = [
         iconCls: 'fa fa-bar-chart',
         children: [
             { path: '/warehouse', component: tenant,leaf: false, name: '库存查询',children:[
-                {path: '/warehouse/index', component: warehouseQuery,leaf: false, name: '库存查询'}
+                {path: '/warehouse/index', component: tenant,leaf: false, name: '库存查询',children:[
+                        {path: '', component: warehouseQueryIndex,leaf: false, name: '库存查询'},
+                        {path: 'turnover', component: warehouseTurnover,leaf: false, name: '库存流水'},
+                    ]}
                 ]},
-            { path: '/warehouse/warning', component: tenant,leaf: true, name: '库存预警' ,children:[
-                    {path: '', component: warehouseWarningIndex, name: '库存预警'},
-                    {path: 'replenish', component: warehouseWarningReplenish, name: '补货'},
-                    {path: 'set', component: warehouseWarningSet, name: '设置预警'},
-                ]},
+
             { path: '/warehouse/manage', component: tenant,leaf: false, name: '库存管理',children:[
                     {path: '/warehouse/put', component: warehouseInput,leaf: false, name: '入库单'},
                     {path: '/warehouse/out', component: tenant,leaf: false, name: '出库单',children:[
                             {path: '', component: warehouseOutIndex,leaf: false, name: '出库单'},
                             {path: 'add', component: warehouseOutAdd,leaf: false, name: '出库单 / 新建'},
                             {path: 'view', component: warehouseOutView,leaf: false, name: '出库单 / 详情'},
+                        ]},
+                    { path: '/warehouse/warning', component: tenant,leaf: false, name: '库存预警' ,children:[
+                            {path: '', component: warehouseWarningIndex, name: '库存预警'},
+                            {path: 'replenish', component: warehouseWarningReplenish, name: '补货'},
+                            {path: 'set', component: warehouseWarningSet, name: '设置预警'},
                         ]},
                 ]},
             { path: '/warehouse/warehouse', component: tenant,leaf: false, name: '仓库管理' ,children:[
@@ -227,8 +235,10 @@ let routes = [
                     {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
                 ]},
             { path: '/warehouse/delivery', component: tenant,leaf: false, name: '配送管理' ,children:[
-                    {path: '/warehouse/delivery', component: warehouseManage,leaf: false, name: '配送出库'},
-                    // {path: '/warehouse/prime', component: warehousePrime,leaf: false, name: '期初库存'},
+                    {path: '/warehouse/delivery', component: tenant,leaf: false, name: '配送出库',children:[
+                            {path: '', component: warehouseDeliveryIndex,leaf: false, name: '配送出库'},
+                            {path: 'watch', component: warehouseDeliveryWatch,leaf: false, name: '出库单详细'},
+                        ]},
                 ]}
         ]
     },

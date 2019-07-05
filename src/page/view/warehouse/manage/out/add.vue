@@ -331,7 +331,7 @@
                 console.log(data);
             },
             goPrime(){
-                this.dialogVisible = false
+                this.dialogProduct = false
 				this.pageType = 'index'
             },
             //新建商品

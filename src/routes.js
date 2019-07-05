@@ -69,7 +69,7 @@ let routes = [
     {
         path: '/',
         component: index,
-        iconCls: 'el-icon-message',//图标样式class
+        iconCls: 'fa fa-id-card-o',//图标样式class
         name: '概况',
         leaf:true,
         hidden: false,
@@ -81,7 +81,7 @@ let routes = [
         path: '/',
         component: tenant,
         name: '店铺',
-        iconCls: 'el-icon-message',//图标样式class
+        iconCls: 'fa fa-id-card-o',//图标样式class
         leaf:false,
         children: [
             { path: '/tenant',
@@ -346,7 +346,7 @@ let routes = [
     {
         path: '/set',
         component: index,
-        iconCls: 'el-icon-message',//图标样式class
+        iconCls: 'fa fa-bar-chart',//图标样式class
         name: '设置',
         leaf:false,
         hidden: false,
@@ -357,7 +357,7 @@ let routes = [
     {
         path: '/404',
         component: NotFound,
-        iconCls: 'el-icon-message',//图标样式class
+        iconCls: 'fa fa-id-card-o',//图标样式class
         name: '帮助',
         leaf:true,
         hidden: false

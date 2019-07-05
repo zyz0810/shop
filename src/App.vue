@@ -167,7 +167,6 @@
         watch: {
             $route: {
                 handler: function(val, oldVal){
-                    console.log(val);
                     if ( this.routerChilden.indexOf(val.path) !== -1) {
                         this.routerSelected = true
 					}
@@ -179,12 +178,11 @@
             fullHeight(val) {
                 // 初始化表格高度
                 this.contentStyleObj.height = window.innerHeight - this.$refs.table.$el.offsetTop - 60 + 'px';
-                console.log('content高度：'+this.contentStyleObj.height)
+                // console.log('content高度：'+this.contentStyleObj.height)
             }
         },
         methods: {
             handleScroll (el) {
-                console.log('dada')
                 this.scrollTop = this.$refs.content.scrollTop
             },
             viewScroll (val, index) {
@@ -194,7 +192,7 @@
 
 
             onSubmit() {
-                console.log('submit!');
+
             },
             showHide(index){    //点击展开收起
                 let contant = document.getElementsByClassName('contant')[index];    //这里我们通过参数index来让浏览器判断你点击的是哪一个列表
@@ -227,7 +225,6 @@
             showMenu(i,status){
                 var that = this
                 that.$refs.menuOne.getElementsByClassName('submenu-hook-'+i)[0].style.display=status?'block':'none';
-                console.log('鼠标指向：'+i)
             },
             clickMenu(index,$event,leaf){
                 this.navIndex = index;
@@ -244,10 +241,9 @@
                         leaf: + leaf
                     }
                 });
-                console.log(leaf);
+
                 this.navIndex = e.currentTarget.parentElement.getAttribute("data-index");
 				this.navLeaf = leaf;
-                console.log('点击：'+e.currentTarget.parentElement.getAttribute("data-index"))
 
 				//获取子路由
                 var routes = {
@@ -266,7 +262,6 @@
 
         },
         mounted() {
-            console.log(this.$route.query.index)
             if(this.$route.query.index){
                 this.navIndex = this.$route.query.index;
             }else{
